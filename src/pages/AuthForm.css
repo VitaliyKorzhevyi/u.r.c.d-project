@@ -1,0 +1,9 @@
+.auth-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 15px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}

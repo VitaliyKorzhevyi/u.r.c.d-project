@@ -1,0 +1,23 @@
+.users-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 15px 0;
+}
+
+.users-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.info-list {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.title-users {
+  padding: 0 0 30px;
+}

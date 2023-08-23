@@ -1,0 +1,170 @@
+.form2-icons {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 8px;
+}
+
+.form2-table {
+  position: relative; 
+  margin: 0 auto;
+  max-width: 1200px;
+  padding: 52px 15px 8px 0;
+}
+
+.form2-table-size {
+  width: 10%;
+}
+
+.form2-table-size1 {
+  width: 30%;
+}
+
+.form2-table-size2 {
+  width: 10%;
+}
+.form2-table-size3 {
+  width: 8%;
+}
+
+.form2-table-size4 {
+  width: 6%;
+}
+
+
+.form2-table-title {
+  background-color: #d7f7e7;
+  color: #21a766;
+
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  font-size: 30px;
+}
+
+.form2-table-time {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  font-size: 18px;
+
+  width: 40%;
+}
+
+.form2-table-column1-text {
+  display: flex;
+  justify-content: flex-end;
+
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.form2-table-text {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.form1-table-number {
+  padding: 8px;
+  width: 100%;
+}
+
+.form1-table-text-name {
+  padding: 8px;
+  width: 100%;
+}
+
+.form2-table-year {
+  display: flex;
+  justify-content: flex-end;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.form2-table2 {
+  text-align: center;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  background-color: #f2f2f2;
+}
+
+.form2-new-row td:nth-child(1) {
+  text-align: center;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  text-align: center;
+}
+
+.add-new-form2 {
+  margin: 40px auto;
+  max-width: 1200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  height: 60px;
+  width: 60px;
+
+  cursor: pointer;
+  background-color: #f1f1f1;
+  border: 2px solid #cacace;
+  border-radius: 100px;
+}
+
+.add-new-form2:hover,
+.add-new-form2:focus {
+  background-color: #3981f7;
+  color: #ffffff;
+  border: 2px solid #0148bb;
+}
+
+
+.form2-table.locked .form1-delete {
+  pointer-events: none;
+  opacity: 0.5;
+  color: rgb(185, 185, 185);
+}
+
+.form2-table.locked .form1-copy {
+  pointer-events: none;
+  opacity: 0.5;
+  color: rgb(185, 185, 185);
+}
+
+.form2-table.locked .form1-icon {
+  color: rgb(255, 0, 0);
+}
+
+
+.form2-table.locked .form1-btn-save {
+  background-color:  #f1f1f1;
+  color: #cacace;
+  border: 2px solid #cacace;
+}
+
+.form1-table-text-name.patient {
+  margin-right: 12px;
+}
+
+.btns-patient {
+  display: flex;
+  gap: 4px;
+}
+
+.btn-patient.one {
+  padding: 4px 5px;
+}
+
+.btn-patient {
+  padding: 4px;
+}
+
+.delete-button1 {
+  margin-right: 8px;
+}
+
+.table1-btn.blue {
+  margin-right: 8px;
+}
+

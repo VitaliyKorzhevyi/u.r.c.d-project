@@ -1,0 +1,202 @@
+.form1-icons {
+  margin: 0 auto;
+  max-width: 1200px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 4px;
+  padding: 52px 15px 8px 0;
+}
+
+.form1-icon {
+  cursor: pointer;
+}
+
+.form1-table {
+  margin: 0 auto;
+  max-width: 1200px;
+  padding: 0 15px;
+}
+
+.form1-icon:hover,
+.form1-icon:focus {
+  color: #3981f7;
+}
+
+.form1-delete:hover,
+.form1-delete:focus {
+  color: #f73939;
+  cursor: pointer;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th,
+td {
+  border: 1px solid #ccc; /* Стиль рамки для заголовків і комірок таблиці */
+  padding: 8px; /* Додаємо відступи всередині комірок */
+}
+
+th {
+  background-color: #f2f2f2; /* Фоновий колір заголовків */
+}
+
+.form1-table-size1 {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  font-size: 18px;
+  width: 120px;
+}
+
+.form1-table-size3 {
+  width: 38%;
+}
+
+.form1-table-title {
+  background-color: #dfe9fa;
+  color: #3981f7;
+
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  font-size: 30px;
+}
+
+.list-day {
+  width: 100%;
+  padding: 8px;
+}
+
+.form-table-name {
+  width: 100%;
+  margin: 2px;
+  padding: 8px;
+}
+
+.form-table-name-user {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  font-size: 20px;
+  width: 100%;
+  padding: 4px;
+}
+
+.form-table-text {
+  text-align: center;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  font-size: 20px;
+}
+
+.form1-table-text-name {
+  padding: 8px;
+  width: 100%;
+}
+
+.form-table2 th:nth-child(3) {
+  width: 4%;
+}
+.form-table2 th:nth-child(4) {
+  width: 8%;
+}
+.form-table2 th:nth-child(6) {
+  width: 10%;
+}
+
+.form1-new-row th {
+  background-color: #fff;
+}
+
+.table1-btn {
+  padding: 4px 8px;
+  background-color: #fff;
+  cursor: pointer;
+  border: 2px solid #cacace;
+}
+
+.table1-btn.blue:hover,
+.table1-btn.blue:focus {
+  color: #fff;
+  background-color: #3981f7;
+  border: 2px solid #194488;
+}
+
+.table1-btn.red:hover,
+.table1-btn.red:focus {
+  color: #fff;
+  background-color: #f73939;
+  border: 2px solid #971212;
+}
+
+.form1-btns {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 8px;
+}
+
+.form1-btn-add {
+  display: flex;
+  align-items: center;
+  margin-left: 8px;
+
+  height: 40px;
+  cursor: pointer;
+  background-color: #f1f1f1;
+  border: 2px solid #cacace;
+  border-radius: 120px;
+}
+.form1-btn-add:hover,
+.form1-btn-add:focus {
+  background-color: #3981f7;
+  color: #ffffff;
+  border: 2px solid #0148bb;
+}
+
+.form1-btn-save {
+  height: 40px;
+  min-width: 180px;
+  background-color: #ceefdf;
+  color: #0aaf60;
+  border: 2px solid #0aaf60;
+  border-radius: 20px;
+  cursor: pointer;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+}
+
+.form1-btn-save:hover,
+.form1-btn-save:focus {
+  background-color: #61bd90;
+  color: #ffffff;
+  border: 2px solid #008545;
+}
+
+.add-new-form1 {
+  margin: 30px auto;
+  max-width: 1200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  height: 60px;
+  width: 60px;
+
+  cursor: pointer;
+  background-color: #f1f1f1;
+  border: 2px solid #cacace;
+  border-radius: 100px;
+}
+
+.add-new-form1:hover,
+.add-new-form1:focus {
+  background-color: #3981f7;
+  color: #ffffff;
+  border: 2px solid #0148bb;
+}
+
+
+/* .form2-table.locked.form1-delete {
+  pointer-events: none;
+  opacity: 0.5; 
+} */
