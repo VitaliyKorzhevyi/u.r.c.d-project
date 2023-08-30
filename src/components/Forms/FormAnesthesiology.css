@@ -2,6 +2,7 @@
   display: flex;
   justify-content: flex-end;
   margin-bottom: 8px;
+  gap: 8px;
 }
 
 .form2-table {
@@ -27,7 +28,7 @@
 }
 
 .form2-table-size4 {
-  width: 6%;
+  width: 8%;
 }
 
 
@@ -45,7 +46,7 @@
   font-weight: 500;
   font-size: 18px;
 
-  width: 40%;
+
 }
 
 .form2-table-column1-text {
@@ -124,16 +125,24 @@
   pointer-events: none;
   opacity: 0.5;
   color: rgb(185, 185, 185);
+  cursor: default;
 }
 
 .form2-table.locked .form1-copy {
   pointer-events: none;
   opacity: 0.5;
   color: rgb(185, 185, 185);
+  cursor: default;
 }
 
 .form2-table.locked .form1-icon {
   color: rgb(255, 0, 0);
+}
+
+.form1-copy:hover,
+.form1-copy:focus {
+  color: #21a766;
+  cursor: pointer;
 }
 
 
@@ -141,6 +150,7 @@
   background-color:  #f1f1f1;
   color: #cacace;
   border: 2px solid #cacace;
+  cursor: default;
 }
 
 .form1-table-text-name.patient {
@@ -165,6 +175,57 @@
 }
 
 .table1-btn.blue {
-  margin-right: 8px;
+  margin-right: 10px;
+}
+
+.btn-patient {
+  background-color: #fff;
+  cursor: pointer;
+  border: 2px solid #cacace;
+}
+
+.btn-patient.blue {
+  padding: 2px 6px;
+  color: #3981f7;
+  background-color: #cadeff;
+  border: 2px solid #3981f7;
+}
+
+.btn-patient.green {
+  display: flex;
+  padding: 5px 6px;
+  background-color: #ceefdf;
+  color: #0aaf60;
+  border: 2px solid #0aaf60;
+}
+
+.btn-patient.blue:hover,
+.btn-patient.blue:focus {
+  color: #fff;
+  background-color: #3981f7;
+  border: 2px solid #194488;
+}
+
+.btn-patient.green:hover,
+.btn-patient.green:focus {
+  background-color: #61bd90;
+  color: #ffffff;
+  border: 2px solid #008545;
+} 
+
+
+.form2-table.locked .btn-patient {
+  background-color:  #f1f1f1;
+  color: #cacace;
+  border: 2px solid #cacace;
+  cursor: default;
+}
+
+
+.form2-table.locked .form1-btn-add {
+  background-color:  #f1f1f1;
+  color: #cacace;
+  border: 2px solid #cacace;
+  cursor: default;
 }
 

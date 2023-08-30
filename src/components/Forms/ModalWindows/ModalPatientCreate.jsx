@@ -1,4 +1,5 @@
 //Todo додати бібліотеку валідації країн
+//Todo додати валідацію
 
 import { useState } from "react";
 import axios from "../../../api/axios";
@@ -7,7 +8,14 @@ import { updateTokens } from "../../../updateTokens";
 
 import "./ModalPatientCreate.css";
 
-export const ModalPatientCreate = ({ isOpen, onClose, onGetAge, onGetFullName, onGetBirthday }) => {
+export const ModalPatientCreate = ({
+  isOpen,
+  onClose,
+  onGetAge,
+  onGetFullName,
+  onGetBirthday,
+  onGetId,
+}) => {
   const [first_name, setFirstName] = useState("");
   const [last_name, setLastName] = useState("");
   const [middle_name, setMiddleName] = useState("");
@@ -37,14 +45,15 @@ export const ModalPatientCreate = ({ isOpen, onClose, onGetAge, onGetFullName, o
         phone,
         email,
       };
-
+      console.log(data);
       const response = await instance.post("/patients", data);
-     
+
       onGetAge(response.data.age);
-      onGetFullName(response.data.patientName);
+      onGetFullName(response.data.full_name);
       onGetBirthday(response.data.birthday);
-      
-  
+      onGetId(response.data.id);
+      console.log(response.data);
+
       setTimeout(() => {
         onClose();
       }, 600);
@@ -66,8 +75,8 @@ export const ModalPatientCreate = ({ isOpen, onClose, onGetAge, onGetFullName, o
   };
 
   return (
-    <div className="modal-overlay">
-      <div className="modal-content">
+    <div className="modal-overlay-create">
+      <div className="modal-content-create">
         <form onSubmit={onCreatePatient}>
           <label>
             Призвіще:
@@ -132,7 +141,7 @@ export const ModalPatientCreate = ({ isOpen, onClose, onGetAge, onGetFullName, o
               onChange={(e) => setEmail(e.target.value)}
             />
           </label>
-          <button type="submit">Send</button>
+          <button type="submit">Створити</button>
         </form>
         <button type="button" onClick={onClose}>
           Закрити

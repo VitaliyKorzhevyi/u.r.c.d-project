@@ -55,7 +55,7 @@ export const DiagnosesInput = ({
   const handleInputChange = (inputValue) => {
     const updatedForms = [...forms];
     updatedForms[formIndex].diagnoses = inputValue;
-    localStorage.setItem("anesthesiologyForms", JSON.stringify(updatedForms));
+    localStorage.setItem("operatingForms", JSON.stringify(updatedForms));
     setForms(updatedForms);
   };
 

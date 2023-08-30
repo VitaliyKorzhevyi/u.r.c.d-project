@@ -42,7 +42,7 @@ export const OperationsInput = ({
   const handleInputChange = (inputValue) => {
     const updatedForms = [...forms];
     updatedForms[formIndex].operations = inputValue;
-    localStorage.setItem("anesthesiologyForms", JSON.stringify(updatedForms));
+    localStorage.setItem("resuscitationForms", JSON.stringify(updatedForms));
     setForms(updatedForms);
   };
 

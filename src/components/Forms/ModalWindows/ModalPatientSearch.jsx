@@ -8,9 +8,12 @@ import "./ModalPatientSearch.css";
 export const ModalPatientSearch = ({
   isOpen,
   onClose,
+  formIndex,
   onGetAge,
   onGetFullName,
   onGetBirthday,
+  onGetId,
+  
 }) => {
   const [patients, setPatients] = useState([]);
   const [lastName, setLastName] = useState("");
@@ -87,15 +90,21 @@ export const ModalPatientSearch = ({
   };
 
   const handleItemClick = (patient) => {
+    console.log("Selected patient:", patient);
     onGetFullName(patient.full_name);
     onGetAge(patient.age);
     onGetBirthday(patient.birthday);
+    onGetId(patient.id);
+
+    setPatients([]);
+
+    onClose();
   };
 
   return (
     <div className="modal-overlay">
       <div className="modal-content">
-        <form onSubmit={onSearchPatient}>
+        <form onSubmit={onSearchPatient} className="seacrh-container">
           <label>
             Призвіще:
             <input
@@ -145,21 +154,33 @@ export const ModalPatientSearch = ({
               className="patient-item"
               onClick={() => handleItemClick(patient)}
             >
-              <p>
-                <strong>Name:</strong> {patient.full_name}
-              </p>
-              <p>
-                <strong>Birthday:</strong> {patient.birthday}
-              </p>
-              <p>
-                <strong>Phone:</strong> {patient.phone}
-              </p>
-              <p>
-                <strong>Age:</strong> {patient.age}
-              </p>
-              <p>
-                <strong>Email:</strong> {patient.email}
-              </p>
+              <ul className="patient-list-info">
+                <li>
+                  <p>
+                    <strong>Name:</strong> {patient.full_name}
+                  </p>
+                </li>
+                <li>
+                  <p>
+                    <strong>Birthday:</strong> {patient.birthday}
+                  </p>
+                </li>
+                <li>
+                  <p>
+                    <strong>Age:</strong> {patient.age}
+                  </p>
+                </li>
+                <li>
+                  <p>
+                    <strong>Phone:</strong> {patient.phone}
+                  </p>
+                </li>
+                <li>
+                  <p>
+                    <strong>Email:</strong> {patient.email}
+                  </p>
+                </li>
+              </ul>
             </div>
           ))}
         </div>
@@ -167,9 +188,3 @@ export const ModalPatientSearch = ({
     </div>
   );
 };
-
-
-
-
-
-

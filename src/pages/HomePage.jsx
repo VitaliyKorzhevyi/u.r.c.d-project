@@ -3,9 +3,12 @@ import { useLocation } from "react-router-dom";
 
 import { UserManagement } from "../components/UserManagement/UserManagement";
 import { Forms } from "../components/Forms/Forms";
-import { Archive } from "../components/Archive/Archive";
+import { SavedForms } from "../components/SavedForms/SavedForms";
 import { Statistics } from "../components/Statistics/Statistics";
 import { Messages } from "../components/Messages/Messages";
+import { Archive } from "../components/Archive/Archive";
+import { Pharmacy } from "../components/Pharmacy/Pharmacy";
+import { Dentistry } from "../components/Dentistry/Dentistry";
 
 import './HomePage.css';
 
@@ -34,16 +37,22 @@ export const HomePage = () => {
         <div className="admin-buttons">
           <button type="button" onClick={() => onSectionChange('users')}>Керування користувачами</button>
           <button type="button" onClick={() => onSectionChange('forms')}>Форми</button>
-          <button type="button" onClick={() => onSectionChange('archive')}>Архів</button>
+          <button type="button" onClick={() => onSectionChange('saved-forms')}>Збережені форми</button>
           <button type="button" onClick={() => onSectionChange('statistics')}>Статистика</button>
           <button type="button" onClick={() => onSectionChange('messages')}>Повідомлення</button>
+          <button type="button" onClick={() => onSectionChange('archive')}>Архів</button>
+          <button type="button" onClick={() => onSectionChange('pharmacy')}>Апт./Бух.</button>
+          <button type="button" onClick={() => onSectionChange('dentistry')}>Стоматологія</button>
         </div>
       </div>
       {activeSection === 'users' && <UserManagement />}
       {activeSection === 'forms' && <Forms />}
-      {activeSection === 'archive' && <Archive />}
+      {activeSection === 'saved-forms' && <SavedForms />}
       {activeSection === 'statistics' && <Statistics />}
       {activeSection === 'messages' && <Messages />}
+      {activeSection === 'archive' && <Archive />}
+      {activeSection === 'pharmacy' && <Pharmacy />}
+      {activeSection === 'dentistry' && <Dentistry />}
     </div>
   );
 };

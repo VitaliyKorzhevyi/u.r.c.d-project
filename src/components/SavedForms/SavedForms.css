@@ -1,0 +1,49 @@
+.container-saved-forms {
+  margin: 0 auto;
+  max-width: 1200px;
+  padding: 0 15px;
+}
+
+.calendar-saved-forms {
+  margin: 0 auto;
+  display: flex;
+  padding-top: 80px;
+  flex-direction: column;
+  align-items: center;
+}
+
+.btn-calendar {
+  margin-top: 12px;
+  padding: 8px 16px;
+}
+
+.list-saved-forms {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  padding: 12px 0;
+
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  font-size: 20px;
+}
+
+.item-saved-forms {
+  display: flex;
+  flex-direction: column;
+  padding: 8px 15px;
+
+  border: 2px solid #b1b1b1;
+  border-radius: 10px;
+}
+
+.mini-form {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 12px;
+}
+
+.table-save-size {
+    width: 6.6%;
+}

@@ -1,6 +1,6 @@
 import axios from "axios";
 
 export default axios.create({
-    baseURL: "https://4ba8-176-124-234-156.ngrok-free.app/api",
+    baseURL: "https://ip-91-227-40-30-92919.vps.hosted-by-mvps.net/api",
     withCredentials: true,
 })

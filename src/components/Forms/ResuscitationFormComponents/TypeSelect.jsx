@@ -2,7 +2,7 @@ export const TypeSelect = ({ formIndex, rowIndex, value, locked, forms, setForms
   const onInputChange = (formIndex, rowIndex, field, inputValue) => {
     const updatedForms = [...forms];
     updatedForms[formIndex].rows[rowIndex][field] = inputValue;
-    localStorage.setItem("anesthesiologyForms", JSON.stringify(updatedForms));
+    localStorage.setItem("resuscitationForms", JSON.stringify(updatedForms));
     setForms(updatedForms);
   };
 

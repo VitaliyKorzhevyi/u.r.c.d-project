@@ -75,7 +75,7 @@ export const MedicamentInput = ({
   const onInputChange = (formIndex, rowIndex, field, inputValue) => {
     const updatedForms = [...forms];
     updatedForms[formIndex].rows[rowIndex][field] = inputValue;
-    localStorage.setItem("anesthesiologyForms", JSON.stringify(updatedForms));
+    localStorage.setItem("operatingForms", JSON.stringify(updatedForms));
     setForms(updatedForms);
   };
 

@@ -1,27 +1,23 @@
-//Todo бібліотека дати!!!!!
-//Todo додати валідацію на інпут доба
-//Todo додати модалку для збереження форми
-
 import { useState, useEffect } from "react";
-import "./FormAnesthesiology.css";
+import './FormResuscitation.css'
 import axios from "../../api/axios";
 
 //Інпути зі списками з бекенду
 import { ModalPatientCreate } from "./ModalWindows/ModalPatientCreate";
 import { ModalPatientSearch } from "./ModalWindows/ModalPatientSearch";
-import { MedicamentInput } from "./AnesthFormComponents/MedicamentInput";
-import { DayInput } from "./AnesthFormComponents/DayInput";
-import { DiagnosesInput } from "./AnesthFormComponents/DiagnosesInput";
-import { OperationsInput } from "./AnesthFormComponents/OperationsInput";
+import { MedicamentInput } from "./ResuscitationFormComponents/MedicamentInput";
+import { DayInput } from "./ResuscitationFormComponents/DayInput";
+import { DiagnosesInput } from "./ResuscitationFormComponents/DiagnosesInput";
+import { OperationsInput } from "./ResuscitationFormComponents/OperationsInput";
 
-import { QuantityInput } from "./AnesthFormComponents/QuantityInput";
-import { TypeSelect } from "./AnesthFormComponents/TypeSelect";
-import { NotesInput } from "./AnesthFormComponents/NotesInput";
+import { QuantityInput } from "./ResuscitationFormComponents/QuantityInput";
+import { TypeSelect } from "./ResuscitationFormComponents/TypeSelect";
+import { NotesInput } from "./ResuscitationFormComponents/NotesInput";
 
-import { CopyRowButton } from "./AnesthFormComponents/CopyRowButton";
-import { DeleteRowButton } from "./AnesthFormComponents/DeleteRowButton";
+import { CopyRowButton } from "./ResuscitationFormComponents/CopyRowButton";
+import { DeleteRowButton } from "./ResuscitationFormComponents/DeleteRowButton";
 
-export const FormAnesthesiology = () => {
+export const FormResuscitation = () => {
   //данні про мене
   const [myData, setmyData] = useState([]);
 
@@ -158,7 +154,7 @@ export const FormAnesthesiology = () => {
   };
 
   // ЗБЕРІГАЄМО ДАННІ З ФОРМИ У ЛОКАЛЬНЕ СХОВИЩЕ
-  const savedForms = localStorage.getItem("anesthesiologyForms");
+  const savedForms = localStorage.getItem("resuscitationForms");
   const initialForms = savedForms
     ? JSON.parse(savedForms)
     : [
@@ -229,12 +225,12 @@ export const FormAnesthesiology = () => {
   };
 
   const setFormsWithStorage = (newForms) => {
-    localStorage.setItem("anesthesiologyForms", JSON.stringify(newForms));
+    localStorage.setItem("resuscitationForms", JSON.stringify(newForms));
     setForms(newForms);
   };
 
   useEffect(() => {
-    const savedForms = localStorage.getItem("anesthesiologyForms");
+    const savedForms = localStorage.getItem("resuscitationForms");
     if (savedForms) {
       setForms(JSON.parse(savedForms));
     }
@@ -319,7 +315,7 @@ export const FormAnesthesiology = () => {
 
     // Здесь вы можете отправить dataToSend на бэкенд
     axios
-      .post("/reports/anesthesiology", dataToSend, {
+      .post("/reports/resuscitation", dataToSend, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
           "Content-Type": "application/json",
@@ -359,8 +355,8 @@ export const FormAnesthesiology = () => {
           <table>
             <thead>
               <tr>
-                <th colSpan="7" className="form2-table-title">
-                  АНЕСТЕЗІОЛОГІЯ
+                <th colSpan="7" className="form4-table-title">
+                  РЕАНІМАЦІЯ
                 </th>
               </tr>
             </thead>
@@ -428,7 +424,6 @@ export const FormAnesthesiology = () => {
                   <ModalPatientSearch
                     isOpen={onModalSearchPatient}
                     onClose={closeModalSearchPatient}
-          
                     value={form.patientName}
                     onGetAge={(age) => onFieldChange(formIndex, "age", age)}
                     onGetFullName={(patientName) =>

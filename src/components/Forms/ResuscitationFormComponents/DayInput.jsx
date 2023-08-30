@@ -38,7 +38,7 @@ export const DayInput = ({
   const handleInputChange = (inputValue) => {
     const updatedForms = [...forms];
     updatedForms[formIndex].day = inputValue;
-    localStorage.setItem("anesthesiologyForms", JSON.stringify(updatedForms));
+    localStorage.setItem("resuscitationForms", JSON.stringify(updatedForms));
     setForms(updatedForms);
   };
 

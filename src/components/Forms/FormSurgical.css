@@ -35,12 +35,12 @@ table {
 
 th,
 td {
-  border: 1px solid #ccc; /* Стиль рамки для заголовків і комірок таблиці */
-  padding: 8px; /* Додаємо відступи всередині комірок */
+  border: 1px solid #ccc; 
+  padding: 8px; 
 }
 
 th {
-  background-color: #f2f2f2; /* Фоновий колір заголовків */
+  background-color: #f2f2f2; 
 }
 
 .form1-table-size1 {
@@ -48,10 +48,6 @@ th {
   font-weight: 500;
   font-size: 18px;
   width: 120px;
-}
-
-.form1-table-size3 {
-  width: 38%;
 }
 
 .form1-table-title {
@@ -192,11 +188,12 @@ th {
 .add-new-form1:focus {
   background-color: #3981f7;
   color: #ffffff;
-  border: 2px solid #0148bb;
+  border: 3px solid #0148bb;
 }
 
-
-/* .form2-table.locked.form1-delete {
-  pointer-events: none;
-  opacity: 0.5; 
-} */
+.form2-table.locked .table1-btn {
+  background-color:  #f1f1f1;
+  color: #cacace;
+  border: 2px solid #cacace;
+  cursor: default;
+}
