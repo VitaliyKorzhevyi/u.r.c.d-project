@@ -75,7 +75,7 @@ export const SavedForms = () => {
 
   const typeNames = {
     operating: "Операційна",
-    anesthesiology: "Анестезіолгія",
+    anesthesiology: "Анестезіологія",
     resuscitation: "Реанімація",
     // добавьте другие типы здесь
   };

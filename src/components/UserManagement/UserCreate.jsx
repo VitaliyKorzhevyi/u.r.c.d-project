@@ -1,9 +1,13 @@
+//! 500 помилка при створені нового користувача
+//todo створити кнопку + по якій буде відкриватися модалка для створення користувача
+//todo створити валідацію для запобігання помилок
+
 import axios from "../../api/axios";
 import { useState, useEffect } from "react";
 import { updateTokens } from "../../updateTokens";
 import UserBanCheckbox from "./UserBanCheckbox";
 
-export const UserPanel = () => {
+export const UserCreate = () => {
   const [first_name, setFirstName] = useState("");
   const [last_name, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -14,6 +18,7 @@ export const UserPanel = () => {
 
   const onCreateUser = async (e) => {
     e.preventDefault();
+    
     const accessToken = async () => {
       const access_token = localStorage.getItem("access_token");
       if (!access_token) {

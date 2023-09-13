@@ -1,8 +1,8 @@
 //Todo валідація збереження від 2
 
 import { useState } from "react";
-import axios from "../../../api/axios"; // Путь к axios
-
+// import axios from "../../../api/axios"; // Путь к axios
+import $api from "../../../api/api";
 import "./DayInput.css";
 
 export const DayInput = ({
@@ -35,29 +35,22 @@ export const DayInput = ({
     }
   };
 
-  const handleInputChange = (inputValue) => {
-    const updatedForms = [...forms];
-    updatedForms[formIndex].day = inputValue;
-    localStorage.setItem("anesthesiologyForms", JSON.stringify(updatedForms));
-    setForms(updatedForms);
-  };
-
   const handleSelectDay = (selectedDay) => {
     setInputValue(selectedDay.title);
     setFilteredDays([]);
+    
+    handleInputChange(selectedDay.title, selectedDay.id); // передайте id
+};
 
-    const existsInDays = days.some(
-      (day) => day.title.toLowerCase() === selectedDay.title.toLowerCase()
-    );
-
-    if (!existsInDays) {
-      updateDays([...days, selectedDay]);
-      setShowModal(true);
-      setInputValue("");
+const handleInputChange = (inputValue, dayId) => {
+    const updatedForms = [...forms];
+    updatedForms[formIndex].day = inputValue;
+    if (dayId) {
+      updatedForms[formIndex].preoperative_day_id = dayId;
     }
-    onDayId(selectedDay.id)
-    console.log("Selected days id:", selectedDay.id);
-  };
+    localStorage.setItem("anesthesiologyForms", JSON.stringify(updatedForms));
+    setForms(updatedForms);
+};
 
   const onDayInputBlur = (value) => {
     if (value.trim() === "") {
@@ -83,18 +76,12 @@ export const DayInput = ({
       }
     }
   };
-
+  
+// добавляем новый день
   const handleAddNewDay = async () => {
     console.log(inputValue);
     try {
-      const response = await axios.post("/preoperative-days", inputValue, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          "Content-Type": "application/json",
-        },
-      });
-
-      // обновляем список
+      const response = await $api.post("/preoperative-days", inputValue);
       updateDays(response.data);
       onDayId(response.data.id)
       setShowModal(false);

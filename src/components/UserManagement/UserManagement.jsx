@@ -1,6 +1,6 @@
+
 import { useState, useEffect } from "react";
-import axios from "../../api/axios";
-import { updateTokens } from "../../updateTokens";
+import $api from "../../api/api";
 import UserBanCheckbox from "./UserBanCheckbox";
 
 import "./UserManagement.css";
@@ -10,19 +10,13 @@ const User = ({ user }) => {
     <div className="user">
       <ul className="info-list">
         <li>
-          <p>{user.first_name}</p>
-        </li>
-        <li>
-          <p>{user.last_name}</p>
-        </li>
-        <li>
-          <p>{user.middle_name}</p>
+          <p>{user.full_name}</p>
         </li>
         <li>
           <p>{user.job_title}</p>
         </li>
         <li>
-          <UserBanCheckbox user_id={user.id} />
+          <UserBanCheckbox user_id={user.id} is_active={!user.is_active}/>
         </li>
         <li>
           <button type="button"> Змінити данні</button>
@@ -34,40 +28,16 @@ const User = ({ user }) => {
 
 export const UserManagement = () => {
   const [users, setUsers] = useState([]);
+  // const [onModalCreateUser, setModalCreateUser] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const access_token = localStorage.getItem("access_token");
-
-        const instance = axios.create({
-          headers: {
-            Authorization: `Bearer ${access_token}`,
-          },
-        });
-
-        const response = await instance.get("/users?skip=0&limit=99");
+        const response = await $api.get("/users?skip=0&limit=99");
         console.log(response.data);
         setUsers(response.data);
       } catch (error) {
-        if (
-          error?.response?.status === 401 &&
-          error?.response?.data?.detail === "Could not validate credentials"
-        ) {
-          try {
-            updateTokens();
-            // const redirected = await updateTokens();
-            // if (!redirected) {
-            //   setTimeout(() => {
-            //     accessToken();
-            //   }, 600);
-            // }
-          } catch (error) {
-            console.log(error);
-          }
-        } else {
-          console.log(error);
-        }
+        console.log(error);
       }
     };
 
@@ -81,6 +51,9 @@ export const UserManagement = () => {
         {users.map((user, index) => (
           <User key={index} user={user} />
         ))}
+      </div>
+      <div>
+
       </div>
     </div>
   );

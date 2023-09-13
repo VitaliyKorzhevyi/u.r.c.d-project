@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "../../../api/axios"; // Путь к axios
+import $api from "../../../api/api";
 
 import "./DiagnosesInput.css";
 
@@ -64,7 +64,7 @@ export const DiagnosesInput = ({
     setFilteredDiagnoses([]);
 
     const existsInDiagnoses = diagnoses.some(
-      (diagnoses) => diagnoses.title.toLowerCase() === selectedDiagnoses.title.toLowerCase()
+      (diagnosis) => diagnosis.title.toLowerCase() === selectedDiagnoses.title.toLowerCase()
     );
 
     if (!existsInDiagnoses) {
@@ -72,9 +72,16 @@ export const DiagnosesInput = ({
       setShowModal(true);
       setInputValue("");
     }
+
+    // Обновите forms со значением diagnosis и diagnosis_id
+    const updatedForms = [...forms];
+    updatedForms[formIndex].diagnoses = selectedDiagnoses.title;
+    updatedForms[formIndex].diagnosis_id = selectedDiagnoses.id;
+    setForms(updatedForms);
+    localStorage.setItem("anesthesiologyForms", JSON.stringify(updatedForms));
+
     onDiagnosesId(selectedDiagnoses.id)
-    console.log("Selected diagnoses id:", selectedDiagnoses.id);
-  };
+};
 
   const handleInputKeyDown = (e) => {
     if (e.key === "Enter") {
@@ -91,12 +98,7 @@ export const DiagnosesInput = ({
   const handleAddNewDiagnoses = async () => {
     console.log(inputValue);
     try {
-      const response = await axios.post("/diagnoses", inputValue, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await $api.post("/diagnoses", inputValue);
 
       // обновляем список
       updateDiagnoses(response.data);

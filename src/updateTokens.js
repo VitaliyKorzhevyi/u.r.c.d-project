@@ -1,4 +1,4 @@
-//Todo {"detail": "Invalid refresh token"} прописати в умові що зацшов з іншого пристрою
+//Todo {"detail": "Invalid refresh token"} прописати в умові що зайшов з іншого пристрою
 
 import axios from "./api/axios";
 

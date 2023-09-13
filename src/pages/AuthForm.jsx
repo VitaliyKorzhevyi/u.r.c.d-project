@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { Navigate } from 'react-router-dom';
+import { Navigate } from "react-router-dom";
 import axios from "../api/axios";
 import querystring from "querystring";
 
-import './AuthForm.css'
+import "./AuthForm.css";
 
 export const Auth = () => {
   const [username, setUsername] = useState("");
@@ -15,7 +15,6 @@ export const Auth = () => {
     e.preventDefault();
 
     try {
-
       const data = querystring.stringify({
         username,
         password,
@@ -30,8 +29,8 @@ export const Auth = () => {
       const { access_token, refresh_token } = response.data;
       localStorage.setItem("access_token", access_token);
       localStorage.setItem("refresh_token", refresh_token);
-        // setUsername('');
-        // setPassword('');
+      // setUsername('');
+      // setPassword('');
       console.log(access_token);
       console.log(refresh_token);
       setIsAuthenticated(true);
@@ -68,8 +67,6 @@ export const Auth = () => {
         </div>
         <button type="submit">Увійти</button>
       </form>
-     
     </div>
   );
 };
-

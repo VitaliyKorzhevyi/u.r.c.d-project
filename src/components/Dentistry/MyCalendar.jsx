@@ -11,7 +11,7 @@ function MyCalendar() {
     <FullCalendar
     style={{ width: '80%', maxWidth: '600px', margin: '0 auto' }}
       plugins={[interactionPlugin, dayGridPlugin]}
-      initialView="timeGridWeek"
+
       editable={true}
       events={[
         { title: 'Meeting', start: new Date() },

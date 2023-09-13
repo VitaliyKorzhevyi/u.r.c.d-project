@@ -1,14 +1,11 @@
 import { useState } from "react";
-import axios from "../../../api/axios";
-
-import { updateTokens } from "../../../updateTokens";
+import $api from "../../../api/api";
 
 import "./ModalPatientSearch.css";
 
 export const ModalPatientSearch = ({
   isOpen,
   onClose,
-  formIndex,
   onGetAge,
   onGetFullName,
   onGetBirthday,
@@ -26,14 +23,6 @@ export const ModalPatientSearch = ({
   if (!isOpen) return null;
 
   const fetchData = async (params) => {
-    const access_token = localStorage.getItem("access_token");
-
-    const instance = axios.create({
-      headers: {
-        Authorization: `Bearer ${access_token}`,
-        "Content-Type": "application/json",
-      },
-    });
 
     const queryString = Object.entries(params)
       .filter(([_, value]) => value.length > 3) // Фильтруем параметры с длиной менее 4
@@ -41,25 +30,13 @@ export const ModalPatientSearch = ({
       .join("&");
     if (queryString) {
       try {
-        const response = await instance.get(
+        const response = await $api.get(
           `/patients?skip=0&limit=8&${queryString}`
         );
         setPatients(response.data);
         console.log(response.data);
       } catch (error) {
-        if (
-          error?.response?.status === 401 &&
-          error?.response?.data?.detail === "Could not validate credentials"
-        ) {
-          try {
-            // обновление токенов
-            updateTokens();
-          } catch (error) {
-            console.log(error);
-          }
-        } else {
-          console.log(error);
-        }
+        console.error("Поиск не удался", error);
       }
     }
   };
@@ -96,6 +73,13 @@ export const ModalPatientSearch = ({
     onGetBirthday(patient.birthday);
     onGetId(patient.id);
 
+    // Очистити всі поля
+    setFirstName("");
+    setLastName("");
+    setMiddleName("");
+    setBirthday("");
+    setPhone("");
+    setEmail("");
     setPatients([]);
 
     onClose();

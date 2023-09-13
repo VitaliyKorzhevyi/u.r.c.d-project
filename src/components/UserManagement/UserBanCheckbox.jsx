@@ -1,38 +1,34 @@
-import { useState } from 'react';
-import axios from '../../api/axios';
-//! додати оновлення токену
-import './UserBanCheckbox.css'
+//todo Тарас мені потрібно, що коли я баню користувача, то він опиняється в кінці списку користувачів, список приходить по алфавіту
+import { useState } from "react";
+import $api from "../../api/api";
+import "./UserBanCheckbox.css";
 
-
-const UserBanCheckbox = ({ user_id }) => {
-  const [isBanned, setIsBanned] = useState(false);
-
-  const access_token = localStorage.getItem("access_token");
-
-  const instance = axios.create({
-    headers: { Authorization: `Bearer ${access_token}` },
-  });
+const UserBanCheckbox = ({ user_id, is_active }) => {
+  const [isBanned, setIsBanned] = useState(is_active);
 
   const handleBanUser = async () => {
     try {
-        console.log('Отправляемые данные:', { user_id });
-        const response = await instance.post(`/users/ban/${user_id}`);
-        const message = response.data; 
-        console.log('Ответ сервера:', message);
-        setIsBanned(true);
+      console.log("Отправляемые данные:", { user_id });
+      const response = await $api.post(`/users/${user_id}/ban`);
+      const message = response.data;
+      console.log("Ответ сервера при бане:", message);
+      setIsBanned(true);
     } catch (error) {
-      console.error('Ошибка при бане пользователя:', error);
+      console.error("Ошибка при бане пользователя:", error);
+      if (error.response) {
+        console.error("Тело ошибки:", error.response.data);
+      }
     }
   };
 
   const handleUnbanUser = async () => {
     try {
-        const response = await instance.post(`/users/unban/${user_id}`);
-        const message = response.data; // Это будет строкой "string"
-        console.log('Ответ сервера:', message);
-        setIsBanned(false);
+      const response = await $api.post(`/users/${user_id}/unban`);
+      const message = response.data; 
+      console.log("Ответ сервера при разбане:", message);
+      setIsBanned(false);
     } catch (error) {
-      console.error('Ошибка при разбане пользователя:', error);
+      console.error("Ошибка при разбане пользователя:", error);
     }
   };
 
@@ -45,7 +41,7 @@ const UserBanCheckbox = ({ user_id }) => {
   };
 
   return (
-    <div className='checkbox-ban'>
+    <div className="checkbox-ban">
       <label>
         Забанить пользователя {user_id}:
         <input

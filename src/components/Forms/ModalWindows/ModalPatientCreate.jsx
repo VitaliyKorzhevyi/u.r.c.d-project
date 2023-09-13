@@ -2,9 +2,7 @@
 //Todo додати валідацію
 
 import { useState } from "react";
-import axios from "../../../api/axios";
-
-import { updateTokens } from "../../../updateTokens";
+import $api from "../../../api/api";
 
 import "./ModalPatientCreate.css";
 
@@ -28,15 +26,6 @@ export const ModalPatientCreate = ({
     e.preventDefault();
 
     try {
-      const access_token = localStorage.getItem("access_token");
-
-      const instance = axios.create({
-        headers: {
-          Authorization: `Bearer ${access_token}`,
-          "Content-Type": "application/json",
-        },
-      });
-
       const data = {
         first_name,
         last_name,
@@ -46,7 +35,7 @@ export const ModalPatientCreate = ({
         email,
       };
       console.log(data);
-      const response = await instance.post("/patients", data);
+      const response = await $api.post("/patients", data);
 
       onGetAge(response.data.age);
       onGetFullName(response.data.full_name);
@@ -54,23 +43,19 @@ export const ModalPatientCreate = ({
       onGetId(response.data.id);
       console.log(response.data);
 
+      // Очистити всі поля
+      setFirstName("");
+      setLastName("");
+      setMiddleName("");
+      setBirthday("");
+      setPhone("");
+      setEmail("");
+
       setTimeout(() => {
         onClose();
       }, 600);
     } catch (error) {
-      if (
-        error?.response?.status === 401 &&
-        error?.response?.data?.detail === "Could not validate credentials"
-      ) {
-        try {
-          // обновление токенов
-          updateTokens();
-        } catch (error) {
-          console.log(error);
-        }
-      } else {
-        console.log(error);
-      }
+      console.error("Добавление пользователя не удалося", error);
     }
   };
 

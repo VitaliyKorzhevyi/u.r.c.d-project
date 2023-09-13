@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "../../../api/axios"; // Путь к axios
+import $api from "../../../api/api";
 
 import "./OperationsInput.css";
 
@@ -59,6 +59,15 @@ export const OperationsInput = ({
       setShowModal(true);
       setInputValue("");
     }
+
+
+    const updatedForms = [...forms];
+    updatedForms[formIndex].operations = selectedOperatios.title;
+    updatedForms[formIndex].operation_id = selectedOperatios.id;
+    setForms(updatedForms);
+    localStorage.setItem("anesthesiologyForms", JSON.stringify(updatedForms));
+
+
     onOperationId(selectedOperatios.id)
     console.log("Selected operations id:", selectedOperatios.id);
   };
@@ -91,12 +100,7 @@ export const OperationsInput = ({
   const handleAddNewOperations = async () => {
     console.log(inputValue);
     try {
-      const response = await axios.post("/operations", inputValue, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await $api.post("/operations", inputValue);
 
       // обновляем список
       updateOperations(response.data);
