@@ -1,8 +1,16 @@
-export const NotesInput = ({ formIndex, rowIndex, value, locked, forms, setForms }) => {
+export const NotesInput = ({
+  formIndex,
+  rowIndex,
+  value,
+  locked,
+  forms,
+  setForms,
+  localStorageKey,
+}) => {
   const onInputChange = (formIndex, rowIndex, field, inputValue) => {
     const updatedForms = [...forms];
     updatedForms[formIndex].rows[rowIndex][field] = inputValue;
-    localStorage.setItem("operatingForms", JSON.stringify(updatedForms));
+    localStorage.setItem(localStorageKey, JSON.stringify(updatedForms));
     setForms(updatedForms);
   };
 
@@ -12,9 +20,10 @@ export const NotesInput = ({ formIndex, rowIndex, value, locked, forms, setForms
       name="notation"
       className="form1-table-text-name"
       value={value}
-      onChange={(e) => onInputChange(formIndex, rowIndex, "notation", e.target.value)}
+      onChange={(e) =>
+        onInputChange(formIndex, rowIndex, "notation", e.target.value)
+      }
       disabled={locked}
     />
   );
 };
-

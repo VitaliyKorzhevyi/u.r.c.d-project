@@ -1,4 +1,3 @@
-//Todo додати бібліотеку валідації країн
 //Todo додати валідацію
 
 import { useState } from "react";

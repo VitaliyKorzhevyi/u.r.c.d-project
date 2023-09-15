@@ -1,25 +1,25 @@
-//Todo бібліотека дати!!!!!
-//Todo додати валідацію на інпут доба
-//Todo додати модалку для збереження форми
+//Todo додати модалку для збереження ВСІХ!!!!!! форм
 
 import { useState, useEffect } from "react";
 import "./FormAnesthesiology.css";
 
 import $api from "../../api/api";
 
-import { ModalPatientCreate } from "./ModalWindows/ModalPatientCreate";
-import { ModalPatientSearch } from "./ModalWindows/ModalPatientSearch";
-import { MedicamentInput } from "./AnesthFormComponents/MedicamentInput";
-import { DayInput } from "./AnesthFormComponents/DayInput";
-import { DiagnosesInput } from "./AnesthFormComponents/DiagnosesInput";
-import { OperationsInput } from "./AnesthFormComponents/OperationsInput";
+//* core components
 
-import { QuantityInput } from "./AnesthFormComponents/QuantityInput";
-import { TypeSelect } from "./AnesthFormComponents/TypeSelect";
-import { NotesInput } from "./AnesthFormComponents/NotesInput";
+import { DayInput } from "./СoreComponentsForms/DayInput";
+import { DiagnosesInput } from "./СoreComponentsForms/DiagnosesInput";
+import { OperationsInput } from "./СoreComponentsForms/OperationsInput";
+import { ModalPatientCreate } from "./СoreComponentsForms/ModalPatientCreate";
+import { ModalPatientSearch } from "./СoreComponentsForms/ModalPatientSearch";
 
-import { CopyRowButton } from "./AnesthFormComponents/CopyRowButton";
-import { DeleteRowButton } from "./AnesthFormComponents/DeleteRowButton";
+//*row components
+import { MedicamentInput } from "./СoreComponentsForms/MedicamentInput";
+import { QuantityInput } from "./СoreComponentsForms/QuantityInput";
+import { TypeSelect } from "./СoreComponentsForms/TypeSelect";
+import { NotesInput } from "./СoreComponentsForms/NotesInput";
+import { CopyRowButton } from "./СoreComponentsForms/CopyRowButton";
+import { DeleteRowButton } from "./СoreComponentsForms/DeleteRowButton";
 
 export const FormAnesthesiology = () => {
   const [activeFormIndex, setActiveFormIndex] = useState(null);
@@ -30,7 +30,6 @@ export const FormAnesthesiology = () => {
   const [operations, setOperations] = useState([]);
   const [isModalOpenCreate, setModalOpenCreate] = useState(false);
   const [isModalOpenSearch, setModalOpenSearch] = useState(false);
-  
 
   //* ЗАПИТ НА ВСІХ ЮЗЕРІВ
   useEffect(() => {
@@ -39,7 +38,6 @@ export const FormAnesthesiology = () => {
       setmyData(response.data);
     });
   }, []);
-
 
   //* ДЛЯ ЗБЕРЕЖЕННЯ МЕДИКАМЕНТІВ В СТЕЙТ
   const updateMedicaments = (newMedicament) => {
@@ -53,7 +51,6 @@ export const FormAnesthesiology = () => {
     });
   }, []);
 
-
   //* ДЛЯ ЗАПИТ ДНІВ (передопераційна доба)
   const updateDays = (newDay) => {
     setDays((prevDays) => [...prevDays, newDay]);
@@ -66,7 +63,6 @@ export const FormAnesthesiology = () => {
     });
   }, []);
 
-
   //* ЗАПИТ ДІАГНОЗІВ
   const updateDiagnoses = (newDiagnoses) => {
     setDiagnoses((prevDiagnoses) => [...prevDiagnoses, newDiagnoses]);
@@ -78,7 +74,6 @@ export const FormAnesthesiology = () => {
       setDiagnoses(response.data);
     });
   }, []);
-
 
   //* ЗАПИТ ОПЕРАЦІЙ
   const updateOperations = (newOperations) => {
@@ -99,7 +94,6 @@ export const FormAnesthesiology = () => {
       setActiveFormIndex(null);
     }
   };
-
 
   const toggleModalSearch = () => {
     setModalOpenSearch(!isModalOpenSearch);
@@ -125,14 +119,14 @@ export const FormAnesthesiology = () => {
               notation: "",
             },
           ],
-          doctorName: myData.full_name || "", // Додаткові поля
+          doctorName: myData.full_name || "", 
           date: "",
           birthday: "",
           history_number: "0",
           patient_id: "0",
           preoperative_day_id: "0",
           operation_id: "0",
-          diagnisis_id: "0",
+          diagnosis_id: "0",
           patientName: "",
           age: "",
           diagnoses: "",
@@ -193,7 +187,7 @@ export const FormAnesthesiology = () => {
 
   //* УПРАВЛІННЯ ТАБЛИЦЕЮ
 
-  // блок формИ
+  // блок форми
   const onLockForm = (formIndex) => {
     const updatedForms = [...forms];
     updatedForms[formIndex].locked = !updatedForms[formIndex].locked;
@@ -210,8 +204,8 @@ export const FormAnesthesiology = () => {
   // копіювання форми
   const onCopyForm = (formIndex) => {
     const formToCopy = forms[formIndex];
-    const copiedForm = { ...formToCopy, id: nextFormId }; // используйте nextFormId здесь
-    setNextFormId(nextFormId + 1); // установите новый ID
+    const copiedForm = { ...formToCopy, id: nextFormId }; 
+    setNextFormId(nextFormId + 1); 
     const updatedForms = [...forms, copiedForm];
     setFormsWithStorage(updatedForms);
   };
@@ -229,7 +223,6 @@ export const FormAnesthesiology = () => {
     setFormsWithStorage(updatedForms); // Обновление localStorage
   };
 
-
   //* ВІДОБРАЖЕННЯ ДАТИ
   const getCurrentDate = () => {
     const date = new Date();
@@ -241,7 +234,6 @@ export const FormAnesthesiology = () => {
   const currentDate = getCurrentDate();
 
   //* ВІДПРАВКА ТАБЛИЦІ НА БЕК
-
   const convertFormToSend = (form) => {
     const sanitizeValue = (value) => {
       if (value === "" || (typeof value === "string" && value.length < 3)) {
@@ -399,6 +391,7 @@ export const FormAnesthesiology = () => {
                     locked={form.locked}
                     forms={forms}
                     setForms={setForms}
+                    localStorageKey="anesthesiologyForms"
                     onDiagnosesId={(diagnosis_id) =>
                       onFieldChange(formIndex, "diagnosis_id", diagnosis_id)
                     }
@@ -424,6 +417,7 @@ export const FormAnesthesiology = () => {
                     locked={form.locked}
                     forms={forms}
                     setForms={setForms}
+                    localStorageKey="anesthesiologyForms"
                     onOperationId={(operation_id) =>
                       onFieldChange(formIndex, "operation_id", operation_id)
                     }
@@ -441,6 +435,7 @@ export const FormAnesthesiology = () => {
                     locked={form.locked}
                     forms={forms}
                     setForms={setForms}
+                    localStorageKey="anesthesiologyForms"
                     onDayId={(preoperative_day_id) =>
                       onFieldChange(
                         formIndex,
@@ -472,6 +467,7 @@ export const FormAnesthesiology = () => {
                       locked={form.locked}
                       forms={forms}
                       setForms={setForms}
+                      localStorageKey="anesthesiologyForms"
                       onMedicamentId={(medicament_id) =>
                         onFieldChange(formIndex, "medicament_id", medicament_id)
                       }
@@ -485,6 +481,7 @@ export const FormAnesthesiology = () => {
                       locked={form.locked}
                       forms={forms}
                       setForms={setForms}
+                      localStorageKey="anesthesiologyForms"
                     />
                   </td>
                   <td>
@@ -495,6 +492,7 @@ export const FormAnesthesiology = () => {
                       locked={form.locked}
                       forms={forms}
                       setForms={setForms}
+                      localStorageKey="anesthesiologyForms"
                     />
                   </td>
                   <td>
@@ -505,6 +503,7 @@ export const FormAnesthesiology = () => {
                       locked={form.locked}
                       forms={forms}
                       setForms={setForms}
+                      localStorageKey="anesthesiologyForms"
                     />
                   </td>
                   <td className="btn-row">

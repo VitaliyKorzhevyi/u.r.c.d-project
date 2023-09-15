@@ -1,0 +1,182 @@
+import { useState } from "react";
+import { toast } from "react-toastify";
+
+import $api from "../../../api/api";
+import "./MedicamentInput.css";
+
+export const MedicamentInput = ({
+  medicaments,
+  updateMedicaments,
+  formIndex,
+  rowIndex,
+  value,
+  locked,
+  forms,
+  setForms,
+  localStorageKey,
+  onMedicamentId,
+}) => {
+  const [filteredMedicaments, setFilteredMedicaments] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [inputValue, setInputValue] = useState(value);
+
+  //* ПЕРША ВЕЛИКА БУКВА
+  const capitalizeFirstLetter = (string) => {
+    if (!string) return "";
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  };
+
+  //* ВВЕДЕННЯ ЗНАЧЕННЯ В ІНПУТ
+  const onInputChange = (e) => {
+    let inputValue = e.target.value;
+    inputValue = capitalizeFirstLetter(inputValue);
+    setInputValue(inputValue);
+
+    if (inputValue.length >= 3) {
+      setFilteredMedicaments(
+        medicaments.filter((medicaments) =>
+          medicaments.title.toLowerCase().startsWith(inputValue.toLowerCase())
+        )
+      );
+    } else {
+      setFilteredMedicaments([]);
+    }
+  };
+
+  //* ВИБІР ЗНАЧЕННЯ З ВИПАДАЮЧОГО СПИСКУ
+  const handleSelectMedicament = (selectedMedicament) => {
+    setInputValue(selectedMedicament.title);
+    setFilteredMedicaments([]);
+    handleInputChange(selectedMedicament.title, selectedMedicament.id, true);
+  };
+
+  //* ПЕРЕДАЧА АРГУМЕНТІВ ДЛЯ ЗБЕРІГАННЯ У ЛОКАЛЬНЕ СХОВИЩЕ
+  const handleInputChange = (
+    inputValue,
+    onMedicamentId,
+    saveToLocalStorage = true
+  ) => {
+    const updatedForms = [...forms];
+    console.log(updatedForms);
+    updatedForms[formIndex].rows[rowIndex].medicaments = inputValue;
+
+    if (onMedicamentId) {
+      updatedForms[formIndex].rows[rowIndex].medicament_id = onMedicamentId;
+    }
+    if (saveToLocalStorage) {
+      localStorage.setItem(localStorageKey, JSON.stringify(updatedForms));
+    }
+
+    setForms(updatedForms);
+  };
+
+  //* Перевіряє наявність заданого значення у списку днів за назвою.
+  const isValueInMedicaments = (value) =>
+    medicaments.some(
+      (medicament) => medicament.title.toLowerCase() === value.toLowerCase()
+    );
+
+  //* АКТИВНІСТЬ ІНПУТА
+  const onMedicamentsInputBlur = (value) => {
+    if (value.trim() === "") {
+      return;
+    }
+
+    if (!isValueInMedicaments(value) && !showModal) {
+      handleInputChange("", null, false);
+      setInputValue("");
+      setFilteredMedicaments([]);
+    }
+  };
+
+  //* ПРИ НАТИСКАННІ НА КНОПКУ ENTER
+  const handleInputKeyDown = (e) => {
+    if (e.key === "Enter" && !isValueInMedicaments(e.target.value)) {
+      setShowModal(true);
+    }
+  };
+
+  //* ПОМИЛКИ
+  function handleAxiosError(error) {
+    const errorMessages = {
+      "String should have at least 3 characters":
+        "Рядок повинен містити не менше 3 символів",
+      "String should have at most 100 characters":
+        "Рядок повинен містити не більше 100 символів",
+    };
+
+    if (error.response) {
+      const detail = error.response.data.detail;
+
+      if (detail[0].msg && errorMessages[detail[0].msg]) {
+        toast.error(errorMessages[detail[0].msg]);
+      } else {
+        toast.error(
+          detail[0].msg ? detail[0].msg : "Сталася невідома помилка сервера."
+        );
+      }
+    } else if (error.request) {
+      toast.error("Сервер не відповідає. Перевірте ваше підключення.");
+    } else {
+      toast.error(`Помилка: ${error.message}`);
+    }
+  }
+
+  //* ДОДАЄМО НОВИЙ МЕДИКАМЕНТ НА БЕК
+  const handleAddNewMedicament = async () => {
+    console.log(inputValue);
+    try {
+      const response = await $api.post("/medicaments", inputValue);
+      toast.success(`Медикамент успішно доданий`);
+      updateMedicaments(response.data);
+      onMedicamentId(response.data.id);
+      setShowModal(false);
+    } catch (error) {
+      handleAxiosError(error);
+      setShowModal(false);
+      setInputValue("");
+      setFilteredMedicaments([]);
+    }
+  };
+
+  return (
+    <>
+      <input
+        type="text"
+        autoComplete="off"
+        name="medicaments"
+        className="form1-table-text-name"
+        value={inputValue}
+        onChange={onInputChange}
+        onBlur={(e) => onMedicamentsInputBlur(e.target.value)}
+        onKeyDown={handleInputKeyDown}
+        disabled={locked}
+      />
+      <ul
+        className="days-dropdown"
+        style={{ display: filteredMedicaments.length === 0 ? "none" : "block" }}
+      >
+        {filteredMedicaments.map((med) => (
+          <li key={med.id} onMouseDown={() => handleSelectMedicament(med)}>
+            {med.title}
+          </li>
+        ))}
+      </ul>
+      {showModal && (
+        <div className="confirm-modal">
+          <p>Додати новий медикамент {inputValue}?</p>
+          <button onClick={handleAddNewMedicament}>Так</button>
+          <button
+            onClick={() => {
+              setShowModal(false);
+              setInputValue("");
+              setFilteredMedicaments([]);
+            }}
+          >
+            Відмінити
+          </button>
+        </div>
+      )}
+    </>
+  );
+};

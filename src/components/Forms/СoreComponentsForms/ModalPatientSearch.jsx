@@ -36,7 +36,7 @@ export const ModalPatientSearch = ({
         setPatients(response.data);
         console.log(response.data);
       } catch (error) {
-        console.error("Поиск не удался", error);
+        console.error("Пошук не вдався", error);
       }
     }
   };
@@ -57,11 +57,11 @@ export const ModalPatientSearch = ({
   };
 
   const handlePhoneChange = (e) => {
-    let phoneNumber = e.target.value.replace(/\+/g, ""); // Удаляем все знаки "+"
-    // Убедитесь, что введенные данные состоят только из цифр
+    let phoneNumber = e.target.value.replace(/\+/g, ""); 
+    
     phoneNumber = phoneNumber.replace(/[^0-9]/g, "");
     if (phoneNumber.length > 15) {
-      phoneNumber = phoneNumber.slice(3, 15); // Ограничиваем длину до 10 символов
+      phoneNumber = phoneNumber.slice(3, 15); 
     }
     setPhone(phoneNumber);
   };

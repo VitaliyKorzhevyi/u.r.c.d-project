@@ -1,8 +1,16 @@
-export const QuantityInput = ({ formIndex, rowIndex, value, locked, forms, setForms }) => {
+export const QuantityInput = ({
+  formIndex,
+  rowIndex,
+  value,
+  locked,
+  forms,
+  setForms,
+  localStorageKey,
+}) => {
   const onInputChange = (formIndex, rowIndex, field, inputValue) => {
     const updatedForms = [...forms];
     updatedForms[formIndex].rows[rowIndex][field] = inputValue;
-    localStorage.setItem("anesthesiologyForms", JSON.stringify(updatedForms));
+    localStorage.setItem(localStorageKey, JSON.stringify(updatedForms));
     setForms(updatedForms);
   };
 
@@ -12,9 +20,15 @@ export const QuantityInput = ({ formIndex, rowIndex, value, locked, forms, setFo
       name="quantity_of_medicament"
       className="form1-table-text-name"
       value={value}
-      onChange={(e) => onInputChange(formIndex, rowIndex, "quantity_of_medicament", e.target.value)}
+      onChange={(e) =>
+        onInputChange(
+          formIndex,
+          rowIndex,
+          "quantity_of_medicament",
+          e.target.value
+        )
+      }
       disabled={locked}
     />
   );
 };
-

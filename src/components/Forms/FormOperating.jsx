@@ -1,159 +1,105 @@
 import { useState, useEffect } from "react";
-import './FormOperating.css'
-import axios from "../../api/axios";
+import "./FormOperating.css";
 
-//Інпути зі списками з бекенду
-import { ModalPatientCreate } from "./ModalWindows/ModalPatientCreate";
-import { ModalPatientSearch } from "./ModalWindows/ModalPatientSearch";
-import { MedicamentInput } from "./OperatingFormComponents/MedicamentInput";
-import { DayInput } from "./OperatingFormComponents/DayInput";
-import { DiagnosesInput } from "./OperatingFormComponents/DiagnosesInput";
-import { OperationsInput } from "./OperatingFormComponents/OperationsInput";
+import $api from "../../api/api";
 
-import { QuantityInput } from "./OperatingFormComponents/QuantityInput";
-import { TypeSelect } from "./OperatingFormComponents/TypeSelect";
-import { NotesInput } from "./OperatingFormComponents/NotesInput";
+//* core components
+import { DayInput } from "./СoreComponentsForms/DayInput";
+import { DiagnosesInput } from "./СoreComponentsForms/DiagnosesInput";
+import { OperationsInput } from "./СoreComponentsForms/OperationsInput";
+import { ModalPatientCreate } from "./СoreComponentsForms/ModalPatientCreate";
+import { ModalPatientSearch } from "./СoreComponentsForms/ModalPatientSearch";
 
-import { CopyRowButton } from "./OperatingFormComponents/CopyRowButton";
-import { DeleteRowButton } from "./OperatingFormComponents/DeleteRowButton";
+//*row components
+import { MedicamentInput } from "./СoreComponentsForms/MedicamentInput";
+import { QuantityInput } from "./СoreComponentsForms/QuantityInput";
+import { TypeSelect } from "./СoreComponentsForms/TypeSelect";
+import { NotesInput } from "./СoreComponentsForms/NotesInput";
+import { CopyRowButton } from "./СoreComponentsForms/CopyRowButton";
+import { DeleteRowButton } from "./СoreComponentsForms/DeleteRowButton";
 
 export const FormOperating = () => {
-  //данні про мене
+  const [activeFormIndex, setActiveFormIndex] = useState(null);
   const [myData, setmyData] = useState([]);
+  const [medicaments, setMedicaments] = useState([]);
+  const [days, setDays] = useState([]);
+  const [diagnoses, setDiagnoses] = useState([]);
+  const [operations, setOperations] = useState([]);
+  const [isModalOpenCreate, setModalOpenCreate] = useState(false);
+  const [isModalOpenSearch, setModalOpenSearch] = useState(false);
 
+  //* ЗАПИТ НА ВСІХ ЮЗЕРІВ
   useEffect(() => {
-    axios
-      .get("/users/me/", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          "Content-Type": "application/json",
-        },
-      })
-      .then((response) => {
-        console.log(response.data);
-        setmyData(response.data);
-      });
+    $api.get("/users/me/").then((response) => {
+      console.log(response.data);
+      setmyData(response.data);
+    });
   }, []);
 
-  // для збереження медикаментів в стейт
-  const [medicaments, setMedicaments] = useState([]);
-
+  //* ДЛЯ ЗБЕРЕЖЕННЯ МЕДИКАМЕНТІВ В СТЕЙТ
   const updateMedicaments = (newMedicament) => {
     setMedicaments((prevMedicaments) => [...prevMedicaments, newMedicament]);
   };
 
   useEffect(() => {
-    axios
-      .get("/medicaments", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          "Content-Type": "application/json",
-        },
-      })
-      .then((response) => {
-        console.log(response.data);
-        setMedicaments(response.data);
-      });
+    $api.get("/medicaments").then((response) => {
+      console.log(response.data);
+      setMedicaments(response.data);
+    });
   }, []);
 
-  //__________________________
-
-  // для збереження днів (передопераційна доба)
-
-  const [days, setDays] = useState([]);
-
+  //* ДЛЯ ЗАПИТ ДНІВ (передопераційна доба)
   const updateDays = (newDay) => {
     setDays((prevDays) => [...prevDays, newDay]);
   };
 
   useEffect(() => {
-    axios
-      .get("/preoperative-days", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          "Content-Type": "application/json",
-        },
-      })
-      .then((response) => {
-        console.log(response.data);
-        setDays(response.data);
-      });
+    $api.get("/preoperative-days").then((response) => {
+      console.log(response.data);
+      setDays(response.data);
+    });
   }, []);
 
-  //__________________________
-
-  // для збереження діагнозів
-
-  const [diagnoses, setDiagnoses] = useState([]);
-
+  //* ЗАПИТ ДІАГНОЗІВ
   const updateDiagnoses = (newDiagnoses) => {
     setDiagnoses((prevDiagnoses) => [...prevDiagnoses, newDiagnoses]);
   };
 
   useEffect(() => {
-    axios
-      .get("/diagnoses", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          "Content-Type": "application/json",
-        },
-      })
-      .then((response) => {
-        console.log(response.data);
-        setDiagnoses(response.data);
-      });
+    $api.get("/diagnoses").then((response) => {
+      console.log(response.data);
+      setDiagnoses(response.data);
+    });
   }, []);
 
-  //__________________________
-
-  // для збереження операцій
-
-  const [operations, setOperations] = useState([]);
-
+  //* ЗАПИТ ОПЕРАЦІЙ
   const updateOperations = (newOperations) => {
     setOperations((prevOperations) => [...prevOperations, newOperations]);
   };
 
   useEffect(() => {
-    axios
-      .get("/operations", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          "Content-Type": "application/json",
-        },
-      })
-      .then((response) => {
-        console.log(response.data);
-        setOperations(response.data);
-      });
+    $api.get("/operations").then((response) => {
+      console.log(response.data);
+      setOperations(response.data);
+    });
   }, []);
 
-  //__________________________
-
-  // states модальних вікон
-  const [onModalCreatePatient, setModalCreatePatient] = useState(false);
-  const [onModalSearchPatient, setModalSearchPatient] = useState(false);
-
-  //модальне вікно створення пацієнта
-  const onBtnClickCreatePatient = () => {
-    setModalCreatePatient(true);
+  //* МОДАЛЬНІ ВІКНА ДЛЯ СТВОРЕННЯ ТА ПОШУКУ ПАЦІЄНТА
+  const toggleModalCreate = () => {
+    setModalOpenCreate(!isModalOpenCreate);
+    if (isModalOpenCreate) {
+      setActiveFormIndex(null);
+    }
   };
 
-  const closeModalCreatePatient = () => {
-    setModalCreatePatient(false);
+  const toggleModalSearch = () => {
+    setModalOpenSearch(!isModalOpenSearch);
+    if (isModalOpenSearch) {
+      setActiveFormIndex(null);
+    }
   };
 
-  //модальне вікно пошуку пацієнта
-
-  const onBtnClickSearchPatient = () => {
-    setModalSearchPatient(true);
-  };
-
-  const closeModalSearchPatient = () => {
-    setModalSearchPatient(false);
-  };
-
-  // ЗБЕРІГАЄМО ДАННІ З ФОРМИ У ЛОКАЛЬНЕ СХОВИЩЕ
+  //* ЗБЕРЕЖЕННЯ ДАННИХ З ФОРМ У ЛОКАЛЬНЕ СХОВИЩЕ
   const savedForms = localStorage.getItem("operatingForms");
   const initialForms = savedForms
     ? JSON.parse(savedForms)
@@ -177,9 +123,9 @@ export const FormOperating = () => {
           patient_id: "0",
           preoperative_day_id: "0",
           operation_id: "0",
-          diagnisis_id: "0",
+          diagnosis_id: "0",
           patientName: "",
-          age: "", // Убедитесь, что это поле инициализировано
+          age: "",
           diagnoses: "",
           operations: "",
           day: "",
@@ -189,7 +135,7 @@ export const FormOperating = () => {
   const [forms, setForms] = useState(initialForms);
   const [nextFormId, setNextFormId] = useState(forms.length);
 
-  // ДОДАЄМО НОВУ ФОРМУ
+  //* ДОДАВАННЯ НОВИХ ФОРМ
   const onAddNewForm = () => {
     const newForm = {
       id: nextFormId,
@@ -236,23 +182,23 @@ export const FormOperating = () => {
     }
   }, []);
 
-  // УПРАВЛІННЯ ТАБЛИЦЕЮ
+  //* УПРАВЛІННЯ ТАБЛИЦЕЮ
 
-  // блокіруєм форму
+  // блок форми
   const onLockForm = (formIndex) => {
     const updatedForms = [...forms];
     updatedForms[formIndex].locked = !updatedForms[formIndex].locked;
     setFormsWithStorage(updatedForms);
   };
 
-  // видаляємо форму
+  // видалення форми
   const onDeleteForm = (formIndex) => {
     const updatedForms = [...forms];
     updatedForms.splice(formIndex, 1);
     setFormsWithStorage(updatedForms);
   };
 
-  // копіюємо форму
+  // копіювання форми
   const onCopyForm = (formIndex) => {
     const formToCopy = forms[formIndex];
     const copiedForm = { ...formToCopy, id: nextFormId }; // используйте nextFormId здесь
@@ -261,7 +207,7 @@ export const FormOperating = () => {
     setFormsWithStorage(updatedForms);
   };
 
-  // додаємо строку
+  // додавання у форму нової строки
   const onAddRow = (formIndex) => {
     const updatedForms = [...forms];
     updatedForms[formIndex].rows.push({
@@ -274,7 +220,7 @@ export const FormOperating = () => {
     setFormsWithStorage(updatedForms); // Обновление localStorage
   };
 
-  // для відображення дати
+  //* ВІДОБРАЖЕННЯ ДАТИ
   const getCurrentDate = () => {
     const date = new Date();
     const day = String(date.getDate()).padStart(2, "0");
@@ -284,8 +230,7 @@ export const FormOperating = () => {
   };
   const currentDate = getCurrentDate();
 
-  // для отправки таблицы на бек
-
+  //* ВІДПРАВКА ТАБЛИЦІ НА БЕК
   const convertFormToSend = (form) => {
     const sanitizeValue = (value) => {
       if (value === "" || (typeof value === "string" && value.length < 3)) {
@@ -313,14 +258,8 @@ export const FormOperating = () => {
     const dataToSend = convertFormToSend(currentForm);
     console.log(dataToSend);
 
-    // Здесь вы можете отправить dataToSend на бэкенд
-    axios
-      .post("/reports/operating", dataToSend, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          "Content-Type": "application/json",
-        },
-      })
+    $api
+      .post("/reports/operating", dataToSend)
       .then((response) => {
         console.log(response);
       })
@@ -401,12 +340,15 @@ export const FormOperating = () => {
                 <td colSpan="2">
                   <p className="form2-table-time">{form.patientName}</p>
                 </td>
-                <td  className="form-patient form2-table-time form2-table-size5">
+                <td className="form-patient form2-table-time form2-table-size5">
                   <div className="btns-patient">
                     <button
                       type="button"
                       className="btn-patient blue one"
-                      onClick={onBtnClickSearchPatient}
+                      onClick={() => {
+                        setActiveFormIndex(formIndex);
+                        toggleModalSearch();
+                      }}
                       disabled={form.locked}
                     >
                       <i className="bx bx-search bx-sm"></i>
@@ -414,39 +356,15 @@ export const FormOperating = () => {
                     <button
                       type="button"
                       className="btn-patient green"
-                      onClick={onBtnClickCreatePatient}
+                      onClick={() => {
+                        setActiveFormIndex(formIndex);
+                        toggleModalCreate();
+                      }}
                       disabled={form.locked}
                     >
                       <i className="bx bx-plus bx-sm"></i>
                     </button>
                   </div>
-
-                  <ModalPatientSearch
-                    isOpen={onModalSearchPatient}
-                    onClose={closeModalSearchPatient}
-                    value={form.patientName}
-                    onGetAge={(age) => onFieldChange(formIndex, "age", age)}
-                    onGetFullName={(patientName) =>
-                      onFieldChange(formIndex, "patientName", patientName)
-                    }
-                    onGetBirthday={(birthday) =>
-                      onFieldChange(formIndex, "birthday", birthday)
-                    }
-                    onGetId={(id) => onFieldChange(formIndex, "patient_id", id)}
-                  />
-                  <ModalPatientCreate
-                    isOpen={onModalCreatePatient}
-                    onClose={closeModalCreatePatient}
-                    value={form.patientName}
-                    onGetAge={(age) => onFieldChange(formIndex, "age", age)}
-                    onGetFullName={(patientName) =>
-                      onFieldChange(formIndex, "patientName", patientName)
-                    }
-                    onGetBirthday={(birthday) =>
-                      onFieldChange(formIndex, "birthday", birthday)
-                    }
-                    onGetId={(id) => onFieldChange(formIndex, "patient_id", id)}
-                  />
                 </td>
 
                 <td>
@@ -470,6 +388,7 @@ export const FormOperating = () => {
                     locked={form.locked}
                     forms={forms}
                     setForms={setForms}
+                    localStorageKey="operatingForms"
                     onDiagnosesId={(diagnosis_id) =>
                       onFieldChange(formIndex, "diagnosis_id", diagnosis_id)
                     }
@@ -495,6 +414,7 @@ export const FormOperating = () => {
                     locked={form.locked}
                     forms={forms}
                     setForms={setForms}
+                    localStorageKey="operatingForms"
                     onOperationId={(operation_id) =>
                       onFieldChange(formIndex, "operation_id", operation_id)
                     }
@@ -512,6 +432,7 @@ export const FormOperating = () => {
                     locked={form.locked}
                     forms={forms}
                     setForms={setForms}
+                    localStorageKey="operatingForms"
                     onDayId={(preoperative_day_id) =>
                       onFieldChange(
                         formIndex,
@@ -543,6 +464,7 @@ export const FormOperating = () => {
                       locked={form.locked}
                       forms={forms}
                       setForms={setForms}
+                      localStorageKey="operatingForms"
                       onMedicamentId={(medicament_id) =>
                         onFieldChange(formIndex, "medicament_id", medicament_id)
                       }
@@ -556,6 +478,7 @@ export const FormOperating = () => {
                       locked={form.locked}
                       forms={forms}
                       setForms={setForms}
+                      localStorageKey="operatingForms"
                     />
                   </td>
                   <td>
@@ -566,6 +489,7 @@ export const FormOperating = () => {
                       locked={form.locked}
                       forms={forms}
                       setForms={setForms}
+                      localStorageKey="operatingForms"
                     />
                   </td>
                   <td>
@@ -576,6 +500,7 @@ export const FormOperating = () => {
                       locked={form.locked}
                       forms={forms}
                       setForms={setForms}
+                      localStorageKey="operatingForms"
                     />
                   </td>
                   <td className="btn-row">
@@ -626,6 +551,36 @@ export const FormOperating = () => {
       >
         <i className="bx bx-plus bx-sm"></i>
       </button>
+      <ModalPatientSearch
+        isOpen={isModalOpenSearch}
+        onClose={toggleModalSearch}
+        value={
+          activeFormIndex !== null ? forms[activeFormIndex].patientName : ""
+        }
+        onGetAge={(age) => onFieldChange(activeFormIndex, "age", age)}
+        onGetFullName={(patientName) =>
+          onFieldChange(activeFormIndex, "patientName", patientName)
+        }
+        onGetBirthday={(birthday) =>
+          onFieldChange(activeFormIndex, "birthday", birthday)
+        }
+        onGetId={(id) => onFieldChange(activeFormIndex, "patient_id", id)}
+      />
+      <ModalPatientCreate
+        isOpen={isModalOpenCreate}
+        onClose={toggleModalCreate}
+        value={
+          activeFormIndex !== null ? forms[activeFormIndex].patientName : ""
+        }
+        onGetAge={(age) => onFieldChange(activeFormIndex, "age", age)}
+        onGetFullName={(patientName) =>
+          onFieldChange(activeFormIndex, "patientName", patientName)
+        }
+        onGetBirthday={(birthday) =>
+          onFieldChange(activeFormIndex, "birthday", birthday)
+        }
+        onGetId={(id) => onFieldChange(activeFormIndex, "patient_id", id)}
+      />
     </>
   );
 };
