@@ -11,7 +11,7 @@ export const SavedForms = () => {
   const [selectedEndDate, setSelectedEndDate] = useState(null);
   const [data, setData] = useState([]);
   
-  const handleDateChange = (start, end) => {
+  const onDateChange = (start, end) => {
     console.log("Received start date in Parent:", start);
     console.log("Received end date in Parent:", end);
 
@@ -25,7 +25,7 @@ export const SavedForms = () => {
   const [selectedItemDetails, setSelectedItemDetails] = useState(null);
 
 
-  const handleButtonClick = () => {
+  const onButtonClick = () => {
     if (selectedStartDate && selectedEndDate) {
       // Формирование URL
       const url = `/reports?skip=0&limit=20&&from_created_at=${selectedStartDate}&to_created_at=${selectedEndDate}`;
@@ -85,11 +85,11 @@ export const SavedForms = () => {
   return (
     <div className="container-saved-forms">
       <div className="calendar-saved-forms">
-        <DatepickerComponent onDateChange={handleDateChange} />
+        <DatepickerComponent onDateChange={onDateChange} />
         <button
           type="button"
           className="btn-calendar"
-          onClick={handleButtonClick}
+          onClick={onButtonClick}
         >
           Знайти
         </button>

@@ -43,14 +43,14 @@ export const DiagnosesInput = ({
   };
 
   //* ВИБІР ЗНАЧЕННЯ З ВИПАДАЮЧОГО СПИСКУ
-  const handleSelectDiagnoses = (selectedDiagnoses) => {
+  const onSelectDiagnoses = (selectedDiagnoses) => {
     setInputValue(selectedDiagnoses.title);
     setFilteredDiagnoses([]);
-    handleInputChange(selectedDiagnoses.title, selectedDiagnoses.id, true);
+    saveValueLocalStorage(selectedDiagnoses.title, selectedDiagnoses.id, true);
   };
 
   //* ПЕРЕДАЧА АРГУМЕНТІВ ДЛЯ ЗБЕРІГАННЯ У ЛОКАЛЬНЕ СХОВИЩЕ
-  const handleInputChange = (
+  const saveValueLocalStorage = (
     inputValue,
     onDiagnosesId,
     saveToLocalStorage = true
@@ -80,21 +80,35 @@ export const DiagnosesInput = ({
     }
 
     if (!isValueInDiagnoses(value) && !showModal) {
-      handleInputChange("", null, false);
+      saveValueLocalStorage("", null, false);
       setInputValue("");
       setFilteredDiagnoses([]);
     }
   };
 
   //* ПРИ НАТИСКАННІ НА КНОПКУ ENTER
-  const handleInputKeyDown = (e) => {
-    if (e.key === "Enter" && !isValueInDiagnoses(e.target.value)) {
-      setShowModal(true);
+  
+  const onInputKeyDown = (e) => {
+    const inputValueLength = e.target.value.length;
+  
+    const errorMessages = {
+      [inputValueLength < 3]: "Рядок повинен містити не менше 3 символів",
+      [inputValueLength > 100]: "Рядок повинен містити не більше 100 символів"
+    };
+  
+    if (e.key === "Enter") {
+      const errorMessage = errorMessages[true];
+      
+      if (errorMessage) {
+        toast.error(errorMessage);
+      } else if (!isValueInDiagnoses(e.target.value)) {
+        setShowModal(true);
+      }
     }
   };
 
     //* ПОМИЛКИ
-    function handleAxiosError(error) {
+    function onAxiosError(error) {
       const errorMessages = {
         "String should have at least 3 characters":
           "Рядок повинен містити не менше 3 символів",
@@ -120,7 +134,7 @@ export const DiagnosesInput = ({
     }
 
   //* ДОДАЄМО НОВИЙ ДІАГНОЗ НА БЕК
-  const handleAddNewDiagnoses = async () => {
+  const onAddNewDiagnoses = async () => {
     console.log(inputValue);
     try {
       const response = await $api.post("/diagnoses", inputValue);
@@ -129,7 +143,7 @@ export const DiagnosesInput = ({
       onDiagnosesId(response.data.id);
       setShowModal(false);
     } catch (error) {
-      handleAxiosError(error);
+      onAxiosError(error);
       setShowModal(false);
       setInputValue("");
       setFilteredDiagnoses([]);
@@ -146,7 +160,7 @@ export const DiagnosesInput = ({
         value={inputValue}
         onChange={onInputChange}
         onBlur={(e) => onDiagnosesInputBlur(e.target.value)}
-        onKeyDown={handleInputKeyDown}
+        onKeyDown={onInputKeyDown}
         disabled={locked}
       />
       <ul
@@ -154,7 +168,7 @@ export const DiagnosesInput = ({
         style={{ display: filteredDiagnoses.length === 0 ? "none" : "block" }}
       >
         {filteredDiagnoses.map((diagnoses, index) => (
-          <li key={index} onMouseDown={() => handleSelectDiagnoses(diagnoses)}>
+          <li key={index} onMouseDown={() => onSelectDiagnoses(diagnoses)}>
             {diagnoses.title}
           </li>
         ))}
@@ -162,7 +176,7 @@ export const DiagnosesInput = ({
       {showModal && (
         <div className="confirm-modal">
           <p>Додати новий діагноз {inputValue}?</p>
-          <button onClick={handleAddNewDiagnoses}>Так</button>
+          <button onClick={onAddNewDiagnoses}>Так</button>
           <button
             onClick={() => {
               setShowModal(false);

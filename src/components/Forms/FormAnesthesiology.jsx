@@ -1,9 +1,10 @@
 //Todo додати модалку для збереження ВСІХ!!!!!! форм
 
 import { useState, useEffect } from "react";
-import "./FormAnesthesiology.css";
-
+import { toast } from "react-toastify";
 import $api from "../../api/api";
+
+import "./FormAnesthesiology.css";
 
 //* core components
 
@@ -30,6 +31,9 @@ export const FormAnesthesiology = () => {
   const [operations, setOperations] = useState([]);
   const [isModalOpenCreate, setModalOpenCreate] = useState(false);
   const [isModalOpenSearch, setModalOpenSearch] = useState(false);
+
+  const [showSaveModal, setShowSaveModal] = useState(false);
+  const [currentFormIndex, setCurrentFormIndex] = useState(null);
 
   //* ЗАПИТ НА ВСІХ ЮЗЕРІВ
   useEffect(() => {
@@ -114,15 +118,15 @@ export const FormAnesthesiology = () => {
             {
               medicament_id: "0",
               medicaments: "",
-              quantity_of_medicament: 0,
-              unit_of_measurement: "шт",
+              quantity_of_medicament: "",
+              unit_of_measurement: "",
               notation: "",
             },
           ],
-          doctorName: myData.full_name || "", 
+          doctorName: myData.full_name || "",
           date: "",
           birthday: "",
-          history_number: "0",
+          history_number: "",
           patient_id: "0",
           preoperative_day_id: "0",
           operation_id: "0",
@@ -147,15 +151,15 @@ export const FormAnesthesiology = () => {
         {
           medicament_id: "0",
           medicaments: "",
-          quantity_of_medicament: 0,
-          unit_of_measurement: "шт",
+          quantity_of_medicament: "",
+          unit_of_measurement: "",
           notation: "",
         },
       ],
       doctorName: myData.full_name || "",
       date: "",
       birthday: "",
-      history_number: "0",
+      history_number: "",
       patientName: "",
       age: "",
       diagnoses: "",
@@ -204,8 +208,8 @@ export const FormAnesthesiology = () => {
   // копіювання форми
   const onCopyForm = (formIndex) => {
     const formToCopy = forms[formIndex];
-    const copiedForm = { ...formToCopy, id: nextFormId }; 
-    setNextFormId(nextFormId + 1); 
+    const copiedForm = { ...formToCopy, id: nextFormId };
+    setNextFormId(nextFormId + 1);
     const updatedForms = [...forms, copiedForm];
     setFormsWithStorage(updatedForms);
   };
@@ -216,8 +220,8 @@ export const FormAnesthesiology = () => {
     updatedForms[formIndex].rows.push({
       medicament_id: "0",
       medicaments: "",
-      quantity_of_medicament: 0,
-      unit_of_measurement: "шт",
+      quantity_of_medicament: "",
+      unit_of_measurement: "",
       notation: "",
     });
     setFormsWithStorage(updatedForms); // Обновление localStorage
@@ -256,7 +260,7 @@ export const FormAnesthesiology = () => {
     };
   };
 
-  const handleSaveForm = (formIndex) => {
+  const onSaveForm = (formIndex) => {
     const currentForm = forms[formIndex];
     const dataToSend = convertFormToSend(currentForm);
     console.log(dataToSend);
@@ -265,10 +269,108 @@ export const FormAnesthesiology = () => {
       .post("/reports/anesthesiology", dataToSend)
       .then((response) => {
         console.log(response);
+        toast.success(`Нова таблиця успішно збережена`);
+        setTimeout(() => {
+          onDeleteForm(formIndex);
+        }, 3500);
       })
       .catch((error) => {
         console.log(error);
       });
+  };
+
+  //* ПЕРЕВІРКА ДЛЯ ІНПУТІВ
+  // Основні поля для перевірки в формі
+  const MAIN_FIELDS = {
+    history_number: '"Номер історії"',
+    patientName: '"Ім\'я пацієнта"',
+    diagnoses: '"Діагноз"',
+    operations: '"Операція"',
+    day: '"К-сть. діб"',
+  };
+
+  // Поля для перевірки в рядках форми
+  const ROW_FIELDS = {
+    medicaments: '"Назва препарату"',
+    quantity_of_medicament: '"Кількість"',
+    unit_of_measurement: '"Одиниця вимірювання"',
+  };
+
+  // Отримання повідомлення про відсутні поля в формі
+  const getMissingFieldsMessage = (form, fields) => {
+    const missingFields = Object.keys(fields)
+      .filter((field) => !form[field] || !form[field].toString().trim())
+      .map((field) => fields[field])
+      .join(", ");
+
+    if (!missingFields) return "";
+
+    return `${
+      missingFields.split(", ").length > 1
+        ? "Не заповнені поля"
+        : "Не заповнене поле"
+    }: ${missingFields}!`;
+  };
+
+  // Отримання індексів рядків з відсутніми полями
+  const getInvalidRows = (rows, fields) => {
+    return rows
+      .map((row, idx) =>
+        !Object.keys(fields).every(
+          (field) => row[field] && row[field].toString().trim()
+        )
+          ? idx
+          : -1
+      )
+      .filter((idx) => idx !== -1);
+  };
+
+  // Головна функція для відкриття модального вікна збереження
+  // після перевірки форми на відсутні поля
+  const openSaveModalWithIndex = (formIndex) => {
+    // Отримання поточної форми на основі індексу
+    const form = forms[formIndex];
+
+    // Перевірка основних полів форми на відсутність
+    const missingMainFieldsMessage = getMissingFieldsMessage(form, MAIN_FIELDS);
+
+    // Якщо є відсутні поля, показуємо відповідне повідомлення
+    if (missingMainFieldsMessage) {
+      toast.warn(missingMainFieldsMessage, {
+        autoClose: 4500,
+      });
+    }
+
+    // Отримання індексів рядків, які мають відсутні поля
+    const invalidRowIndices = getInvalidRows(form.rows, ROW_FIELDS);
+
+    // Для кожного недійсного рядка відображаємо повідомлення про відсутні поля
+    invalidRowIndices.forEach((idx) => {
+      const invalidFields = Object.keys(ROW_FIELDS)
+        .filter(
+          (field) =>
+            !(form.rows[idx][field] && form.rows[idx][field].toString().trim())
+        )
+        .map((field) => ROW_FIELDS[field])
+        .join(", ");
+
+      const fieldText = invalidFields.split(", ").length > 1 ? "поля" : "поле";
+      const verb =
+        invalidFields.split(", ").length > 1
+          ? "не заповнені!"
+          : "не заповнене!";
+
+      // Показуємо повідомлення про відсутні поля у конкретному рядку
+      toast.warn(`В рядку ${idx + 1}, ${fieldText}: ${invalidFields} ${verb}`, {
+        autoClose: 4500,
+      });
+    });
+
+    // Якщо немає жодних помилок, встановлюємо поточний індекс форми та показуємо модальне вікно збереження
+    if (!missingMainFieldsMessage && !invalidRowIndices.length) {
+      setCurrentFormIndex(formIndex);
+      setShowSaveModal(true);
+    }
   };
 
   return (
@@ -320,7 +422,9 @@ export const FormAnesthesiology = () => {
                 </td>
 
                 <td className="form2-table-size1">
-                  <p className="form2-table-column1-text">№ історії:</p>
+                  <p className="form2-table-column1-text">
+                    <span className="required">*</span>&nbsp;№ історії:
+                  </p>
                 </td>
 
                 <td className="form2-table-size">
@@ -338,7 +442,9 @@ export const FormAnesthesiology = () => {
               </tr>
               <tr>
                 <td>
-                  <p className="form2-table-column1-text">Хворий:</p>
+                  <p className="form2-table-column1-text">
+                    <span className="required">*</span>&nbsp;Пацієнт:
+                  </p>
                 </td>
                 <td colSpan="2">
                   <p className="form2-table-time">{form.patientName}</p>
@@ -380,7 +486,9 @@ export const FormAnesthesiology = () => {
               </tr>
               <tr>
                 <td>
-                  <p className="form2-table-column1-text">Діагноз:</p>
+                  <p className="form2-table-column1-text">
+                    <span className="required">*</span>&nbsp;Діагноз:
+                  </p>
                 </td>
                 <td colSpan="3">
                   <DiagnosesInput
@@ -406,7 +514,9 @@ export const FormAnesthesiology = () => {
               </tr>
               <tr>
                 <td>
-                  <p className="form2-table-column1-text">Операція:</p>
+                  <p className="form2-table-column1-text">
+                    <span className="required">*</span>&nbsp;Операція:
+                  </p>
                 </td>
                 <td colSpan="3">
                   <OperationsInput
@@ -424,7 +534,9 @@ export const FormAnesthesiology = () => {
                   />
                 </td>
                 <td>
-                  <p className="form2-table-column1-text">К-сть. діб:</p>
+                  <p className="form2-table-column1-text">
+                    <span className="required">*</span>&nbsp;К-сть. діб:
+                  </p>
                 </td>
                 <td>
                   <DayInput
@@ -448,9 +560,19 @@ export const FormAnesthesiology = () => {
               </tr>
               <tr className="form2-table2">
                 <td>№</td>
-                <td>Назва</td>
-                <td className="form2-table-size3">Кількість</td>
-                <td className="form2-table-size4">Тип</td>
+                <td>
+                  <span className="required">*</span>&nbsp;Назва препарату
+                </td>
+                <td className="form2-table-size3">
+                  <p title="Кількість">
+                    <span className="required">*</span>&nbsp;К-сть.
+                  </p>
+                </td>
+                <td className="form2-table-size4">
+                  <p title="Одиниці вимірювання">
+                    <span className="required">*</span>&nbsp;Од. вим.
+                  </p>
+                </td>
                 <td>Примітки</td>
                 <td>Управління</td>
               </tr>
@@ -531,7 +653,7 @@ export const FormAnesthesiology = () => {
               type="button"
               className="form1-btn-save"
               disabled={form.locked}
-              onClick={() => handleSaveForm(formIndex)}
+              onClick={() => openSaveModalWithIndex(formIndex)}
             >
               Зберегти форму
             </button>
@@ -554,7 +676,20 @@ export const FormAnesthesiology = () => {
       >
         <i className="bx bx-plus bx-sm"></i>
       </button>
-
+      {showSaveModal && (
+        <div className="confirm-modal">
+          <p>Зберегти форму?</p>
+          <button
+            onClick={() => {
+              onSaveForm(currentFormIndex);
+              setShowSaveModal(false);
+            }}
+          >
+            Так
+          </button>
+          <button onClick={() => setShowSaveModal(false)}>Відмінити</button>
+        </div>
+      )}
       <ModalPatientSearch
         isOpen={isModalOpenSearch}
         onClose={toggleModalSearch}

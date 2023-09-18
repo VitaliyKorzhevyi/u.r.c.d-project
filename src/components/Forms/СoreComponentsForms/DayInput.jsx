@@ -36,14 +36,14 @@ export const DayInput = ({
   };
 
   //* ВИБІР ЗНАЧЕННЯ З ВИПАДАЮЧОГО СПИСКУ
-  const handleSelectDay = (selectedDay) => {
+  const onSelectDay = (selectedDay) => {
     setInputValue(selectedDay.title);
     setFilteredDays([]);
-    handleInputChange(selectedDay.title, selectedDay.id, true);
+    saveValueLocalStorage(selectedDay.title, selectedDay.id, true);
   };
 
   //* ПЕРЕДАЧА АРГУМЕНТІВ ДЛЯ ЗБЕРІГАННЯ У ЛОКАЛЬНЕ СХОВИЩЕ
-  const handleInputChange = (inputValue, dayId, saveToLocalStorage = true) => {
+  const saveValueLocalStorage = (inputValue, dayId, saveToLocalStorage = true) => {
     const updatedForms = [...forms];
     updatedForms[formIndex].day = inputValue;
     if (dayId) {
@@ -66,21 +66,34 @@ export const DayInput = ({
     }
 
     if (!isValueInDays(value) && !showModal) {
-      handleInputChange("", null, false);
+      saveValueLocalStorage("", null, false);
       setInputValue("");
       setFilteredDays([]);
     }
   };
 
   //* ПРИ НАТИСКАННІ НА КНОПКУ ENTER
-  const handleInputKeyDown = (e) => {
-    if (e.key === "Enter" && !isValueInDays(e.target.value)) {
-      setShowModal(true);
+  const onInputKeyDown = (e) => {
+    const inputValueLength = e.target.value.length;
+  
+    const errorMessages = {
+      [inputValueLength < 2]: "Рядок повинен містити не менше 2 символів",
+      [inputValueLength > 100]: "Рядок повинен містити не більше 100 символів"
+    };
+  
+    if (e.key === "Enter") {
+      const errorMessage = errorMessages[true];
+      
+      if (errorMessage) {
+        toast.error(errorMessage);
+      } else if (!isValueInDays(e.target.value)) {
+        setShowModal(true);
+      }
     }
   };
 
   //* ПОМИЛКИ
-  function handleAxiosError(error) {
+  function onAxiosError(error) {
     const errorMessages = {
       "String should have at least 2 characters":
         "Рядок повинен містити не менше 2 символів",
@@ -106,16 +119,16 @@ export const DayInput = ({
   }
 
   //* ДОДАЄМО НОВИЙ ДЕНЬ НА БЕК
-  const handleAddNewDay = async () => {
+  const onAddNewDay = async () => {
     try {
       const response = await $api.post("/preoperative-days", inputValue);
-      toast.success(`Нова к-сть днів успішно додана`);
+      toast.success(`Нова к-сть. днів успішно додана`);
       updateDays(response.data);
       onDayId(response.data.id);
       setShowModal(false);
-      handleInputChange(inputValue, response.data.id, true);
+      saveValueLocalStorage(inputValue, response.data.id, true);
     } catch (error) {
-      handleAxiosError(error);
+      onAxiosError(error);
       setShowModal(false);
       setInputValue("");
       setFilteredDays([]);
@@ -132,7 +145,7 @@ export const DayInput = ({
         value={inputValue}
         onChange={onInputChange}
         onBlur={(e) => onDayInputBlur(e.target.value)}
-        onKeyDown={handleInputKeyDown}
+        onKeyDown={onInputKeyDown}
         disabled={locked}
       />
       <ul
@@ -140,7 +153,7 @@ export const DayInput = ({
         style={{ display: filteredDays.length === 0 ? "none" : "block" }}
       >
         {filteredDays.map((day, index) => (
-          <li key={index} onMouseDown={() => handleSelectDay(day)}>
+          <li key={index} onMouseDown={() => onSelectDay(day)}>
             {day.title}
           </li>
         ))}
@@ -148,7 +161,7 @@ export const DayInput = ({
       {showModal && (
         <div className="confirm-modal">
           <p>Додати новий день {inputValue}?</p>
-          <button onClick={handleAddNewDay}>Так</button>
+          <button onClick={onAddNewDay}>Так</button>
           <button
             onClick={() => {
               setShowModal(false);

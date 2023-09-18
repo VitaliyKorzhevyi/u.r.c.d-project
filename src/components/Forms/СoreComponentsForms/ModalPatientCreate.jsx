@@ -1,6 +1,7 @@
-//Todo додати валідацію
+//Todo додати зірочки
 
 import { useState } from "react";
+import { toast } from "react-toastify";
 import $api from "../../../api/api";
 
 import "./ModalPatientCreate.css";
@@ -20,7 +21,80 @@ export const ModalPatientCreate = ({
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
 
+  const resetFields = () => {
+    setFirstName("");
+    setLastName("");
+    setMiddleName("");
+    setBirthday("");
+    setPhone("");
+    setEmail("");
+  };
   if (!isOpen) return null;
+
+  //* ПЕРЕВІРКА ДЛЯ ІНПУТІВ
+  const MAIN_FIELDS = {
+    first_name: '"Ім\'я"',
+    last_name: '"Призвіще"',
+    middle_name: '"По-батькові"',
+    birthday: '"Дата народження"',
+  };
+  const getMissingFieldsMessage = (fields) => {
+    const stateValues = { first_name, last_name, middle_name, birthday };
+
+    const missingFields = Object.keys(fields)
+      .filter((field) => !stateValues[field] || !stateValues[field].toString().trim())
+      .map((field) => fields[field])
+      .join(", ");
+
+    if (!missingFields) return "";
+
+    return `${
+      missingFields.split(", ").length > 1
+        ? "Не заповнені поля"
+        : "Не заповнене поле"
+    }: ${missingFields}!`;
+  };
+
+  const validatePhone = (phone) => {
+    const phoneRegex = /^\+\d{7,15}$/;
+    return phoneRegex.test(phone);
+  };
+  
+  const validateEmail = (email) => {
+    return email.includes("@");
+  };
+
+
+  const validateInputs = (e) => {
+  const missingMainFieldsMessage = getMissingFieldsMessage(MAIN_FIELDS);
+
+  if (missingMainFieldsMessage) {
+    toast.warn(missingMainFieldsMessage, {
+      autoClose: 2500,
+    });
+    e.preventDefault();
+    return;
+  }
+
+  if (phone && !validatePhone(phone)) {
+    toast.warn("Невірний формат телефону! Він повинен виглядати як +123456789012", {
+      autoClose: 2500,
+    });
+    e.preventDefault();
+    return;
+  }
+
+  if (email && !validateEmail(email)) {
+    toast.warn("Помилка у форматі пошти! Вона повинна містити символ '@'", {
+      autoClose: 2500,
+    });
+    e.preventDefault();
+    return;
+  }
+
+  onCreatePatient(e);
+  };
+
   const onCreatePatient = async (e) => {
     e.preventDefault();
 
@@ -30,7 +104,7 @@ export const ModalPatientCreate = ({
         last_name,
         middle_name,
         birthday,
-        phone,
+        phone, 
         email,
       };
       console.log(data);
@@ -43,25 +117,26 @@ export const ModalPatientCreate = ({
       console.log(response.data);
 
       // Очистити всі поля
-      setFirstName("");
-      setLastName("");
-      setMiddleName("");
-      setBirthday("");
-      setPhone("");
-      setEmail("");
+      resetFields();
 
       setTimeout(() => {
         onClose();
       }, 600);
     } catch (error) {
-      console.error("Добавление пользователя не удалося", error);
+      if (error.response && error.response.status === 409) {
+        toast.info("Пацієнт із таким номером телефону вже існує!", {
+          autoClose: 2500,
+        });
+      } else {
+        toast.error("Помилка: Не можливо створити пацієнта!");
+      }
     }
   };
 
   return (
     <div className="modal-overlay-create">
       <div className="modal-content-create">
-        <form onSubmit={onCreatePatient}>
+        <form onSubmit={validateInputs}>
           <label>
             Призвіще:
             <input
@@ -114,7 +189,16 @@ export const ModalPatientCreate = ({
             <input
               type="tel"
               value={phone}
-              onChange={(e) => setPhone(e.target.value)}
+              placeholder="+"
+              onChange={(e) => {
+                if (/^[+\d]+$/.test(e.target.value)) {
+                  if (e.target.value[0] !== "+") {
+                    setPhone("+" + e.target.value);
+                  } else {
+                    setPhone(e.target.value);
+                  }
+                }
+              }}
             />
           </label>
           <label>
@@ -122,12 +206,19 @@ export const ModalPatientCreate = ({
             <input
               type="email"
               value={email}
+              pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
               onChange={(e) => setEmail(e.target.value)}
             />
           </label>
           <button type="submit">Створити</button>
         </form>
-        <button type="button" onClick={onClose}>
+        <button
+          type="button"
+          onClick={() => {
+            resetFields();
+            onClose();
+          }}
+        >
           Закрити
         </button>
       </div>

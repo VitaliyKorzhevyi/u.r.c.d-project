@@ -11,7 +11,7 @@ export const Auth = () => {
   const [error, setError] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  const handleSubmit = async (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
 
     try {
@@ -48,7 +48,7 @@ export const Auth = () => {
     <div className="auth-container">
       <h2>Авторизация</h2>
       {error && <p style={{ color: "red" }}>{error}</p>}
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={onSubmit}>
         <div>
           <label>Имя пользователя:</label>
           <input

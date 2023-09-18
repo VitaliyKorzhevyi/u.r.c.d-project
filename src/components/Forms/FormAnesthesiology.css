@@ -13,7 +13,7 @@
 }
 
 .form2-table-size {
-  width: 10%;
+  width: 11%;
 }
 
 .form2-table-size1 {
@@ -30,7 +30,6 @@
 .form2-table-size4 {
   width: 8%;
 }
-
 
 .form2-table-title {
   background-color: #d7f7e7;
@@ -175,7 +174,7 @@
 }
 
 .table1-btn.blue {
-  margin-right: 10px;
+  margin: 0 10px 0 8px;
 }
 
 .btn-patient {
@@ -229,3 +228,11 @@
   cursor: default;
 }
 
+.invalid {
+  border: 1px solid red;
+  background-color: #ffe6e6;
+}
+
+.required {
+  color: red;
+}

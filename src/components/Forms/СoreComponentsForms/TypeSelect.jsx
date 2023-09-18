@@ -28,6 +28,7 @@ export const TypeSelect = ({
       }
       disabled={locked}
     >
+      <option value="" disabled hidden></option>
       <option value="шт">шт</option>
       <option value="амп">амп</option>
       <option value="фл">фл</option>

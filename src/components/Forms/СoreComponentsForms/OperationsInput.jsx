@@ -43,14 +43,14 @@ export const OperationsInput = ({
   };
 
   //* ВИБІР ЗНАЧЕННЯ З ВИПАДАЮЧОГО СПИСКУ
-  const handleSelectOperations = (selectedOperatios) => {
+  const onSelectOperations = (selectedOperatios) => {
     setInputValue(selectedOperatios.title);
     setFilteredOperations([]);
-    handleInputChange(selectedOperatios.title, selectedOperatios.id, true);
+    saveValueLocalStorage(selectedOperatios.title, selectedOperatios.id, true);
   };
 
   //* ПЕРЕДАЧА АРГУМЕНТІВ ДЛЯ ЗБЕРІГАННЯ У ЛОКАЛЬНЕ СХОВИЩЕ
-  const handleInputChange = (
+  const saveValueLocalStorage = (
     inputValue,
     onOperationId,
     saveToLocalStorage = true
@@ -80,21 +80,34 @@ export const OperationsInput = ({
     }
 
     if (!isValueInOperations(value) && !showModal) {
-      handleInputChange("", null, false);
+      saveValueLocalStorage("", null, false);
       setInputValue("");
       setFilteredOperations([]);
     }
   };
 
   //* ПРИ НАТИСКАННІ НА КНОПКУ ENTER
-  const handleInputKeyDown = (e) => {
-    if (e.key === "Enter" && !isValueInOperations(e.target.value)) {
-      setShowModal(true);
+  const onInputKeyDown = (e) => {
+    const inputValueLength = e.target.value.length;
+  
+    const errorMessages = {
+      [inputValueLength < 3]: "Рядок повинен містити не менше 3 символів",
+      [inputValueLength > 100]: "Рядок повинен містити не більше 100 символів"
+    };
+  
+    if (e.key === "Enter") {
+      const errorMessage = errorMessages[true];
+      
+      if (errorMessage) {
+        toast.error(errorMessage);
+      } else if (!isValueInOperations(e.target.value)) {
+        setShowModal(true);
+      }
     }
   };
 
   //* ПОМИЛКИ
-  function handleAxiosError(error) {
+  function onAxiosError(error) {
     const errorMessages = {
       "String should have at least 3 characters":
         "Рядок повинен містити не менше 3 символів",
@@ -120,7 +133,7 @@ export const OperationsInput = ({
   }
 
   //* ДОДАЄМО НОВУ ОПЕРАЦІЮ НА БЕК
-  const handleAddNewOperations = async () => {
+  const onAddNewOperations = async () => {
     console.log(inputValue);
     try {
       const response = await $api.post("/operations", inputValue);
@@ -129,7 +142,7 @@ export const OperationsInput = ({
       onOperationId(response.data.id);
       setShowModal(false);
     } catch (error) {
-      handleAxiosError(error);
+      onAxiosError(error);
       setShowModal(false);
       setInputValue("");
       setFilteredOperations([]);
@@ -146,7 +159,7 @@ export const OperationsInput = ({
         value={inputValue}
         onChange={onInputChange}
         onBlur={(e) => onOperationsInputBlur(e.target.value)}
-        onKeyDown={handleInputKeyDown}
+        onKeyDown={onInputKeyDown}
         disabled={locked}
       />
       <ul
@@ -156,7 +169,7 @@ export const OperationsInput = ({
         {filteredOperations.map((operations, index) => (
           <li
             key={index}
-            onMouseDown={() => handleSelectOperations(operations)}
+            onMouseDown={() => onSelectOperations(operations)}
           >
             {operations.title}
           </li>
@@ -165,7 +178,7 @@ export const OperationsInput = ({
       {showModal && (
         <div className="confirm-modal">
           <p>Додати нову операцію {inputValue}?</p>
-          <button onClick={handleAddNewOperations}>Так</button>
+          <button onClick={onAddNewOperations}>Так</button>
           <button
             onClick={() => {
               setShowModal(false);

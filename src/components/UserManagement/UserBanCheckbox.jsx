@@ -6,7 +6,7 @@ import "./UserBanCheckbox.css";
 const UserBanCheckbox = ({ user_id, is_active }) => {
   const [isBanned, setIsBanned] = useState(is_active);
 
-  const handleBanUser = async () => {
+  const onBanUser = async () => {
     try {
       console.log("Отправляемые данные:", { user_id });
       const response = await $api.post(`/users/${user_id}/ban`);
@@ -21,7 +21,7 @@ const UserBanCheckbox = ({ user_id, is_active }) => {
     }
   };
 
-  const handleUnbanUser = async () => {
+  const onUnbanUser = async () => {
     try {
       const response = await $api.post(`/users/${user_id}/unban`);
       const message = response.data; 
@@ -32,11 +32,11 @@ const UserBanCheckbox = ({ user_id, is_active }) => {
     }
   };
 
-  const handleCheckboxChange = (event) => {
+  const onCheckboxChange = (event) => {
     if (event.target.checked) {
-      handleBanUser();
+      onBanUser();
     } else {
-      handleUnbanUser();
+      onUnbanUser();
     }
   };
 
@@ -47,7 +47,7 @@ const UserBanCheckbox = ({ user_id, is_active }) => {
         <input
           type="checkbox"
           checked={isBanned}
-          onChange={handleCheckboxChange}
+          onChange={onCheckboxChange}
         />
       </label>
     </div>

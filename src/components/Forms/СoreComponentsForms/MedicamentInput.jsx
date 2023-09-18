@@ -44,14 +44,14 @@ export const MedicamentInput = ({
   };
 
   //* ВИБІР ЗНАЧЕННЯ З ВИПАДАЮЧОГО СПИСКУ
-  const handleSelectMedicament = (selectedMedicament) => {
+  const onSelectMedicament = (selectedMedicament) => {
     setInputValue(selectedMedicament.title);
     setFilteredMedicaments([]);
-    handleInputChange(selectedMedicament.title, selectedMedicament.id, true);
+    saveValueLocalStorage(selectedMedicament.title, selectedMedicament.id, true);
   };
 
   //* ПЕРЕДАЧА АРГУМЕНТІВ ДЛЯ ЗБЕРІГАННЯ У ЛОКАЛЬНЕ СХОВИЩЕ
-  const handleInputChange = (
+  const saveValueLocalStorage = (
     inputValue,
     onMedicamentId,
     saveToLocalStorage = true
@@ -83,21 +83,34 @@ export const MedicamentInput = ({
     }
 
     if (!isValueInMedicaments(value) && !showModal) {
-      handleInputChange("", null, false);
+      saveValueLocalStorage("", null, false);
       setInputValue("");
       setFilteredMedicaments([]);
     }
   };
 
   //* ПРИ НАТИСКАННІ НА КНОПКУ ENTER
-  const handleInputKeyDown = (e) => {
-    if (e.key === "Enter" && !isValueInMedicaments(e.target.value)) {
-      setShowModal(true);
+  const onInputKeyDown = (e) => {
+    const inputValueLength = e.target.value.length;
+  
+    const errorMessages = {
+      [inputValueLength < 3]: "Рядок повинен містити не менше 3 символів",
+      [inputValueLength > 100]: "Рядок повинен містити не більше 100 символів"
+    };
+  
+    if (e.key === "Enter") {
+      const errorMessage = errorMessages[true];
+      
+      if (errorMessage) {
+        toast.error(errorMessage);
+      } else if (!isValueInMedicaments(e.target.value)) {
+        setShowModal(true);
+      }
     }
   };
 
   //* ПОМИЛКИ
-  function handleAxiosError(error) {
+  function onAxiosError(error) {
     const errorMessages = {
       "String should have at least 3 characters":
         "Рядок повинен містити не менше 3 символів",
@@ -123,7 +136,7 @@ export const MedicamentInput = ({
   }
 
   //* ДОДАЄМО НОВИЙ МЕДИКАМЕНТ НА БЕК
-  const handleAddNewMedicament = async () => {
+  const onAddNewMedicament = async () => {
     console.log(inputValue);
     try {
       const response = await $api.post("/medicaments", inputValue);
@@ -132,7 +145,7 @@ export const MedicamentInput = ({
       onMedicamentId(response.data.id);
       setShowModal(false);
     } catch (error) {
-      handleAxiosError(error);
+      onAxiosError(error);
       setShowModal(false);
       setInputValue("");
       setFilteredMedicaments([]);
@@ -149,7 +162,7 @@ export const MedicamentInput = ({
         value={inputValue}
         onChange={onInputChange}
         onBlur={(e) => onMedicamentsInputBlur(e.target.value)}
-        onKeyDown={handleInputKeyDown}
+        onKeyDown={onInputKeyDown}
         disabled={locked}
       />
       <ul
@@ -157,7 +170,7 @@ export const MedicamentInput = ({
         style={{ display: filteredMedicaments.length === 0 ? "none" : "block" }}
       >
         {filteredMedicaments.map((med) => (
-          <li key={med.id} onMouseDown={() => handleSelectMedicament(med)}>
+          <li key={med.id} onMouseDown={() => onSelectMedicament(med)}>
             {med.title}
           </li>
         ))}
@@ -165,7 +178,7 @@ export const MedicamentInput = ({
       {showModal && (
         <div className="confirm-modal">
           <p>Додати новий медикамент {inputValue}?</p>
-          <button onClick={handleAddNewMedicament}>Так</button>
+          <button onClick={onAddNewMedicament}>Так</button>
           <button
             onClick={() => {
               setShowModal(false);
