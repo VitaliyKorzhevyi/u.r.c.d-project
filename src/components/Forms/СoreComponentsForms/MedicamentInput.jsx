@@ -50,7 +50,7 @@ export const MedicamentInput = ({
     saveValueLocalStorage(selectedMedicament.title, selectedMedicament.id, true);
   };
 
-  //* ПЕРЕДАЧА АРГУМЕНТІВ ДЛЯ ЗБЕРІГАННЯ У ЛОКАЛЬНЕ СХОВИЩЕ 111
+  //* ПЕРЕДАЧА АРГУМЕНТІВ ДЛЯ ЗБЕРІГАННЯ У ЛОКАЛЬНЕ СХОВИЩЕ 
   const saveValueLocalStorage = (
     inputValue,
     onMedicamentId,
