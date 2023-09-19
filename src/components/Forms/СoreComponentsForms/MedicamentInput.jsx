@@ -135,7 +135,7 @@ export const MedicamentInput = ({
     }
   }
 
-  //* ДОДАЄМО НОВИЙ МЕДИКАМЕНТ НА БЕК
+  //* ДОДАЄМО НОВИЙ МЕДИКАМЕНТ
   const onAddNewMedicament = async () => {
     console.log(inputValue);
     try {
