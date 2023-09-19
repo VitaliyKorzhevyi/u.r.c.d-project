@@ -8,8 +8,6 @@ import { FormResuscitation } from "./FormResuscitation";
 import { FormSurgical } from "./FormSurgical";
 import { FormConsultation } from "./FormConsultation";
 
-import './Forms.css';
-
 export const Forms = () => {
   const location = useLocation();
   const params = new URLSearchParams(location.search);

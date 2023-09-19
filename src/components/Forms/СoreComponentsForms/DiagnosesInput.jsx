@@ -27,14 +27,14 @@ export const DiagnosesInput = ({
 
   //* ВВЕДЕННЯ ЗНАЧЕННЯ В ІНПУТ
   const onInputChange = (e) => {
-    let inputValue = e.target.value;
-    inputValue = capitalizeFirstLetter(inputValue);
-    setInputValue(inputValue);
+    let inputVal = e.target.value;
+    inputVal = capitalizeFirstLetter(inputVal);
+    setInputValue(inputVal);
 
-    if (inputValue.length >= 3) {
+    if (inputVal.length >= 3) {
       setFilteredDiagnoses(
         diagnoses.filter((diagnoses) =>
-          diagnoses.title.toLowerCase().startsWith(inputValue.toLowerCase())
+          diagnoses.title.toLowerCase().startsWith(inputVal.toLowerCase())
         )
       );
     } else {
@@ -142,6 +142,7 @@ export const DiagnosesInput = ({
       updateDiagnoses(response.data);
       onDiagnosesId(response.data.id);
       setShowModal(false);
+      saveValueLocalStorage(inputValue, response.data.id, true);
     } catch (error) {
       onAxiosError(error);
       setShowModal(false);

@@ -3,18 +3,17 @@
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import $api from "../../api/api";
+import { useSpring, animated } from "react-spring";
 
-import "./FormResuscitation.css";
 
-//* core components
-
+//* Core components
 import { DayInput } from "./СoreComponentsForms/DayInput";
 import { DiagnosesInput } from "./СoreComponentsForms/DiagnosesInput";
 import { OperationsInput } from "./СoreComponentsForms/OperationsInput";
 import { ModalPatientCreate } from "./СoreComponentsForms/ModalPatientCreate";
 import { ModalPatientSearch } from "./СoreComponentsForms/ModalPatientSearch";
 
-//*row components
+//* Row components
 import { MedicamentInput } from "./СoreComponentsForms/MedicamentInput";
 import { QuantityInput } from "./СoreComponentsForms/QuantityInput";
 import { TypeSelect } from "./СoreComponentsForms/TypeSelect";
@@ -34,6 +33,8 @@ export const FormResuscitation = () => {
 
   const [showSaveModal, setShowSaveModal] = useState(false);
   const [currentFormIndex, setCurrentFormIndex] = useState(null);
+
+  const [exitingFormIndex, setExitingFormIndex] = useState(null);
 
   //* ЗАПИТ НА ВСІХ ЮЗЕРІВ
   useEffect(() => {
@@ -217,6 +218,14 @@ export const FormResuscitation = () => {
   // додавання у форму нової строки
   const onAddRow = (formIndex) => {
     const updatedForms = [...forms];
+
+    if (forms[formIndex].rows.length >= 99) {
+      toast.warn(
+        "Ви досягли максимальної кількості рядків (99). Додавання нових рядків неможливе."
+      );
+      return;
+    }
+
     updatedForms[formIndex].rows.push({
       medicament_id: "0",
       medicaments: "",
@@ -269,17 +278,18 @@ export const FormResuscitation = () => {
       .post("/reports/anesthesiology", dataToSend)
       .then((response) => {
         console.log(response);
-        toast.success(`Нова таблиця успішно збережена`);
+        toast.success(`Нова таблиця успішно збережена`, {
+          autoClose: 1500,
+        });
         setTimeout(() => {
-          onDeleteForm(formIndex);
-        }, 3500);
+          handleDelete(formIndex);
+        }, 2500);
       })
       .catch((error) => {
         console.log(error);
       });
   };
 
-  //* ПОМИЛКИ ДЛЯ ІНПУТІВ
   //* ПОМИЛКИ ДЛЯ ІНПУТІВ
   // Основні поля для перевірки в формі
   const MAIN_FIELDS = {
@@ -332,6 +342,14 @@ export const FormResuscitation = () => {
     // Отримання поточної форми на основі індексу
     const form = forms[formIndex];
 
+    // Перевірка на 1 обовязковий рядок
+    if (form.rows.length === 0) {
+      toast.warn("Форма не може бути порожньою. Додайте хоча б один рядок!", {
+        autoClose: 2500,
+      });
+      return;
+    }
+
     // Перевірка основних полів форми на відсутність
     const missingMainFieldsMessage = getMissingFieldsMessage(form, MAIN_FIELDS);
 
@@ -374,11 +392,38 @@ export const FormResuscitation = () => {
     }
   };
 
+    //* ДЛЯ АНІМАЦІЇ ПОЯВИ ТА ВИДАЛЕННЯ ФОРМ
+
+    const fadeOutAnimation = useSpring({
+      opacity: exitingFormIndex !== null ? 0 : 1,
+      transform:
+        exitingFormIndex !== null ? "translateY(-100%)" : "translateY(0%)",
+      config: { duration: 200 },
+    });
+  
+    const handleDelete = (formIndex) => {
+      setExitingFormIndex(formIndex);
+      setTimeout(() => {
+        onDeleteForm(formIndex);
+        setExitingFormIndex(null);
+      }, 200); // совпадает с длительностью анимации
+    };
+  
+    const handleAddNewForm = () => {
+      onAddNewForm();
+    };
+
   return (
     <>
       {forms.map((form, formIndex) => (
+        <animated.div
+        style={formIndex === exitingFormIndex ? fadeOutAnimation : {}}
+        key={form.id}
+      >
         <div
-          className={`form2-table ${form.locked ? "locked" : ""}`}
+          className={`form2-table ${form.locked ? "locked" : ""} ${
+            formIndex === forms.length - 1 ? "fade-in" : ""
+          }`}
           key={form.id}
         >
           <div className="form2-icons">
@@ -394,7 +439,7 @@ export const FormResuscitation = () => {
             ></i>
             <i
               className="bx bx-trash bx-sm form1-delete"
-              onClick={() => onDeleteForm(formIndex)}
+              onClick={() => handleDelete(formIndex)}
             ></i>
           </div>
           <table>
@@ -668,12 +713,13 @@ export const FormResuscitation = () => {
             </button>
           </div>
         </div>
+        </animated.div>
       ))}
       <button
         type="button"
         id="add-row-form2"
         className="add-new-form2"
-        onClick={onAddNewForm}
+        onClick={handleAddNewForm}
       >
         <i className="bx bx-plus bx-sm"></i>
       </button>

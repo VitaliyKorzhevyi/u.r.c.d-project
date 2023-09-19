@@ -44,6 +44,84 @@
     padding-bottom: 12px;
 }
 
+.semi-head {
+  background-color: #eeeeee;
+}
+
 .table-save-size {
     width: 6.6%;
+}
+
+.table-save-size1 {
+  width: 6.1%;
+}
+
+.table-save-size2 {
+  width: 5%;
+}
+
+
+.text-semititle {
+  text-align: right;
+}
+
+.semititle-size1 {
+  width: 22.9%;
+}
+
+.semititle-size2 {
+  width: 27.2%;
+}
+
+.semititle-size3 {
+  width: 10%;
+}
+
+.text-head-saved-forms {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  font-size: 20px;
+}
+
+.check-static {
+  text-align: center;
+}
+
+.autocomplete-container {
+  position: relative;
+  width: 100%;
+}
+
+.autocomplete-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-left: 117px;
+  width: 251px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  z-index: 1000;
+  max-height: 150px;
+  overflow-y: auto;
+
+  font-family: "Montserrat", sans-serif;
+  font-weight: 400;
+  font-size: 20px;
+}
+
+.autocomplete-dropdown li {
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.autocomplete-dropdown li:hover {
+  background-color: #eee;
+}
+
+.yellow-background {
+  background-color: rgb(255, 248, 234);
+}
+
+.green-background {
+  background-color: rgb(228, 248, 228);
 }

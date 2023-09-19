@@ -141,6 +141,7 @@ export const OperationsInput = ({
       updateOperations(response.data);
       onOperationId(response.data.id);
       setShowModal(false);
+      saveValueLocalStorage(inputValue, response.data.id, true);
     } catch (error) {
       onAxiosError(error);
       setShowModal(false);

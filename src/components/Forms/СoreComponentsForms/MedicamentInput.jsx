@@ -144,6 +144,7 @@ export const MedicamentInput = ({
       updateMedicaments(response.data);
       onMedicamentId(response.data.id);
       setShowModal(false);
+      saveValueLocalStorage(inputValue, response.data.id, true)
     } catch (error) {
       onAxiosError(error);
       setShowModal(false);
