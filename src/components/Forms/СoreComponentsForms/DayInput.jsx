@@ -98,7 +98,7 @@ export const DayInput = ({
       "String should have at least 2 characters":
         "Рядок повинен містити не менше 2 символів",
       "String should have at most 100 characters":
-        "Рядок повинен містити не більше 100 символів",
+        "Рядок повинен містити не більше 100 сим",//!зміни
     };
 
     if (error.response) {
