@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { isThreeDaysOld } from "./dateUtils";
 
-export const DayInputEditing = ({
+export const MedicamentInputEditing = ({
   items,
   selectedItem,
   onItemSelect,
@@ -10,11 +10,7 @@ export const DayInputEditing = ({
   const [inputValue, setInputValue] = useState(selectedItem || "");
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
 
-  useEffect(() => {
-    setInputValue(selectedItem || "");
-  }, [selectedItem]);
-
-  const MIN_INPUT_LENGTH = 2;
+  const MIN_INPUT_LENGTH = 3;
 
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
@@ -25,12 +21,9 @@ export const DayInputEditing = ({
 
   return (
     <div className="autocomplete-container">
-      <div style={{ display: "flex", alignItems: "center" }}>
-        <label htmlFor="dayInput" style={{ marginRight: "10px" }}>
-        К-сть. діб:
-        </label>
-        <input
-          id="dayInput"
+      <div>
+        <input 
+        className="medicament-input"
           type="text"
           value={inputValue}
           onChange={handleInputChange}
@@ -38,7 +31,7 @@ export const DayInputEditing = ({
         />
       </div>
       {isDropdownVisible && (
-        <ul className="autocomplete-dropdown">
+        <ul className="autocomplete-dropdown-medicament">
           {items
             .filter((item) =>
               item.title.toLowerCase().includes(inputValue.toLowerCase())

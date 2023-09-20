@@ -60,6 +60,9 @@
   width: 5%;
 }
 
+.table-save-size3 {
+  width: 35%;
+}
 
 .text-semititle {
   text-align: right;
@@ -109,13 +112,56 @@
   font-size: 20px;
 }
 
-.autocomplete-dropdown li {
+.autocomplete-dropdown li,
+.autocomplete-dropdown-medicament li,
+.autocomplete-dropdown-diagnoses li{
   padding: 5px 10px;
   cursor: pointer;
 }
 
-.autocomplete-dropdown li:hover {
+.autocomplete-dropdown li:hover,
+.autocomplete-dropdown-medicament li:hover,
+.autocomplete-dropdown-diagnoses li:hover {
   background-color: #eee;
+}
+
+.autocomplete-dropdown-medicament {
+  position: absolute;
+  top: 100%;
+  left: 0;
+
+  width: 100%;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  z-index: 1000;
+  max-height: 150px;
+  overflow-y: auto;
+
+  font-family: "Montserrat", sans-serif;
+  font-weight: 400;
+  font-size: 20px;
+}
+
+.autocomplete-dropdown-diagnoses {
+  position: absolute;
+  top: 100%;
+  left: 0;
+
+  margin-left: 98px;
+  width: 91.3%;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  z-index: 1000;
+  max-height: 150px;
+  overflow-y: auto;
+
+  font-family: "Montserrat", sans-serif;
+  font-weight: 400;
+  font-size: 20px;
+}
+
+.medicament-input {
+  width: 100%;
 }
 
 .yellow-background {
