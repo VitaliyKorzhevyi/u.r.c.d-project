@@ -32,7 +32,7 @@
 .item-saved-forms {
   display: flex;
   flex-direction: column;
-  padding: 8px 15px;
+  padding: 16px 15px;
 
   border: 2px solid #b1b1b1;
   border-radius: 10px;
@@ -42,6 +42,7 @@
     display: flex;
     justify-content: space-between;
     padding-bottom: 12px;
+    cursor: pointer;
 }
 
 .semi-head {
@@ -114,15 +115,18 @@
 
 .autocomplete-dropdown li,
 .autocomplete-dropdown-medicament li,
-.autocomplete-dropdown-diagnoses li{
+.autocomplete-dropdown-diagnoses li,
+.autocomplete-dropdown-operating li{
   padding: 5px 10px;
   cursor: pointer;
+  border-top: 1px solid #ccc;
 }
 
 .autocomplete-dropdown li:hover,
 .autocomplete-dropdown-medicament li:hover,
-.autocomplete-dropdown-diagnoses li:hover {
-  background-color: #eee;
+.autocomplete-dropdown-diagnoses li:hover,
+.autocomplete-dropdown-operating li:hover {
+  background-color: #d0e4fa;
 }
 
 .autocomplete-dropdown-medicament {
@@ -160,6 +164,24 @@
   font-size: 20px;
 }
 
+.autocomplete-dropdown-operating {
+  position: absolute;
+  top: 100%;
+  left: 0;
+
+  margin-left: 117px;
+  width: 89.5%;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  z-index: 1000;
+  max-height: 150px;
+  overflow-y: auto;
+
+  font-family: "Montserrat", sans-serif;
+  font-weight: 400;
+  font-size: 20px;
+}
+
 .medicament-input {
   width: 100%;
 }
@@ -171,3 +193,6 @@
 .green-background {
   background-color: rgb(228, 248, 228);
 }
+
+
+

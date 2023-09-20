@@ -1,15 +1,19 @@
 //Todo якщо термін дії форми пройшов 3 дні то кнопка відправити та інпути будуть заблоковані
 
 import { useState, useEffect } from "react";
-import $api from "../../api/api";
+import { toast } from "react-toastify";
 import DatepickerComponent from "./Сalendar";
+import $api from "../../api/api";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 
 import { DayInputEditing } from "./СoreComponentsForms/DayInputEditing";
 import { DiagnosesInputEditing } from "./СoreComponentsForms/DiagnosesInputEditing";
+import { OperatingInputEditing } from "./СoreComponentsForms/OperatingInputEditing";
 import { MedicamentInputEditing } from "./СoreComponentsForms/MedicamentInputEditing";
+
+import { ModalPatientSearch } from "../Forms/СoreComponentsForms/ModalPatientSearch";
 
 import "./SavedForms.css";
 
@@ -44,6 +48,7 @@ export const SavedForms = () => {
 
   //* ЗАПИТ ДНІВ (передопераційна доба)
   const [days, setDays] = useState([]);
+  const [isModalOpenSearch, setModalOpenSearch] = useState(false);
 
   useEffect(() => {
     $api.get("/preoperative-days").then((response) => setDays(response.data));
@@ -57,20 +62,35 @@ export const SavedForms = () => {
     }));
   };
 
-    //* ЗАПИТ ДІАГНОЗІВ
-    const [diagnoses, setDiagnoses] = useState([]);
+  //* ЗАПИТ ДІАГНОЗІВ
+  const [diagnoses, setDiagnoses] = useState([]);
 
-    useEffect(() => {
-      $api.get("/diagnoses").then((response) => setDiagnoses(response.data));
-    }, []);
-  
-    const onDiagnosesSelect = (selectedDiagnosesId) => {
-      console.log("Selected Diagnoses ID:", selectedDiagnosesId); 
-      setFormData((prevData) => ({
-        ...prevData,
-        diagnosis_id: selectedDiagnosesId,
-      }));
-    };
+  useEffect(() => {
+    $api.get("/diagnoses").then((response) => setDiagnoses(response.data));
+  }, []);
+
+  const onDiagnosesSelect = (selectedDiagnosesId) => {
+    console.log("Selected Diagnoses ID:", selectedDiagnosesId);
+    setFormData((prevData) => ({
+      ...prevData,
+      diagnosis_id: selectedDiagnosesId,
+    }));
+  };
+
+  //* ЗАПИТ ОПЕРАЦІЙ
+  const [operating, setOperating] = useState([]);
+
+  useEffect(() => {
+    $api.get("/operations").then((response) => setOperating(response.data));
+  }, []);
+
+  const onOperatingSelect = (selectedOperatingId) => {
+    console.log("Selected Operating ID:", selectedOperatingId);
+    setFormData((prevData) => ({
+      ...prevData,
+      operation_id: selectedOperatingId,
+    }));
+  };
 
   //* ЗАПИТ МЕДИКАМЕНТІВ
   const [medicaments, setMedicaments] = useState([]);
@@ -90,6 +110,73 @@ export const SavedForms = () => {
         return prevData;
       }
     });
+  };
+
+  //* РЕАДГУВАННЯ ПАЦІЄНТА
+  const onPatientSelect = (selectedPatientId) => {
+    console.log("Selected Patient ID:", selectedPatientId);
+    setFormData((prevData) => ({
+      ...prevData,
+      patient_id: selectedPatientId,
+    }));
+  };
+
+  const onSetPatientFullName = (fullName) => {
+    if (selectedItem) {
+      const updatedData = data.map((item) => {
+        if (item.id === selectedItem.id && item.type === selectedItem.type) {
+          return { ...item, patient_full_name: fullName };
+        }
+        return item;
+      });
+      setData(updatedData);
+    }
+  };
+  const updatePatientDetail = (field, value) => {
+    if (selectedItemDetails) {
+      setSelectedItemDetails((prevDetails) => ({
+        ...prevDetails,
+        patient: {
+          ...prevDetails.patient,
+          [field]: value,
+        },
+      }));
+    }
+  };
+
+  const onSetPhone = (phone) => {
+    updatePatientDetail("phone", phone);
+  };
+
+  const onSetBirthday = (birthday) => {
+    updatePatientDetail("birthday", birthday);
+  };
+
+  const onSetAge = (age) => {
+    updatePatientDetail("age", age);
+  };
+
+  //* ДЛЯ РЕДАГУВАННЯ ОДИНИЦІ ВИМІРУ
+  const updateRowsUnit = (rows, rowIndex, unit) => {
+    if (!rows[rowIndex]) {
+      console.warn("Row index not found:", rowIndex);
+      return rows;
+    }
+    const updatedRows = [...rows];
+    updatedRows[rowIndex].unit_of_measurement = unit;
+    return updatedRows;
+  };
+  
+  const onUnitChange = (rowIndex, unit) => {
+    setSelectedItemDetails(prevDetails => ({
+      ...prevDetails,
+      rows: updateRowsUnit(prevDetails.rows, rowIndex, unit)
+    }));
+  
+    setFormData(prevData => ({
+      ...prevData,
+      rows: updateRowsUnit(prevData.rows, rowIndex, unit)
+    }));
   };
 
   //* ДЛЯ ВИБОРУ ДАТИ
@@ -118,6 +205,7 @@ export const SavedForms = () => {
     }
   };
 
+  //* ДЛЯ ВІДОБРАЖЕННЯ ВСІЄЇ ТАБЛИЦІ
   const onFormDataById = (item) => {
     setSelectedItem({ id: item.id, type: item.type });
     const url = `reports/${item.type}/${item.id}`;
@@ -159,7 +247,7 @@ export const SavedForms = () => {
     resuscitation: "Реанімація",
   };
 
-  //* ДЛЯ відприавки інформації на сервер
+  //* ДЛЯ відправки інформації на сервер
   const onSaveChanges = () => {
     if (!selectedItem) {
       console.warn("No table selected!");
@@ -168,16 +256,25 @@ export const SavedForms = () => {
 
     const url = `/reports/${selectedItem.type}`;
 
-    console.log("Змнена форма:", formData);
+    console.log("Змінена форма:", formData);
 
     $api
       .put(url, formData)
       .then((response) => {
-        console.log("Успешно изменена:", response.data);
+        console.log("Успішно оновлена:", response.data);
+        const item = response.data;
+        onFormDataById(item);
+        toast.success(`Нова таблиця успішно оновлена`, {
+          autoClose: 1500,
+        });
       })
       .catch((error) => {
         console.error("Error saving data:", error);
       });
+  };
+
+  const toggleModalSearch = () => {
+    setModalOpenSearch(!isModalOpenSearch);
   };
 
   return (
@@ -192,10 +289,7 @@ export const SavedForms = () => {
         <ul className="list-saved-forms">
           {data.map((item) => (
             <li key={`${item.id}-${item.type}`} className="item-saved-forms">
-              <div
-                className="mini-form"
-                onClick={() => onFormDataById(item)} // Обработчик события теперь здесь
-              >
+              <div className="mini-form" onClick={() => onFormDataById(item)}>
                 <table>
                   <tbody>
                     <tr>
@@ -270,11 +364,9 @@ export const SavedForms = () => {
                       <tbody>
                         <tr>
                           <td colSpan="6">
-                          <DiagnosesInputEditing
+                            <DiagnosesInputEditing
                               items={diagnoses}
-                              selectedItem={
-                                selectedItemDetails.diagnosis.title
-                              }
+                              selectedItem={selectedItemDetails.diagnosis.title}
                               onItemSelect={onDiagnosesSelect}
                               createdAt={item.created_at}
                             />
@@ -282,8 +374,12 @@ export const SavedForms = () => {
                         </tr>
                         <tr>
                           <td colSpan="6">
-                            <strong>Операція:</strong>{" "}
-                            {selectedItemDetails.operation.title}
+                            <OperatingInputEditing
+                              items={operating}
+                              selectedItem={selectedItemDetails.operation.title}
+                              onItemSelect={onOperatingSelect}
+                              createdAt={item.created_at}
+                            />
                           </td>
                         </tr>
                         <tr className="semi-head">
@@ -319,7 +415,21 @@ export const SavedForms = () => {
                               />
                             </td>
                             <td>{row.quantity_of_medicament}</td>
-                            <td>{row.unit_of_measurement}</td>
+                            <td>
+                              <select
+                                value={row.unit_of_measurement}
+                                onChange={(e) =>
+                                  onUnitChange(index, e.target.value)
+                                }
+                              >
+                                <option value="шт">шт</option>
+                                <option value="амп">амп</option>
+                                <option value="фл">фл</option>
+                                <option value="мл">мл</option>
+                                <option value="гр">гр</option>
+                                <option value="пар">пар</option>
+                              </select>
+                            </td>
                             <td>{row.notation}</td>
                             <td className="table-save-size1">
                               <p className="check-static">
@@ -344,6 +454,15 @@ export const SavedForms = () => {
                       </tbody>
                     </table>
                     <button
+                      type="button"
+                      onClick={() => {
+                        toggleModalSearch();
+                      }}
+                      disabled={isThreeDaysOld(item.created_at)}
+                    >
+                      <i className="bx bx-search bx-sm"></i>
+                    </button>
+                    <button
                       onClick={() => onSaveChanges(item.type)}
                       disabled={isThreeDaysOld(item.created_at)}
                     >
@@ -355,6 +474,15 @@ export const SavedForms = () => {
           ))}
         </ul>
       </div>
+      <ModalPatientSearch
+        isOpen={isModalOpenSearch}
+        onClose={toggleModalSearch}
+        onGetId={onPatientSelect}
+        onGetFullName={onSetPatientFullName}
+        onGetPhone={onSetPhone}
+        onGetBirthday={onSetBirthday}
+        onGetAge={onSetAge}
+      />
     </div>
   );
 };

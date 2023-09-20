@@ -12,6 +12,7 @@ export const ModalPatientSearch = ({
   onGetFullName,
   onGetBirthday,
   onGetId,
+  onGetPhone
 }) => {
   const [patients, setPatients] = useState([]);
   const [lastName, setLastName] = useState("");
@@ -119,6 +120,8 @@ export const ModalPatientSearch = ({
     onGetAge(patient.age);
     onGetBirthday(patient.birthday);
     onGetId(patient.id);
+    onGetPhone?.(patient.phone);
+    console.log(patient.phone);
 
     // Очистити всі поля
     resetFields();
