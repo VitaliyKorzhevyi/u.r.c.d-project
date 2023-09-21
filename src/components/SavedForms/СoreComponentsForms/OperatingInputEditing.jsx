@@ -30,9 +30,10 @@ export const OperatingInputEditing = ({
         <strong>Операція:</strong>
         </label>
         <input
-        className="medicament-input"
+        className="medicament-input input-size-save-table"
           id="operatingInput"
           type="text"
+          title={inputValue}
           value={inputValue}
           onChange={handleInputChange}
           disabled={disabledInput}

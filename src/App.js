@@ -20,6 +20,7 @@ function App() {
         theme="colored"
         padding="20px"
       />
+      
       <Routes>
         <Route path="/" element={<Auth />} />
         <Route path="homepage" element={<HomePage />} />

@@ -30,9 +30,10 @@ export const DiagnosesInputEditing = ({
         <strong>Діагноз:</strong>
         </label>
         <input
-        className="medicament-input"
+        className="medicament-input input-size-save-table"
           id="diagnosesInput"
           type="text"
+          title={inputValue}
           value={inputValue}
           onChange={handleInputChange}
           disabled={disabledInput}

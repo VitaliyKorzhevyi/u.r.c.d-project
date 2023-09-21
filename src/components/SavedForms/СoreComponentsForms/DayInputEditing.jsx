@@ -32,6 +32,7 @@ export const DayInputEditing = ({
         <input
           id="dayInput"
           type="text"
+          className="input-size-save-table"
           value={inputValue}
           onChange={handleInputChange}
           disabled={disabledInput}

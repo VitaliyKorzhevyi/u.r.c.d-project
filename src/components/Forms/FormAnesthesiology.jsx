@@ -5,8 +5,6 @@ import { toast } from "react-toastify";
 import $api from "../../api/api";
 import { useSpring, animated } from "react-spring";
 
-
-
 //* Core components
 import { DayInput } from "./СoreComponentsForms/DayInput";
 import { DiagnosesInput } from "./СoreComponentsForms/DiagnosesInput";
@@ -291,7 +289,7 @@ export const FormAnesthesiology = () => {
       });
   };
 
- //* ПОМИЛКИ ДЛЯ ІНПУТІВ
+  //* ПОМИЛКИ ДЛЯ ІНПУТІВ
   // Основні поля для перевірки в формі
   const MAIN_FIELDS = {
     history_number: '"Номер історії"',
@@ -476,7 +474,7 @@ export const FormAnesthesiology = () => {
 
                   <td className="form2-table-size">
                     <input
-                      type="number"
+                      type="text"
                       name="history_number"
                       className="form1-table-number"
                       value={form.history_number}
@@ -487,6 +485,11 @@ export const FormAnesthesiology = () => {
                           e.target.value
                         )
                       }
+                      onKeyPress={(e) => {
+                        if (!/[0-9-]/.test(e.key)) {
+                          e.preventDefault();
+                        }
+                      }}
                       disabled={form.locked}
                     />
                   </td>

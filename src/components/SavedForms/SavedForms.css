@@ -3,7 +3,9 @@
   max-width: 1200px;
   padding: 0 15px;
 }
-
+td {
+  padding: 4px 8px;
+}
 .calendar-saved-forms {
   margin: 0 auto;
   display: flex;
@@ -26,23 +28,36 @@
 
   font-family: "Montserrat", sans-serif;
   font-weight: 500;
-  font-size: 20px;
+  font-size: 18px;
 }
 
 .item-saved-forms {
   display: flex;
   flex-direction: column;
-  padding: 16px 15px;
+  padding: 16px 15px 4px;
 
   border: 2px solid #b1b1b1;
   border-radius: 10px;
+}
+
+.input-size-save-table {
+  padding-left: 10px;
+}
+
+.table-save input,
+.table-save select,
+.mini-form input{
+ height: 36px;
+}
+
+.table-save select {
+  cursor: pointer;
 }
 
 .mini-form {
     display: flex;
     justify-content: space-between;
     padding-bottom: 12px;
-    cursor: pointer;
 }
 
 .semi-head {
@@ -50,7 +65,7 @@
 }
 
 .table-save-size {
-    width: 6.6%;
+    width: 7%;
 }
 
 .table-save-size1 {
@@ -70,22 +85,36 @@
 }
 
 .semititle-size1 {
-  width: 22.9%;
+  width: 20.7%;
 }
 
 .semititle-size2 {
-  width: 27.2%;
+  width: 24.6%;
 }
 
 .semititle-size3 {
-  width: 10%;
+  width: 10.2%;
+}
+/* Завантаження всієї таблиці */
+.semititle-size4 {
+  width: 4%;
+  cursor: pointer;
+
+}
+.semititle-size4:hover {
+  background-color: #ccc;
 }
 
 .text-head-saved-forms {
   font-family: "Montserrat", sans-serif;
   font-weight: 500;
-  font-size: 20px;
+  font-size: 18px;
 }
+
+.text-size-saved-forms {
+  padding: 8px 8px;
+}
+
 
 .check-static {
   text-align: center;
@@ -100,8 +129,8 @@
   position: absolute;
   top: 100%;
   left: 0;
-  margin-left: 117px;
-  width: 251px;
+  margin-left: 106px;
+  width: 229px;
   border: 1px solid #ccc;
   background-color: #fff;
   z-index: 1000;
@@ -151,8 +180,8 @@
   top: 100%;
   left: 0;
 
-  margin-left: 98px;
-  width: 91.3%;
+  margin-left: 89px;
+  width: 92.1%;
   border: 1px solid #ccc;
   background-color: #fff;
   z-index: 1000;
@@ -169,8 +198,8 @@
   top: 100%;
   left: 0;
 
-  margin-left: 117px;
-  width: 89.5%;
+  margin-left: 106px;
+  width: 90.6%;
   border: 1px solid #ccc;
   background-color: #fff;
   z-index: 1000;
@@ -180,6 +209,10 @@
   font-family: "Montserrat", sans-serif;
   font-weight: 400;
   font-size: 20px;
+}
+
+.number-history-padding {
+  padding-right: 4px;
 }
 
 .medicament-input {
@@ -194,5 +227,23 @@
   background-color: rgb(228, 248, 228);
 }
 
+.history-input {
+  width: 100%;
+}
 
+.btns-save-table-container {
+  display: flex;
+  justify-content: flex-end;
+  gap: 4px;
 
+  padding: 12px 0;
+}
+
+.btn-save-table {
+padding: 4px 8px;
+cursor: pointer;
+}
+
+.custom-tooltip {
+  font-size: 16px; /* или любой другой размер, который вам нужен */
+}
