@@ -2,7 +2,6 @@ import axios from "./axios";
 const $api = axios;
 
 $api.interceptors.request.use(config => {
-    console.log("Making a request with the following config:", config);
     config.headers.Authorization = `Bearer ${localStorage.getItem("access_token")}`;
     return config;
 });

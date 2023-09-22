@@ -8,7 +8,7 @@ import { Statistics } from "../components/Statistics/Statistics";
 import { Messages } from "../components/Messages/Messages";
 import { Archive } from "../components/Archive/Archive";
 import { Pharmacy } from "../components/Pharmacy/Pharmacy";
-import { Dentistry } from "../components/Dentistry/Dentistry";
+import { Accounting } from "../components/Accounting/Accounting";
 
 import './HomePage.css';
 
@@ -41,8 +41,8 @@ export const HomePage = () => {
           <button type="button" onClick={() => onSectionChange('statistics')}>Статистика</button>
           <button type="button" onClick={() => onSectionChange('messages')}>Повідомлення</button>
           <button type="button" onClick={() => onSectionChange('archive')}>Архів</button>
-          <button type="button" onClick={() => onSectionChange('pharmacy')}>Апт./Бух.</button>
-          <button type="button" onClick={() => onSectionChange('dentistry')}>Стоматологія</button>
+          <button type="button" onClick={() => onSectionChange('pharmacy')}>Аптека</button>
+          <button type="button" onClick={() => onSectionChange('accounting')}>Бухгалтерія</button>
         </div>
       </div>
       {activeSection === 'users' && <UserManagement />}
@@ -52,7 +52,7 @@ export const HomePage = () => {
       {activeSection === 'messages' && <Messages />}
       {activeSection === 'archive' && <Archive />}
       {activeSection === 'pharmacy' && <Pharmacy />}
-      {activeSection === 'dentistry' && <Dentistry />}
+      {activeSection === 'accounting' && <Accounting />}
     </div>
   );
 };

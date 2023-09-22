@@ -275,7 +275,7 @@ export const FormResuscitation = () => {
     console.log(dataToSend);
 
     $api
-      .post("/reports/anesthesiology", dataToSend)
+      .post("/reports/resuscitation", dataToSend)
       .then((response) => {
         console.log(response);
         toast.success(`Нова таблиця успішно збережена`, {

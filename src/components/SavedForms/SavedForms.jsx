@@ -27,6 +27,8 @@ export const SavedForms = () => {
   const [selectedItem, setSelectedItem] = useState(null);
   const [selectedItemDetails, setSelectedItemDetails] = useState(null);
 
+  const [loading, setLoading] = useState(false);
+
   //* ДЛЯ ЗБЕРАГІННЯ ВІДРЕДАГОВАНИХ ЗНАЧЕНЬ
   const [formData, setFormData] = useState({
     id: null,
@@ -113,7 +115,7 @@ export const SavedForms = () => {
   };
 
   //* РЕДАГУВАННЯ НОМЕРА ІСТОРІЇ
-  const handleInputChange = (e, id, type) => {
+  const onInputChange = (e, id, type) => {
     const newValue = e.target.value;
 
     // Обновляем formData
@@ -223,14 +225,13 @@ export const SavedForms = () => {
           console.error("Error fetching data:", error);
         });
     } else {
-      console.warn(
-        "Please select both start and end dates before making a request."
-      );
+      console.warn("Please select both start and end dates before making a request.");
     }
   };
 
   //* ДЛЯ ВІДОБРАЖЕННЯ ВСІЄЇ ТАБЛИЦІ
   const onFormDataById = (item) => {
+    setLoading(true);
     setSelectedItem({ id: item.id, type: item.type });
     const url = `reports/${item.type}/${item.id}`;
     $api
@@ -257,15 +258,17 @@ export const SavedForms = () => {
 
         // Задаем данные в состояние
         setFormData(transformedData);
+        setLoading(false);
       })
       .catch((error) => {
         console.error("Error fetching table:", error);
+        setLoading(false);
       });
     console.log(item.id);
     console.log(item.type);
   };
 
-  const typeNames = {
+  const REPORT_TYPE_NAMES = {
     operating: "Операційна",
     anesthesiology: "Анестезіологія",
     resuscitation: "Реанімація",
@@ -311,325 +314,269 @@ export const SavedForms = () => {
       </div>
       <div>
         <ul className="list-saved-forms">
-          {data.map((item) => (
-            <li key={`${item.id}-${item.type}`} className="item-saved-forms">
-              <div className="mini-form">
-                <table>
-                  <tbody>
-                    <tr>
-                      <td
-                        className={`semititle-size1 ${
-                          isThreeDaysOld(item.created_at)
-                            ? "yellow-background"
-                            : "green-background"
-                        }`}
-                      >
-                        <p>
-                          <strong>Форма:</strong>{" "}
-                          {typeNames[item.type] || item.type}
-                        </p>
-                      </td>
-                      <td>
-                        <strong>Пацієнт:</strong> {item.patient_full_name}
-                      </td>
-                      <td className="semititle-size3 ">
-                        <div style={{ display: "flex", alignItems: "center" }}>
-                          <label
-                            htmlFor="historyInput"
-                            className="number-history-padding"
-                          >
-                            <strong>№:</strong>
-                          </label>
-                          {isThreeDaysOld(item.created_at) ? (
-                            <span className="text-head-saved-forms">
-                              {item.history_number}
-                            </span>
-                          ) : (
-                            <input
-                              id="historyInput"
-                              type="text"
-                              title={item.history_number}
-                              style={{ textAlign: "center" }}
-                              className="history-input"
-                              value={item.history_number}
-                              onChange={(e) =>
-                                handleInputChange(e, item.id, item.type)
-                              }
-                              disabled={isThreeDaysOld(item.created_at)}
-                            />
-                          )}
-                        </div>
-                      </td>
-
-                      <td className="semititle-size2">
-                        <p className="text-semititle">
-                          <strong>Дата створення:</strong>{" "}
-                          {new Date(item.created_at).toLocaleDateString()}
-                        </p>
-                      </td>
-                      <td
-                        className="semititle-size4"
-                        onClick={() => onFormDataById(item)}
-                      >
-                        <i className="bx bx-chevron-down bx-md"></i>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-
-              {selectedItem &&
-                selectedItem.id === item.id &&
-                selectedItem.type === item.type &&
-                selectedItemDetails && (
-                  <>
-                    <table border="1" className="table-save">
-                      <thead>
-                        <tr>
-                          <th colSpan="2">
-                            Телефон:{" "}
-                            <span className="text-head-saved-forms">
-                              {selectedItemDetails.patient.phone}
-                            </span>
-                          </th>
-                          <th colSpan="4">
-                            Дата народження:{" "}
-                            <span className="text-head-saved-forms">
-                              {selectedItemDetails.patient.birthday}
-                            </span>
-                          </th>
-                        </tr>
-                        <tr>
-                          <th colSpan="2">
-                            Вік:{" "}
-                            <span className="text-head-saved-forms">
-                              {selectedItemDetails.patient.age}
-                            </span>
-                          </th>
-                          <th colSpan="4">
-                            {isThreeDaysOld(item.created_at) ? (
-                              <span className="text-head-saved-forms">
-                                <strong>К-сть. діб:</strong>{" "}
-                                {selectedItemDetails.preoperative_day.title}
-                              </span>
+          {data.map(({ id, type, patient_full_name, history_number, created_at }) => {
+            const itemKey = `${id}-${type}`;
+            return (
+              <li key={itemKey} className="item-saved-forms">
+                <div className="mini-form">
+                  <table>
+                    <tbody>
+                      <tr>
+                        <td
+                          className={`semititle-size1 ${
+                            isThreeDaysOld(created_at) ? "yellow-background" : "green-background"
+                          }`}
+                        >
+                          <p>
+                            <strong>Форма:</strong> {REPORT_TYPE_NAMES[type] || type}
+                          </p>
+                        </td>
+                        <td>
+                          <strong>Пацієнт:</strong> {patient_full_name}
+                        </td>
+                        <td className="semititle-size3 ">
+                          <div style={{ display: "flex", alignItems: "center" }}>
+                            <label htmlFor="historyInput" className="number-history-padding">
+                              <strong>№:</strong>
+                            </label>
+                            {isThreeDaysOld(created_at) ? (
+                              <span className="text-head-saved-forms">{history_number}</span>
                             ) : (
-                              <DayInputEditing
-                                items={days}
-                                selectedItem={
-                                  selectedItemDetails.preoperative_day.title
-                                }
-                                onItemSelect={onDaySelect}
-                                createdAt={item.created_at}
+                              <input
+                                id="historyInput"
+                                type="text"
+                                title={history_number}
+                                style={{ textAlign: "center" }}
+                                className="history-input"
+                                value={history_number}
+                                onChange={(e) => onInputChange(e, id, type)}
+                                disabled={isThreeDaysOld(created_at)}
                               />
                             )}
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          {isThreeDaysOld(item.created_at) ? (
-                            <td colSpan="6" className="text-size-saved-forms">
-                              <span className="text-head-saved-forms">
-                                <strong>Діагноз:</strong>{" "}
-                                {selectedItemDetails.diagnosis.title}
-                              </span>
-                            </td>
-                          ) : (
-                            <td colSpan="6">
-                              <DiagnosesInputEditing
-                                items={diagnoses}
-                                selectedItem={
-                                  selectedItemDetails.diagnosis.title
-                                }
-                                onItemSelect={onDiagnosesSelect}
-                                createdAt={item.created_at}
-                              />
-                            </td>
-                          )}
-                        </tr>
-                        <tr>
-                          {isThreeDaysOld(item.created_at) ? (
-                            <td colSpan="6" className="text-size-saved-forms">
-                              <span className="text-head-saved-forms">
-                                <strong>Операція:</strong>{" "}
-                                {selectedItemDetails.operation.title}
-                              </span>
-                            </td>
-                          ) : (
-                            <td colSpan="6">
-                              <OperatingInputEditing
-                                items={operating}
-                                selectedItem={
-                                  selectedItemDetails.operation.title
-                                }
-                                onItemSelect={onOperatingSelect}
-                                createdAt={item.created_at}
-                              />
-                            </td>
-                          )}
-                        </tr>
-                        <tr className="semi-head">
-                          <td className="table-save-size3">
-                            <p>
-                              <strong>Назва</strong>
-                            </p>
-                          </td>
-                          <td className="table-save-size">
-                            <strong>К-сть.</strong>
-                          </td>
-                          <td className="table-save-size2">
-                            <strong>Тип</strong>
-                          </td>
-                          <td>
-                            <strong>Примітки</strong>
-                          </td>
-                          <td>
-                            <strong>Апт.</strong>
-                          </td>
-                          <td>
-                            <strong>Бух.</strong>
-                          </td>
-                        </tr>
-                        {selectedItemDetails.rows.map((row, index) => (
-                          <tr key={row.id}>
-                            <td>
-                              {isThreeDaysOld(item.created_at) ? (
+                          </div>
+                        </td>
+
+                        <td className="semititle-size2">
+                          <p className="text-semititle">
+                            <strong>Дата створення:</strong> {new Date(created_at).toLocaleDateString()}
+                          </p>
+                        </td>
+                        <td className="semititle-size4" onClick={() => onFormDataById({ id, type })}>
+                          <i className="bx bx-chevron-down bx-md"></i>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                {!loading &&
+                  selectedItem &&
+                  selectedItem.id === id &&
+                  selectedItem.type === type &&
+                  selectedItemDetails && (
+                    <>
+                      <table border="1" className="table-save">
+                        <thead>
+                          <tr>
+                            <th colSpan="2">
+                              Телефон:{" "}
+                              <span className="text-head-saved-forms">{selectedItemDetails.patient.phone}</span>
+                            </th>
+                            <th colSpan="4">
+                              Дата народження:{" "}
+                              <span className="text-head-saved-forms">{selectedItemDetails.patient.birthday}</span>
+                            </th>
+                          </tr>
+                          <tr>
+                            <th colSpan="2">
+                              Вік: <span className="text-head-saved-forms">{selectedItemDetails.patient.age}</span>
+                            </th>
+                            <th colSpan="4">
+                              {isThreeDaysOld(created_at) ? (
                                 <span className="text-head-saved-forms">
-                                  {row.medicament.title}
+                                  <strong>К-сть. діб:</strong> {selectedItemDetails.preoperative_day.title}
                                 </span>
                               ) : (
-                                <MedicamentInputEditing
-                                  items={medicaments}
-                                  selectedItem={row.medicament.title}
-                                  onItemSelect={(medicamentId) =>
-                                    onMedicamentSelect(index, medicamentId)
-                                  }
-                                  createdAt={item.created_at}
+                                <DayInputEditing
+                                  items={days}
+                                  selectedItem={selectedItemDetails.preoperative_day.title}
+                                  onItemSelect={onDaySelect}
+                                  createdAt={created_at}
                                 />
                               )}
-                            </td>
-                            <td>
-                              {isThreeDaysOld(item.created_at) ? (
-                                <p
-                                  className="text-head-saved-forms"
-                                  style={{ textAlign: "center" }}
-                                >
-                                  {row.quantity_of_medicament}
-                                </p>
-                              ) : (
-                                <input
-                                  type="number"
-                                  className="history-input"
-                                  style={{ textAlign: "center" }}
-                                  value={row.quantity_of_medicament}
-                                  onChange={(e) =>
-                                    onRowFieldChange(
-                                      index,
-                                      "quantity_of_medicament",
-                                      e.target.value
-                                    )
-                                  }
-                                  disabled={isThreeDaysOld(item.created_at)}
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            {isThreeDaysOld(created_at) ? (
+                              <td colSpan="6" className="text-size-saved-forms">
+                                <span className="text-head-saved-forms">
+                                  <strong>Діагноз:</strong> {selectedItemDetails.diagnosis.title}
+                                </span>
+                              </td>
+                            ) : (
+                              <td colSpan="6">
+                                <DiagnosesInputEditing
+                                  items={diagnoses}
+                                  selectedItem={selectedItemDetails.diagnosis.title}
+                                  onItemSelect={onDiagnosesSelect}
+                                  createdAt={created_at}
                                 />
-                              )}
-                            </td>
-                            <td>
-                              {isThreeDaysOld(item.created_at) ? (
-                                <p
-                                  className="text-head-saved-forms"
-                                  style={{ textAlign: "center" }}
-                                >
-                                  {row.unit_of_measurement}
-                                </p>
-                              ) : (
-                                <select
-                                  value={row.unit_of_measurement}
-                                  onChange={(e) =>
-                                    onRowFieldChange(
-                                      index,
-                                      "unit_of_measurement",
-                                      e.target.value
-                                    )
-                                  }
-                                  disabled={isThreeDaysOld(item.created_at)}
-                                >
-                                  <option value="шт">шт</option>
-                                  <option value="амп">амп</option>
-                                  <option value="фл">фл</option>
-                                  <option value="мл">мл</option>
-                                  <option value="гр">гр</option>
-                                  <option value="пар">пар</option>
-                                </select>
-                              )}
-                            </td>
-                            <td>
-                              {isThreeDaysOld(item.created_at) ? (
-                                <p className="text-head-saved-forms">
-                                  {row.notation}
-                                </p>
-                              ) : (
-                                <input
-                                  type="text"
-                                  className="history-input"
-                                  title={row.notation || ""}
-                                  value={row.notation || ""}
-                                  onChange={(e) =>
-                                    onRowFieldChange(
-                                      index,
-                                      "notation",
-                                      e.target.value
-                                    )
-                                  }
-                                  disabled={isThreeDaysOld(item.created_at)}
+                              </td>
+                            )}
+                          </tr>
+                          <tr>
+                            {isThreeDaysOld(created_at) ? (
+                              <td colSpan="6" className="text-size-saved-forms">
+                                <span className="text-head-saved-forms">
+                                  <strong>Операція:</strong> {selectedItemDetails.operation.title}
+                                </span>
+                              </td>
+                            ) : (
+                              <td colSpan="6">
+                                <OperatingInputEditing
+                                  items={operating}
+                                  selectedItem={selectedItemDetails.operation.title}
+                                  onItemSelect={onOperatingSelect}
+                                  createdAt={created_at}
                                 />
-                              )}
-                            </td>
-                            <td className="table-save-size1">
-                              <p className="check-static">
-                                {row.mark && row.mark.type === "pharmacy" ? (
-                                  <FontAwesomeIcon icon={faCheck} size="xl" />
-                                ) : (
-                                  ""
-                                )}
+                              </td>
+                            )}
+                          </tr>
+                          <tr className="semi-head">
+                            <td className="table-save-size3">
+                              <p>
+                                <strong>Назва препарату</strong>
                               </p>
                             </td>
-                            <td className="table-save-size1">
-                              <p className="check-static">
-                                {row.mark && row.mark.type === "accounting" ? (
-                                  <FontAwesomeIcon icon={faCheck} size="xl" />
-                                ) : (
-                                  ""
-                                )}
-                              </p>
+                            <td className="table-save-size">
+                              <strong>К-сть.</strong>
+                            </td>
+                            <td className="table-save-size2">
+                              <strong>Тип</strong>
+                            </td>
+                            <td>
+                              <strong>Примітки</strong>
+                            </td>
+                            <td>
+                              <strong>Апт.</strong>
+                            </td>
+                            <td>
+                              <strong>Бух.</strong>
                             </td>
                           </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                    <div className="btns-save-table-container">
-                      <button
-                        type="button"
-                        className="btn-save-table"
-                        onClick={() => {
-                          toggleModalSearch();
-                        }}
-                        disabled={isThreeDaysOld(item.created_at)}
-                      >
-                        Редагувати пацієнта
-                      </button>
-                      <button
-                        type="button"
-                        className="btn-save-table"
-                        onClick={() => onSaveChanges(item.type)}
-                        disabled={isThreeDaysOld(item.created_at)}
-                      >
-                        Зберегти зміни
-                      </button>
-                    </div>
-                  </>
-                )}
-            </li>
-          ))}
+                          {selectedItemDetails.rows.map((row, index) => (
+                            <tr key={row.id}>
+                              <td>
+                                {isThreeDaysOld(created_at) ? (
+                                  <span className="text-head-saved-forms">{row.medicament.title}</span>
+                                ) : (
+                                  <MedicamentInputEditing
+                                    items={medicaments}
+                                    selectedItem={row.medicament.title}
+                                    onItemSelect={(medicamentId) => onMedicamentSelect(index, medicamentId)}
+                                    createdAt={created_at}
+                                  />
+                                )}
+                              </td>
+                              <td>
+                                {isThreeDaysOld(created_at) ? (
+                                  <p className="text-head-saved-forms" style={{ textAlign: "center" }}>
+                                    {row.quantity_of_medicament}
+                                  </p>
+                                ) : (
+                                  <input
+                                    type="number"
+                                    className="history-input"
+                                    style={{ textAlign: "center" }}
+                                    value={row.quantity_of_medicament}
+                                    onChange={(e) => onRowFieldChange(index, "quantity_of_medicament", e.target.value)}
+                                    disabled={isThreeDaysOld(created_at)}
+                                  />
+                                )}
+                              </td>
+                              <td>
+                                {isThreeDaysOld(created_at) ? (
+                                  <p className="text-head-saved-forms" style={{ textAlign: "center" }}>
+                                    {row.unit_of_measurement}
+                                  </p>
+                                ) : (
+                                  <select
+                                    value={row.unit_of_measurement}
+                                    onChange={(e) => onRowFieldChange(index, "unit_of_measurement", e.target.value)}
+                                    disabled={isThreeDaysOld(created_at)}
+                                  >
+                                    <option value="шт">шт</option>
+                                    <option value="амп">амп</option>
+                                    <option value="фл">фл</option>
+                                    <option value="мл">мл</option>
+                                    <option value="гр">гр</option>
+                                    <option value="пар">пар</option>
+                                  </select>
+                                )}
+                              </td>
+                              <td>
+                                {isThreeDaysOld(created_at) ? (
+                                  <p className="text-head-saved-forms">{row.notation}</p>
+                                ) : (
+                                  <input
+                                    type="text"
+                                    className="history-input"
+                                    title={row.notation || ""}
+                                    value={row.notation || ""}
+                                    onChange={(e) => onRowFieldChange(index, "notation", e.target.value)}
+                                    disabled={isThreeDaysOld(created_at)}
+                                  />
+                                )}
+                              </td>
+                              <td className="table-save-size1">
+                                <p className="check-static">
+                                  {row.mark && row.mark.type === "pharmacy" ? (
+                                    <FontAwesomeIcon icon={faCheck} size="xl" />
+                                  ) : (
+                                    ""
+                                  )}
+                                </p>
+                              </td>
+                              <td className="table-save-size1">
+                                <p className="check-static">
+                                  {row.mark && row.mark.type === "accounting" ? (
+                                    <FontAwesomeIcon icon={faCheck} size="xl" />
+                                  ) : (
+                                    ""
+                                  )}
+                                </p>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                      <div className="btns-save-table-container">
+                        <button
+                          type="button"
+                          className="btn-save-table"
+                          onClick={() => {
+                            toggleModalSearch();
+                          }}
+                          disabled={isThreeDaysOld(created_at)}
+                        >
+                          Редагувати пацієнта
+                        </button>
+                        <button
+                          type="button"
+                          className="btn-save-table"
+                          onClick={() => onSaveChanges(type)}
+                          disabled={isThreeDaysOld(created_at)}
+                        >
+                          Зберегти зміни
+                        </button>
+                      </div>
+                    </>
+                  )}
+              </li>
+            );
+          })}
         </ul>
       </div>
       <ModalPatientSearch

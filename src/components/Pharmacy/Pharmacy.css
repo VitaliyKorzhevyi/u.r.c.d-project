@@ -1,0 +1,40 @@
+.container-pharmacy-forms {
+  margin: 0 auto;
+  max-width: 1200px;
+  padding: 0 15px;
+}
+
+.calendar-pharmacy-forms {
+  margin: 0 auto;
+  display: flex;
+  padding-top: 80px;
+  flex-direction: column;
+  align-items: center;
+}
+
+.list-formset {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+
+  padding: 12px 0;
+
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  font-size: 18px;
+}
+
+.item-formset {
+    display: flex;
+    flex-direction: column;
+    padding: 16px 15px 4px;
+  
+    border: 2px solid #b1b1b1;
+    border-radius: 10px;
+  }
+
+td {
+  padding: 4px 8px;
+}
+
+

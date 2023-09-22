@@ -2,7 +2,10 @@
 
 import { useState } from 'react';
 import DatePicker from "react-datepicker";
+import { uk } from 'date-fns/locale';
 import "react-datepicker/dist/react-datepicker.css";
+
+import "./Calendar.css";
 
 function DatepickerComponent({ onDateChange }) {
     const [startDate, setStartDate] = useState(new Date());
@@ -32,6 +35,8 @@ function DatepickerComponent({ onDateChange }) {
         <DatePicker
           selected={startDate}
           onChange={onChange}
+          locale={uk}
+          dateFormat="P"
           startDate={startDate}
           endDate={endDate}
           maxDate={new Date()}

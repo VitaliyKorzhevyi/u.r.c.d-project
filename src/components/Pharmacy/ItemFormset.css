@@ -1,0 +1,111 @@
+.detailed-table-data {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 2s ease-in-out;
+}
+
+.detailed-table-data.active {
+  max-height: 100%;
+}
+
+.item-formset-table th {
+  padding: 12px 8px;
+}
+
+.item-formset-table td {
+  padding: 10px 8px;
+}
+
+.size-table-formset {
+    width: 20.7%;
+}
+
+.size-table-formset1 {
+    width: 9.2%;
+}
+
+.size-table-formset2 {
+    width: 6.5%;
+}
+
+.size-table-formset3 {
+    width: 4.7%;
+}
+
+.size-table-formset4 {
+    width: 5%;
+}
+
+.size-table-formset5 {
+    width: 9.2%;
+}
+
+.operating-background {
+    background-color: #fff7c7; /* Желтый цвет для operating */
+  }
+  
+  .anesthesiology-background {
+    background-color: #d7f7e7; /* Красный цвет для anesthesiology */
+  }
+  
+  .resuscitation-background {
+    background-color: #e6e7ff; /* Фиолетовый цвет для resuscitation */
+  }
+
+.item-formset-table .text-size {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  font-size: 18px;
+}
+
+.static-checkmark-formset {
+  display: flex;
+  justify-content: center;
+}
+
+.rotate-0 {
+  transform: rotate(0deg);
+  transition: transform 0.3s ease-in-out;
+}
+
+.rotate-180 {
+  transform: rotate(180deg);
+  transition: transform 0.3s ease-in-out;
+}
+
+.custom-checkbox {
+    display: flex;
+    justify-content: center;
+}
+
+.hidden-checkbox {
+  display: none;
+}
+
+.custom-checkbox-label {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  position: relative;
+  cursor: pointer;
+}
+
+.custom-checkbox-label .bx {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  visibility: hidden;
+}
+
+.custom-checkbox-label .bx:not(.invisible) {
+  visibility: visible;
+}
+
+.btns-table-formset {
+    display: flex;
+    justify-content: flex-end;
+    padding: 12px 0 12px;
+}
