@@ -4,7 +4,7 @@
   padding: 0 15px;
 }
 
-td {
+.container-saved-forms td {
   padding: 4px 8px;
 }
 
@@ -18,15 +18,30 @@ td {
 
 .btn-calendar {
   margin-top: 12px;
-  padding: 8px 16px;
+  padding: 14px 28px;
+
+  cursor: pointer;
+
+  background-color: #c6dfff;
+  border: 3px solid #72aefd;
+  border-radius: 8px;
+
+  font-family: "Montserrat", sans-serif;
+  font-weight: 400;
+  font-size: 18px;
+}
+
+.btn-calendar:hover {
+  background-color: #72aefd;
+  border-color: #1b7eff;
 }
 
 .list-saved-forms {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 12px;
 
-  padding: 12px 0;
+  padding: 20px 0;
 
   font-family: "Montserrat", sans-serif;
   font-weight: 500;
@@ -38,7 +53,9 @@ td {
   flex-direction: column;
   padding: 16px 15px 4px;
 
-  border: 2px solid #b1b1b1;
+  background-color: #f1f1f193;
+
+  border: 4px solid #c4c4c4;
   border-radius: 10px;
 }
 
@@ -46,10 +63,18 @@ td {
   padding-left: 10px;
 }
 
+.item-saved-forms table {
+  background-color: #ffffff;
+}
+
+.semi-title-color {
+  background-color: #dfdfdf;
+}
+
 .table-save input,
 .table-save select,
-.mini-form input{
- height: 36px;
+.mini-form input {
+  height: 36px;
 }
 
 .table-save select {
@@ -57,17 +82,13 @@ td {
 }
 
 .mini-form {
-    display: flex;
-    justify-content: space-between;
-    padding-bottom: 12px;
-}
-
-.semi-head {
-  background-color: #eeeeee;
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 12px;
 }
 
 .table-save-size {
-    width: 7%;
+  width: 7%;
 }
 
 .table-save-size1 {
@@ -97,11 +118,10 @@ td {
 .semititle-size3 {
   width: 10.2%;
 }
-/* Завантаження всієї таблиці */
+
 .semititle-size4 {
   width: 4%;
   cursor: pointer;
-
 }
 .semititle-size4:hover {
   background-color: #ccc;
@@ -113,10 +133,19 @@ td {
   font-size: 18px;
 }
 
+.rotate-0 {
+  transform: rotate(0deg);
+  transition: transform 0.3s ease-in-out;
+}
+
+.rotate-180 {
+  transform: rotate(180deg);
+  transition: transform 0.3s ease-in-out;
+}
+
 .text-size-saved-forms {
   padding: 8px 8px;
 }
-
 
 .check-static {
   text-align: center;
@@ -147,7 +176,7 @@ td {
 .autocomplete-dropdown li,
 .autocomplete-dropdown-medicament li,
 .autocomplete-dropdown-diagnoses li,
-.autocomplete-dropdown-operating li{
+.autocomplete-dropdown-operating li {
   padding: 5px 10px;
   cursor: pointer;
   border-top: 1px solid #ccc;
@@ -242,10 +271,34 @@ td {
 }
 
 .btn-save-table {
-padding: 4px 8px;
-cursor: pointer;
+  padding: 8px 16px;
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+.btn-save-table.blue {
+  background-color: #c6dfff;
+  border: 2px solid #76b0fc;
+}
+
+.btn-save-table.blue:hover {
+  background-color: #8abdff;
+  border-color: #1b7cfa;
+}
+
+.btn-save-table.green {
+  background-color: #ade9cc;
+  border: 2px solid #3adb8d;
+}
+.btn-save-table.green:hover {
+  background-color: #3adb8d;
+  border-color: #33be7b;
 }
 
 .custom-tooltip {
   font-size: 16px; /* или любой другой размер, который вам нужен */
+}
+
+.btn-save-table[disabled] {
+  cursor: default;
 }

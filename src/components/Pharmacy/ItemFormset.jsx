@@ -27,8 +27,6 @@ export const ItemFormset = ({ data }) => {
     const currentItemId = `${id}-${type}`;
 
     if (activeItemId === currentItemId) {
-      // Убираем это условие, чтобы при повторном нажатии информация обновлялась, но таблица не закрывалась
-      // setActiveItemId(null);
     } else {
       setActiveItemId(currentItemId);
       setPharmacyCheck({}); // Обнуляем состояние при открытии новой таблицы
@@ -175,6 +173,7 @@ export const ItemFormset = ({ data }) => {
       });
   };
   const userRole = "pharmacy"; //accounting pharmacy
+
   const currentItemDetails = detailedData[activeItemId];
 
   return (

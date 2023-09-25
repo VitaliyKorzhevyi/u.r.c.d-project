@@ -456,7 +456,7 @@ export const FormAnesthesiology = () => {
                       {myData.full_name} ({myData.job_title})
                     </p>
                   </td>
-                </tr>
+                </tr>         
                 <tr>
                   <td className="form2-table-size2">
                     <p className="form2-table-column1-text">Дата:</p>

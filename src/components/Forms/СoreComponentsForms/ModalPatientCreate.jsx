@@ -42,7 +42,9 @@ export const ModalPatientCreate = ({
     const stateValues = { first_name, last_name, middle_name, birthday };
 
     const missingFields = Object.keys(fields)
-      .filter((field) => !stateValues[field] || !stateValues[field].toString().trim())
+      .filter(
+        (field) => !stateValues[field] || !stateValues[field].toString().trim()
+      )
       .map((field) => fields[field])
       .join(", ");
 
@@ -59,40 +61,42 @@ export const ModalPatientCreate = ({
     const phoneRegex = /^\+\d{7,15}$/;
     return phoneRegex.test(phone);
   };
-  
+
   const validateEmail = (email) => {
     return email.includes("@");
   };
 
-
   const validateInputs = (e) => {
-  const missingMainFieldsMessage = getMissingFieldsMessage(MAIN_FIELDS);
+    const missingMainFieldsMessage = getMissingFieldsMessage(MAIN_FIELDS);
 
-  if (missingMainFieldsMessage) {
-    toast.warn(missingMainFieldsMessage, {
-      autoClose: 2500,
-    });
-    e.preventDefault();
-    return;
-  }
+    if (missingMainFieldsMessage) {
+      toast.warn(missingMainFieldsMessage, {
+        autoClose: 2500,
+      });
+      e.preventDefault();
+      return;
+    }
 
-  if (phone && !validatePhone(phone)) {
-    toast.warn("Невірний формат телефону! Він повинен виглядати як +123456789012", {
-      autoClose: 2500,
-    });
-    e.preventDefault();
-    return;
-  }
+    if (phone && !validatePhone(phone)) {
+      toast.warn(
+        "Невірний формат телефону! Він повинен виглядати як +123456789012",
+        {
+          autoClose: 2500,
+        }
+      );
+      e.preventDefault();
+      return;
+    }
 
-  if (email && !validateEmail(email)) {
-    toast.warn("Помилка у форматі пошти! Вона повинна містити символ '@'", {
-      autoClose: 2500,
-    });
-    e.preventDefault();
-    return;
-  }
+    if (email && !validateEmail(email)) {
+      toast.warn("Помилка у форматі пошти! Вона повинна містити символ '@'", {
+        autoClose: 2500,
+      });
+      e.preventDefault();
+      return;
+    }
 
-  onCreatePatient(e);
+    onCreatePatient(e);
   };
 
   const onCreatePatient = async (e) => {
@@ -104,7 +108,7 @@ export const ModalPatientCreate = ({
         last_name,
         middle_name,
         birthday,
-        phone, 
+        phone,
         email,
       };
       console.log(data);
@@ -134,93 +138,103 @@ export const ModalPatientCreate = ({
   };
 
   return (
-    <div className="modal-overlay-create">
-      <div className="modal-content-create">
-        <form onSubmit={validateInputs}>
-          <label>
-            Призвіще:
-            <input
-              type="text"
-              value={last_name}
-              onChange={(e) =>
-                setLastName(
-                  e.target.value.charAt(0).toUpperCase() +
-                    e.target.value.slice(1)
-                )
-              }
-            />
-          </label>
-          <label>
-            Ім'я:
-            <input
-              type="text"
-              value={first_name}
-              onChange={(e) =>
-                setFirstName(
-                  e.target.value.charAt(0).toUpperCase() +
-                    e.target.value.slice(1)
-                )
-              }
-            />
-          </label>
-          <label>
-            По-батькові:
-            <input
-              type="text"
-              value={middle_name}
-              onChange={(e) =>
-                setMiddleName(
-                  e.target.value.charAt(0).toUpperCase() +
-                    e.target.value.slice(1)
-                )
-              }
-            />
-          </label>
-          <label>
-            Дата народження:
-            <input
-              type="date"
-              value={birthday}
-              onChange={(e) => setBirthday(e.target.value)}
-            />
-          </label>
-          <label>
-            Тел:
-            <input
-              type="tel"
-              value={phone}
-              placeholder="+"
-              onChange={(e) => {
-                if (/^[+\d]+$/.test(e.target.value)) {
-                  if (e.target.value[0] !== "+") {
-                    setPhone("+" + e.target.value);
-                  } else {
-                    setPhone(e.target.value);
-                  }
-                }
-              }}
-            />
-          </label>
-          <label>
-            Пошта:
-            <input
-              type="email"
-              value={email}
-              pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </label>
-          <button type="submit">Створити</button>
-        </form>
-        <button
-          type="button"
+    <div className="modal-overlay">
+      <div className="modal-content">
+        <div
+          className="btn-close-modal"
           onClick={() => {
             resetFields();
             onClose();
           }}
         >
-          Закрити
-        </button>
+          <img src="/images/cross.svg" alt="Х" className="logo-autorization" />
+        </div>
+        <p className="modal-search-title">Додати пацієнта у реєстр</p>
+
+        <form onSubmit={validateInputs} className="modal-container">
+          <div className="input-container">
+            <label>
+              <input
+                type="text"
+                placeholder="Призвіще"
+                value={last_name}
+                onChange={(e) =>
+                  setLastName(
+                    e.target.value.charAt(0).toUpperCase() +
+                      e.target.value.slice(1)
+                  )
+                }
+              />
+            </label>
+            <label>
+              <input
+                type="text"
+                placeholder="Ім'я"
+                value={first_name}
+                onChange={(e) =>
+                  setFirstName(
+                    e.target.value.charAt(0).toUpperCase() +
+                      e.target.value.slice(1)
+                  )
+                }
+              />
+            </label>
+          </div>
+          <div className="input-container">
+            <label>
+              <input
+                type="text"
+                placeholder="По-батькові"
+                value={middle_name}
+                onChange={(e) =>
+                  setMiddleName(
+                    e.target.value.charAt(0).toUpperCase() +
+                      e.target.value.slice(1)
+                  )
+                }
+              />
+            </label>
+            <label>
+              <input
+                type="date"
+                value={birthday}
+                onChange={(e) => setBirthday(e.target.value)}
+              />
+            </label>
+          </div>
+          <div className="input-container">
+            <label>
+              <input
+                type="email"
+                placeholder="Пошта"
+                value={email}
+                pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </label>
+            <label>
+              <input
+                type="tel"
+                value={phone}
+                placeholder="Телефон"
+                onChange={(e) => {
+                  if (/^[+\d]+$/.test(e.target.value)) {
+                    if (e.target.value[0] !== "+") {
+                      setPhone("+" + e.target.value);
+                    } else {
+                      setPhone(e.target.value);
+                    }
+                  }
+                }}
+              />
+            </label>
+          </div>
+          <div>
+            <button type="submit" className="btn-create">
+              Додати
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );

@@ -5,6 +5,7 @@ import $api from "../../../api/api";
 
 import "./ModalPatientSearch.css";
 
+
 export const ModalPatientSearch = ({
   isOpen,
   onClose,
@@ -12,7 +13,7 @@ export const ModalPatientSearch = ({
   onGetFullName,
   onGetBirthday,
   onGetId,
-  onGetPhone
+  onGetPhone,
 }) => {
   const [patients, setPatients] = useState([]);
   const [lastName, setLastName] = useState("");
@@ -132,56 +133,78 @@ export const ModalPatientSearch = ({
   return (
     <div className="modal-overlay">
       <div className="modal-content">
-        <form onSubmit={onSearchPatient} className="seacrh-container">
-          <label>
-            Призвіще:
-            <input
-              value={lastName}
-              onChange={(e) => setLastName(capitalize(e.target.value))}
-            />
-          </label>
-          <label>
-            Ім'я:
-            <input
-              value={firstName}
-              onChange={(e) => setFirstName(capitalize(e.target.value))}
-            />
-          </label>
-          <label>
-            По-батькові:
-            <input
-              value={middleName}
-              onChange={(e) => setMiddleName(capitalize(e.target.value))}
-            />
-          </label>
-          <label>
-            тел:
-            <input type="text" value={phone} onChange={onPhoneChange} />
-          </label>
-          <label>
-            Дата народження:
-            <input
-              type="date"
-              value={birthday}
-              onChange={(e) => setBirthday(e.target.value)}
-            />
-          </label>
-          <label>
-            Пошта:
-            <input value={email} onChange={(e) => setEmail(e.target.value)} />
-          </label>
-          <button type="submit">Пошук</button>
-        </form>
-        <button
-          type="button"
+        <div
+          className="btn-close-modal"
           onClick={() => {
             resetFields();
-
             onClose();
           }}
         >
-          закрити
-        </button>
+                <img
+          src="/images/cross.svg"
+          alt="Х"
+          className="logo-autorization"
+        />
+        </div>
+        <p className="modal-search-title">Пошук пацієнта</p>
+
+        <form onSubmit={onSearchPatient} className="modal-container">
+          <div className="input-container">
+            <label>
+              <input
+                value={lastName}
+                placeholder="Призвіще"
+                onChange={(e) => setLastName(capitalize(e.target.value))}
+              />
+            </label>
+            <label>
+              <input
+                value={firstName}
+                placeholder="Ім'я"
+                onChange={(e) => setFirstName(capitalize(e.target.value))}
+              />
+            </label>
+          </div>
+          <div className="input-container">
+            <label>
+              <input
+                value={middleName}
+                placeholder="По-батькові"
+                onChange={(e) => setMiddleName(capitalize(e.target.value))}
+              />
+            </label>
+
+            <label>
+              <input
+                type="date"
+                value={birthday}
+                onChange={(e) => setBirthday(e.target.value)}
+              />
+            </label>
+          </div>
+          <div className="input-container">
+            <label>
+              <input
+                value={email}
+                placeholder="Пошта"
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </label>
+            <label>
+              <input
+                type="text"
+                placeholder="Телефон"
+                value={phone}
+                onChange={onPhoneChange}
+              />
+            </label>
+          </div>
+          <div>
+            <button type="submit" className="btn-search">
+              Пошук
+            </button>
+          </div>
+        </form>
         <div className="patients-list">
           {patients.map((patient) => (
             <div

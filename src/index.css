@@ -127,10 +127,14 @@ table {
   width: 100%;
 }
 
-th,
-td {
-  border: 1px solid #ccc;
-  padding: 8px;
+th{
+  border: 1px solid #777777;
+  padding: 4px;
+}
+
+td{
+  border: 1px solid #777777;
+  padding: 6px;
 }
 
 th {
@@ -179,7 +183,7 @@ th {
 .form1-btns {
   display: flex;
   justify-content: flex-end;
-  margin-top: 8px;
+  margin-top: 12px;
 }
 
 .form1-btn-add {

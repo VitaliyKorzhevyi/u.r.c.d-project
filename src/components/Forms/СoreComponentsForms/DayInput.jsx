@@ -24,7 +24,7 @@ export const DayInput = ({
     const inputValue = e.target.value;
     setInputValue(inputValue);
 
-    if (inputValue.length >= 2) {
+    if (inputValue.length >= 1) {
       setFilteredDays(
         days.filter((day) =>
           day.title.toLowerCase().startsWith(inputValue.toLowerCase())
@@ -77,7 +77,7 @@ export const DayInput = ({
     const inputValueLength = e.target.value.length;
   
     const errorMessages = {
-      [inputValueLength < 2]: "Рядок повинен містити не менше 2 символів",
+      [inputValueLength < 1]: "Рядок повинен містити не менше 2 символів",
       [inputValueLength > 100]: "Рядок повинен містити не більше 100 символів"
     };
   

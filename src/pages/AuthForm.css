@@ -1,9 +1,103 @@
 .auth-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 40px 15px 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 16px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 15px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.logo-autorization {
+  width: 160px;
+  margin: 0 auto;
+}
+
+.main-title {
+  margin-top: 20px;
+  color: #279b48;
+  font-family: "Rubik", sans-serif;
+  text-transform: uppercase;
+  font-size: 24px;
+  letter-spacing: 3px;
+}
+
+.main-text {
+  margin-top: 16px;
+  text-align: center;
+  font-family: "Montserrat", sans-serif;
+  color: #7c7c7c;
+  font-weight: 500;
+  font-size: 18px;
+  letter-spacing: 4px;
+}
+
+.autorization-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 60px auto 0;
+  padding: 32px 0 64px;
+  min-width: 580px;
+
+  background-color: #fff;
+  border: 3px solid #cacace;
+  border-radius: 12px;
+}
+
+.autorization-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-1 {
+  margin: 18px 0;
+}
+
+.form-input {
+  height: 58px;
+  padding: 16px;
+  border: 1px solid #cacace;
+  border-radius: 12px;
+  min-width: 316px;
+}
+
+.autorization-btn {
+  margin: 32px auto 36px;
+  height: 58px;
+  min-width: 316px;
+  background-color: #f1f1f1;
+  border: 2px solid #cacace;
+  border-radius: 12px;
+  cursor: pointer;
+
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  font-size: 18px;
+}
+
+.autorization-btn:hover,
+.autorization-btn:focus {
+  background-color: #ceefdf;
+  color: #0aaf60;
+  border: 2px solid #ceefdf;
+}
+
+.password-input-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.password-toggle-icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px white inset !important;
 }

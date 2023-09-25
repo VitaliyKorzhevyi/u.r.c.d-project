@@ -1,21 +1,21 @@
-.modal-overlay-create {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.6);
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.btn-create {
+  width: 120px;
+  padding: 6px 20px;
+  margin-top: 8px;
+  background-color: #e0e0e0;
+  border: 2px solid #afafaf;
 
+  cursor: pointer;
+  border-radius: 6px;
+
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  font-size: 16px;
 }
 
-.modal-content-create {
-  background-color: white;
-  padding: 20px;
-  border-radius: 10px;
-  width: 300px;
-  text-align: center;
-}
 
+.btn-create:hover {
+  background-color: #ceefdf;
+  border-color: #0aaf60;
+  color: #0aaf60;
+}

@@ -1,6 +1,6 @@
 //Todo якщо термін дії форми пройшов 3 дні то кнопка відправити та інпути будуть заблоковані
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { toast } from "react-toastify";
 import DatepickerComponent from "./Сalendar";
 import $api from "../../api/api";
@@ -220,6 +220,12 @@ export const SavedForms = () => {
         .get(url)
         .then((response) => {
           setData(response.data);
+          setTimeout(() => {
+            targetComponentRef.current.scrollIntoView({
+              behavior: 'smooth',
+              block: 'start'
+            });
+          }, 500);
         })
         .catch((error) => {
           console.error("Error fetching data:", error);
@@ -228,6 +234,8 @@ export const SavedForms = () => {
       console.warn("Please select both start and end dates before making a request.");
     }
   };
+
+  const targetComponentRef = useRef(null);
 
   //* ДЛЯ ВІДОБРАЖЕННЯ ВСІЄЇ ТАБЛИЦІ
   const onFormDataById = (item) => {
@@ -313,9 +321,10 @@ export const SavedForms = () => {
         </button>
       </div>
       <div>
-        <ul className="list-saved-forms">
+        <ul className="list-saved-forms" ref={targetComponentRef}>
           {data.map(({ id, type, patient_full_name, history_number, created_at }) => {
             const itemKey = `${id}-${type}`;
+            const activeKey = selectedItem ? `${selectedItem.id}-${selectedItem.type}` : null;
             return (
               <li key={itemKey} className="item-saved-forms">
                 <div className="mini-form">
@@ -362,7 +371,12 @@ export const SavedForms = () => {
                           </p>
                         </td>
                         <td className="semititle-size4" onClick={() => onFormDataById({ id, type })}>
-                          <i className="bx bx-chevron-down bx-md"></i>
+                       
+                        <i
+                        className={`bx ${
+                          itemKey === activeKey ? "rotate-180" : "rotate-0"
+                        } bx-chevron-down bx-md`}
+                      ></i>
                         </td>
                       </tr>
                     </tbody>
@@ -378,20 +392,20 @@ export const SavedForms = () => {
                       <table border="1" className="table-save">
                         <thead>
                           <tr>
-                            <th colSpan="2">
+                            <th colSpan="2" className="semi-title-color">
                               Телефон:{" "}
                               <span className="text-head-saved-forms">{selectedItemDetails.patient.phone}</span>
                             </th>
-                            <th colSpan="4">
+                            <th colSpan="4" className="semi-title-color">
                               Дата народження:{" "}
                               <span className="text-head-saved-forms">{selectedItemDetails.patient.birthday}</span>
                             </th>
                           </tr>
                           <tr>
-                            <th colSpan="2">
+                            <th colSpan="2" className="semi-title-color">
                               Вік: <span className="text-head-saved-forms">{selectedItemDetails.patient.age}</span>
                             </th>
-                            <th colSpan="4">
+                            <th colSpan="4" className="semi-title-color">
                               {isThreeDaysOld(created_at) ? (
                                 <span className="text-head-saved-forms">
                                   <strong>К-сть. діб:</strong> {selectedItemDetails.preoperative_day.title}
@@ -444,7 +458,7 @@ export const SavedForms = () => {
                               </td>
                             )}
                           </tr>
-                          <tr className="semi-head">
+                          <tr className="semi-title-color">
                             <td className="table-save-size3">
                               <p>
                                 <strong>Назва препарату</strong>
@@ -555,7 +569,7 @@ export const SavedForms = () => {
                       <div className="btns-save-table-container">
                         <button
                           type="button"
-                          className="btn-save-table"
+                          className={`btn-save-table ${!isThreeDaysOld(created_at) ? 'blue' : ''}`}
                           onClick={() => {
                             toggleModalSearch();
                           }}
@@ -565,7 +579,7 @@ export const SavedForms = () => {
                         </button>
                         <button
                           type="button"
-                          className="btn-save-table"
+                          className={`btn-save-table ${!isThreeDaysOld(created_at) ? 'green' : ''}`}
                           onClick={() => onSaveChanges(type)}
                           disabled={isThreeDaysOld(created_at)}
                         >
