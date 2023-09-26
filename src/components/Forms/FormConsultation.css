@@ -1,0 +1,18 @@
+.consultation-table {
+  position: relative;
+  margin: 0 auto;
+  max-width: 1200px;
+  padding: 52px 15px 8px 0;
+  transform: translateY(0);
+  opacity: 1;
+  transition: transform 500ms ease-out, opacity 500ms ease-out;
+}
+
+.consultation-table-title {
+    /* background-color: var(--anest-title-bg-color);
+    color: var(--anest-title-color); */
+  
+    font-family: "Montserrat", sans-serif;
+    font-weight: 700;
+    font-size: 30px;
+  }

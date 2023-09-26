@@ -30,6 +30,22 @@ function DatepickerComponent({ onDateChange }) {
           }
       }
     };
+
+    uk.localize.month = function (monthIndex, { width = 'abbreviated' } = {}) {
+        const monthNames = {
+            narrow: ['С', 'Л', 'Б', 'К', 'Т', 'Ч', 'Л', 'С', 'В', 'Ж', 'Л', 'Г'],
+            abbreviated: [
+                'Січень', 'Лютий', 'Березень', 'Квітень', 'Травень', 'Червень',
+                'Липень', 'Серпень', 'Вересень', 'Жовтень', 'Листопад', 'Грудень'
+            ],
+            wide: [
+                'Січень', 'Лютий', 'Березень', 'Квітень', 'Травень', 'Червень',
+                'Липень', 'Серпень', 'Вересень', 'Жовтень', 'Листопад', 'Грудень'
+            ]
+        };
+    
+        return monthNames[width][monthIndex];
+    };
     
     return (
         <DatePicker
@@ -40,6 +56,10 @@ function DatepickerComponent({ onDateChange }) {
           startDate={startDate}
           endDate={endDate}
           maxDate={new Date()}
+          showYearDropdown
+          dateFormatCalendar="MMMM"
+          yearDropdownItemNumber={15}
+          scrollableYearDropdown
           selectsRange
           inline
         />

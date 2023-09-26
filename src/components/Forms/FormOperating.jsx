@@ -30,7 +30,6 @@ export const FormOperating = () => {
 
   const [showSaveModal, setShowSaveModal] = useState(false);
   const [currentFormIndex, setCurrentFormIndex] = useState(null);
-
   const [exitingFormIndex, setExitingFormIndex] = useState(null);
 
   //* ЗАПИТ НА ВСІХ ЮЗЕРІВ

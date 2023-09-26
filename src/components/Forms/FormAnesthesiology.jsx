@@ -22,7 +22,7 @@ import { DeleteRowButton } from "./СoreComponentsForms/DeleteRowButton";
 
 export const FormAnesthesiology = () => {
   const [activeFormIndex, setActiveFormIndex] = useState(null);
-  const [myData, setmyData] = useState([]);
+  const [myData, setMyData] = useState([]);
   const [medicaments, setMedicaments] = useState([]);
   const [days, setDays] = useState([]);
   const [diagnoses, setDiagnoses] = useState([]);
@@ -35,11 +35,11 @@ export const FormAnesthesiology = () => {
 
   const [exitingFormIndex, setExitingFormIndex] = useState(null);
 
-  //* ЗАПИТ НА ВСІХ ЮЗЕРІВ
+  //* ЗАПИТ НА СЕБЕ
   useEffect(() => {
     $api.get("/users/me/").then((response) => {
       console.log(response.data);
-      setmyData(response.data);
+      setMyData(response.data);
     });
   }, []);
 
@@ -456,7 +456,7 @@ export const FormAnesthesiology = () => {
                       {myData.full_name} ({myData.job_title})
                     </p>
                   </td>
-                </tr>         
+                </tr>
                 <tr>
                   <td className="form2-table-size2">
                     <p className="form2-table-column1-text">Дата:</p>

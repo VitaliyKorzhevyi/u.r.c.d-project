@@ -29,11 +29,11 @@ export const TypeSelect = ({
       disabled={locked}
     >
       <option value="" disabled hidden></option>
-      <option value="шт">шт</option>
-      <option value="амп">амп</option>
-      <option value="фл">фл</option>
-      <option value="мл">мл</option>
-      <option value="гр">гр</option>
+      <option value="шт.">шт.</option>
+      <option value="амп.">амп.</option>
+      <option value="фл.">фл.</option>
+      <option value="мл.">мл.</option>
+      <option value="гр.">гр.</option>
       <option value="пар">пар</option>
     </select>
   );

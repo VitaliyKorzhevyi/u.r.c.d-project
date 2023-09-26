@@ -227,7 +227,7 @@ th {
 .form2-icons {
   display: flex;
   justify-content: flex-end;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
   gap: 8px;
 }
 

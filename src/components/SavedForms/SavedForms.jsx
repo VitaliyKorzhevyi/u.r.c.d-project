@@ -521,11 +521,11 @@ export const SavedForms = () => {
                                     onChange={(e) => onRowFieldChange(index, "unit_of_measurement", e.target.value)}
                                     disabled={isThreeDaysOld(created_at)}
                                   >
-                                    <option value="шт">шт</option>
-                                    <option value="амп">амп</option>
-                                    <option value="фл">фл</option>
-                                    <option value="мл">мл</option>
-                                    <option value="гр">гр</option>
+                                    <option value="шт.">шт.</option>
+                                    <option value="амп.">амп.</option>
+                                    <option value="фл.">фл.</option>
+                                    <option value="мл.">мл.</option>
+                                    <option value="гр.">гр.</option>
                                     <option value="пар">пар</option>
                                   </select>
                                 )}
