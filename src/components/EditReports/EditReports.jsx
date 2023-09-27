@@ -8,18 +8,18 @@ import $api from "../../api/api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 
-import { DayInputEditing } from "./СoreComponentsForms/DayInputEditing";
-import { DiagnosesInputEditing } from "./СoreComponentsForms/DiagnosesInputEditing";
-import { OperatingInputEditing } from "./СoreComponentsForms/OperatingInputEditing";
-import { MedicamentInputEditing } from "./СoreComponentsForms/MedicamentInputEditing";
+import { DayInputEditing } from "./СoreComponentsReports/DayInputEditing";
+import { DiagnosesInputEditing } from "./СoreComponentsReports/DiagnosesInputEditing";
+import { OperatingInputEditing } from "./СoreComponentsReports/OperatingInputEditing";
+import { MedicamentInputEditing } from "./СoreComponentsReports/MedicamentInputEditing";
 
-import { ModalPatientSearch } from "../Forms/СoreComponentsForms/ModalPatientSearch";
+import { ModalPatientSearch } from "../CreateReports/СoreComponentsReports/ModalPatientSearch";
 
-import "./SavedForms.css";
+import "./EditReports.css";
 
-import { isThreeDaysOld } from "./СoreComponentsForms/dateUtils";
+import { isThreeDaysOld } from "./СoreComponentsReports/dateUtils";
 
-export const SavedForms = () => {
+export const EditReports = () => {
   const [selectedStartDate, setSelectedStartDate] = useState(null);
   const [selectedEndDate, setSelectedEndDate] = useState(null);
   const [data, setData] = useState([]);

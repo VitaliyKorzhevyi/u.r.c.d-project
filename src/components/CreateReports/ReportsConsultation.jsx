@@ -1,7 +1,7 @@
 import React from "react";
 
-import "./FormConsultation.css";
-export const FormConsultation = () => {
+import "./ReportsConsultation.css";
+export const ReportsConsultation = () => {
   return (
     <div className="consultation-table">
       <div className="form2-icons">

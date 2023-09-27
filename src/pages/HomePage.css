@@ -4,12 +4,12 @@
     padding: 40px 15px 0;
 }
 
-.admin-buttons {
+.admin-container-btns {
     display: flex;
     justify-content: space-between;
 }
 
 
-.admin-header button {
+.admin-btns {
     padding: 4px 20px;
 }

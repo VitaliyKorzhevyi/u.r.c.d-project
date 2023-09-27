@@ -1,28 +1,27 @@
-//Todo додати модалку для збереження ВСІХ!!!!!! форм
-
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import $api from "../../api/api";
 import { useSpring, animated } from "react-spring";
 
 //* Core components
-import { DayInput } from "./СoreComponentsForms/DayInput";
-import { DiagnosesInput } from "./СoreComponentsForms/DiagnosesInput";
-import { OperationsInput } from "./СoreComponentsForms/OperationsInput";
-import { ModalPatientCreate } from "./СoreComponentsForms/ModalPatientCreate";
-import { ModalPatientSearch } from "./СoreComponentsForms/ModalPatientSearch";
+import { DayInput } from "./СoreComponentsReports/DayInput";
+import { DiagnosesInput } from "./СoreComponentsReports/DiagnosesInput";
+import { OperationsInput } from "./СoreComponentsReports/OperationsInput";
+import { ModalPatientCreate } from "./СoreComponentsReports/ModalPatientCreate";
+import { ModalPatientSearch } from "./СoreComponentsReports/ModalPatientSearch";
 
 //* Row components
-import { MedicamentInput } from "./СoreComponentsForms/MedicamentInput";
-import { QuantityInput } from "./СoreComponentsForms/QuantityInput";
-import { TypeSelect } from "./СoreComponentsForms/TypeSelect";
-import { NotesInput } from "./СoreComponentsForms/NotesInput";
-import { CopyRowButton } from "./СoreComponentsForms/CopyRowButton";
-import { DeleteRowButton } from "./СoreComponentsForms/DeleteRowButton";
+import { MedicamentInput } from "./СoreComponentsReports/MedicamentInput";
+import { QuantityInput } from "./СoreComponentsReports/QuantityInput";
+import { TypeSelect } from "./СoreComponentsReports/TypeSelect";
+import { NotesInput } from "./СoreComponentsReports/NotesInput";
+import { CopyRowButton } from "./СoreComponentsReports/CopyRowButton";
+import { DeleteRowButton } from "./СoreComponentsReports/DeleteRowButton";
 
-export const FormAnesthesiology = () => {
+
+export const ReportsOperating = () => {
   const [activeFormIndex, setActiveFormIndex] = useState(null);
-  const [myData, setMyData] = useState([]);
+  const [myData, setmyData] = useState([]);
   const [medicaments, setMedicaments] = useState([]);
   const [days, setDays] = useState([]);
   const [diagnoses, setDiagnoses] = useState([]);
@@ -32,14 +31,13 @@ export const FormAnesthesiology = () => {
 
   const [showSaveModal, setShowSaveModal] = useState(false);
   const [currentFormIndex, setCurrentFormIndex] = useState(null);
-
   const [exitingFormIndex, setExitingFormIndex] = useState(null);
 
-  //* ЗАПИТ НА СЕБЕ
+  //* ЗАПИТ НА ВСІХ ЮЗЕРІВ
   useEffect(() => {
     $api.get("/users/me/").then((response) => {
       console.log(response.data);
-      setMyData(response.data);
+      setmyData(response.data);
     });
   }, []);
 
@@ -92,14 +90,14 @@ export const FormAnesthesiology = () => {
   }, []);
 
   //* МОДАЛЬНІ ВІКНА ДЛЯ СТВОРЕННЯ ТА ПОШУКУ ПАЦІЄНТА
-  const toggleModalCreate = () => {
+  const onModalCreate = () => {
     setModalOpenCreate(!isModalOpenCreate);
     if (isModalOpenCreate) {
       setActiveFormIndex(null);
     }
   };
 
-  const toggleModalSearch = () => {
+  const onModalSearch = () => {
     setModalOpenSearch(!isModalOpenSearch);
     if (isModalOpenSearch) {
       setActiveFormIndex(null);
@@ -107,7 +105,7 @@ export const FormAnesthesiology = () => {
   };
 
   //* ЗБЕРЕЖЕННЯ ДАННИХ З ФОРМ У ЛОКАЛЬНЕ СХОВИЩЕ
-  const savedForms = localStorage.getItem("anesthesiologyForms");
+  const savedForms = localStorage.getItem("operatingForms");
   const initialForms = savedForms
     ? JSON.parse(savedForms)
     : [
@@ -123,7 +121,7 @@ export const FormAnesthesiology = () => {
               notation: "",
             },
           ],
-          doctorName: myData.full_name || "",
+          doctorName: myData.full_name || "", // Додаткові поля
           date: "",
           birthday: "",
           history_number: "",
@@ -178,12 +176,12 @@ export const FormAnesthesiology = () => {
   };
 
   const setFormsWithStorage = (newForms) => {
-    localStorage.setItem("anesthesiologyForms", JSON.stringify(newForms));
+    localStorage.setItem("operatingForms", JSON.stringify(newForms));
     setForms(newForms);
   };
 
   useEffect(() => {
-    const savedForms = localStorage.getItem("anesthesiologyForms");
+    const savedForms = localStorage.getItem("operatingForms");
     if (savedForms) {
       setForms(JSON.parse(savedForms));
     }
@@ -208,8 +206,8 @@ export const FormAnesthesiology = () => {
   // копіювання форми
   const onCopyForm = (formIndex) => {
     const formToCopy = forms[formIndex];
-    const copiedForm = { ...formToCopy, id: nextFormId };
-    setNextFormId(nextFormId + 1);
+    const copiedForm = { ...formToCopy, id: nextFormId }; // используйте nextFormId здесь
+    setNextFormId(nextFormId + 1); // установите новый ID
     const updatedForms = [...forms, copiedForm];
     setFormsWithStorage(updatedForms);
   };
@@ -274,7 +272,7 @@ export const FormAnesthesiology = () => {
     console.log(dataToSend);
 
     $api
-      .post("/reports/anesthesiology", dataToSend)
+      .post("/reports/operating", dataToSend)
       .then((response) => {
         console.log(response);
         toast.success(`Нова таблиця успішно збережена`, {
@@ -288,6 +286,7 @@ export const FormAnesthesiology = () => {
         console.log(error);
       });
   };
+
 
   //* ПОМИЛКИ ДЛЯ ІНПУТІВ
   // Основні поля для перевірки в формі
@@ -392,7 +391,6 @@ export const FormAnesthesiology = () => {
   };
 
   //* ДЛЯ АНІМАЦІЇ ПОЯВИ ТА ВИДАЛЕННЯ ФОРМ
-
   const fadeOutAnimation = useSpring({
     opacity: exitingFormIndex !== null ? 0 : 1,
     transform:
@@ -416,318 +414,302 @@ export const FormAnesthesiology = () => {
     <>
       {forms.map((form, formIndex) => (
         <animated.div
-          style={formIndex === exitingFormIndex ? fadeOutAnimation : {}}
+        style={formIndex === exitingFormIndex ? fadeOutAnimation : {}}
+        key={form.id}
+      >
+        <div
+          className={`form2-table ${form.locked ? "locked" : ""} ${
+            formIndex === forms.length - 1 ? "fade-in" : ""
+          }`}
           key={form.id}
         >
-          <div
-            className={`form2-table ${form.locked ? "locked" : ""} ${
-              formIndex === forms.length - 1 ? "fade-in" : ""
-            }`}
-            key={form.id}
-          >
-            <div className="form2-icons">
-              <i
-                className={`bx bx-lock-open-alt bx-sm form1-icon ${
-                  form.locked ? "locked" : ""
-                }`}
-                onClick={() => onLockForm(formIndex)}
-              ></i>
-              <i
-                className="bx bx-copy bx-sm form1-copy"
-                onClick={() => onCopyForm(formIndex)}
-              ></i>
-              <i
-                className="bx bx-trash bx-sm form1-delete"
-                onClick={() => handleDelete(formIndex)}
-              ></i>
-            </div>
-            <table>
-              <thead>
-                <tr>
-                  <th colSpan="7" className="form2-table-title">
-                    АНЕСТЕЗІОЛОГІЯ
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="tbody2">
-                <tr>
-                  <td colSpan="7">
-                    <p className="form-table-name-user">
-                      {myData.full_name} ({myData.job_title})
-                    </p>
-                  </td>
-                </tr>
-                <tr>
-                  <td className="form2-table-size2">
-                    <p className="form2-table-column1-text">Дата:</p>
-                  </td>
+          <div className="form2-icons">
+            <i
+              className={`bx bx-lock-open-alt bx-sm form1-icon ${
+                form.locked ? "locked" : ""
+              }`}
+              onClick={() => onLockForm(formIndex)}
+            ></i>
+            <i
+              className="bx bx-copy bx-sm form1-copy"
+              onClick={() => onCopyForm(formIndex)}
+            ></i>
+            <i
+              className="bx bx-trash bx-sm form1-delete"
+              onClick={() => handleDelete(formIndex)}
+            ></i>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th colSpan="7" className="form3-table-title">
+                  ОПЕРАЦІЙНА
+                </th>
+              </tr>
+            </thead>
+            <tbody className="tbody2">
+              <tr>
+                <td colSpan="7">
+                  <p className="form-table-name-user">
+                    {myData.full_name} ({myData.job_title})
+                  </p>
+                </td>
+              </tr>
+              <tr>
+                <td className="form2-table-size2">
+                  <p className="form2-table-column1-text">Дата:</p>
+                </td>
 
-                  <td id="date1" className="form2-table-time" colSpan="3">
-                    {currentDate}
-                  </td>
+                <td id="date1" className="form2-table-time" colSpan="3">
+                  {currentDate}
+                </td>
 
-                  <td className="form2-table-size1">
-                    <p className="form2-table-column1-text">
-                      <span className="required">*</span>&nbsp;№ історії:
-                    </p>
-                  </td>
+                <td className="form2-table-size1">
+                  <p className="form2-table-column1-text">
+                    <span className="required">*</span>&nbsp;№ історії:
+                  </p>
+                </td>
 
-                  <td className="form2-table-size">
-                    <input
-                      type="text"
-                      name="history_number"
-                      className="form1-table-number"
-                      value={form.history_number}
-                      onChange={(e) =>
-                        onFieldChange(
-                          formIndex,
-                          "history_number",
-                          e.target.value
-                        )
-                      }
-                      onKeyPress={(e) => {
-                        if (!/[0-9-]/.test(e.key)) {
-                          e.preventDefault();
-                        }
+                <td className="form2-table-size">
+                  <input
+                    type="number"
+                    name="history_number"
+                    className="form1-table-number"
+                    value={form.history_number}
+                    onChange={(e) =>
+                      onFieldChange(formIndex, "history_number", e.target.value)
+                    }
+                    disabled={form.locked}
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <p className="form2-table-column1-text">
+                    <span className="required">*</span>&nbsp;Пацієнт:
+                  </p>
+                </td>
+                <td colSpan="2">
+                  <p className="form2-table-time">{form.patientName}</p>
+                </td>
+                <td className="form-patient form2-table-time form2-table-size5">
+                  <div className="btns-patient">
+                    <button
+                      type="button"
+                      className="btn-patient blue one"
+                      onClick={() => {
+                        setActiveFormIndex(formIndex);
+                        onModalSearch();
                       }}
                       disabled={form.locked}
-                    />
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <p className="form2-table-column1-text">
-                      <span className="required">*</span>&nbsp;Пацієнт:
-                    </p>
-                  </td>
-                  <td colSpan="2">
-                    <p className="form2-table-time">{form.patientName}</p>
-                  </td>
-                  <td className="form-patient form2-table-time form2-table-size5">
-                    <div className="btns-patient">
-                      <button
-                        type="button"
-                        className="btn-patient blue one"
-                        onClick={() => {
-                          setActiveFormIndex(formIndex);
-                          toggleModalSearch();
-                        }}
-                        disabled={form.locked}
-                      >
-                        <i className="bx bx-search bx-sm"></i>
-                      </button>
-                      <button
-                        type="button"
-                        className="btn-patient green"
-                        onClick={() => {
-                          setActiveFormIndex(formIndex);
-                          toggleModalCreate();
-                        }}
-                        disabled={form.locked}
-                      >
-                        <i className="bx bx-plus bx-sm"></i>
-                      </button>
-                    </div>
-                  </td>
+                    >
+                      <i className="bx bx-search bx-sm"></i>
+                    </button>
+                    <button
+                      type="button"
+                      className="btn-patient green"
+                      onClick={() => {
+                        setActiveFormIndex(formIndex);
+                        onModalCreate();
+                      }}
+                      disabled={form.locked}
+                    >
+                      <i className="bx bx-plus bx-sm"></i>
+                    </button>
+                  </div>
+                </td>
 
-                  <td>
-                    <p className="form2-table-column1-text ">Вік:</p>
-                  </td>
+                <td>
+                  <p className="form2-table-column1-text ">Вік:</p>
+                </td>
 
+                <td>
+                  <p className="form2-table-time">{form.age}</p>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <p className="form2-table-column1-text">
+                    <span className="required">*</span>&nbsp;Діагноз:
+                  </p>
+                </td>
+                <td colSpan="3">
+                  <DiagnosesInput
+                    diagnoses={diagnoses}
+                    updateDiagnoses={updateDiagnoses}
+                    formIndex={formIndex}
+                    value={form.diagnoses}
+                    locked={form.locked}
+                    forms={forms}
+                    setForms={setForms}
+                    localStorageKey="operatingForms"
+                    onDiagnosesId={(diagnosis_id) =>
+                      onFieldChange(formIndex, "diagnosis_id", diagnosis_id)
+                    }
+                  />
+                </td>
+                <td>
+                  <p className="form2-table-column1-text">Дата народження:</p>
+                </td>
+                <td>
+                  <p className="form2-table-time">{form.birthday}</p>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <p className="form2-table-column1-text">
+                    <span className="required">*</span>&nbsp;Операція:
+                  </p>
+                </td>
+                <td colSpan="3">
+                  <OperationsInput
+                    operations={operations}
+                    updateOperations={updateOperations}
+                    formIndex={formIndex}
+                    value={form.operations}
+                    locked={form.locked}
+                    forms={forms}
+                    setForms={setForms}
+                    localStorageKey="operatingForms"
+                    onOperationId={(operation_id) =>
+                      onFieldChange(formIndex, "operation_id", operation_id)
+                    }
+                  />
+                </td>
+                <td>
+                  <p className="form2-table-column1-text">
+                    <span className="required">*</span>&nbsp;К-сть. діб:
+                  </p>
+                </td>
+                <td>
+                  <DayInput
+                    days={days}
+                    updateDays={updateDays}
+                    formIndex={formIndex}
+                    value={form.day}
+                    locked={form.locked}
+                    forms={forms}
+                    setForms={setForms}
+                    localStorageKey="operatingForms"
+                    onDayId={(preoperative_day_id) =>
+                      onFieldChange(
+                        formIndex,
+                        "preoperative_day_id",
+                        preoperative_day_id
+                      )
+                    }
+                  />
+                </td>
+              </tr>
+              <tr className="form2-table2">
+                <td>№</td>
+                <td>
+                  <span className="required">*</span>&nbsp;Назва препарату
+                </td>
+                <td className="form2-table-size3">
+                  <p title="Кількість">
+                    <span className="required">*</span>&nbsp;К-сть.
+                  </p>
+                </td>
+                <td className="form2-table-size4">
+                  <p title="Одиниці вимірювання">
+                    <span className="required">*</span>&nbsp;Од. вим.
+                  </p>
+                </td>
+                <td>Примітки</td>
+                <td>Управління</td>
+              </tr>
+              {form.rows.map((row, rowIndex) => (
+                <tr className="form2-new-row" key={`${formIndex}-${rowIndex}`}>
+                  <td>{rowIndex + 1}</td>
                   <td>
-                    <p className="form2-table-time">{form.age}</p>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <p className="form2-table-column1-text">
-                      <span className="required">*</span>&nbsp;Діагноз:
-                    </p>
-                  </td>
-                  <td colSpan="3">
-                    <DiagnosesInput
-                      diagnoses={diagnoses}
-                      updateDiagnoses={updateDiagnoses}
+                    <MedicamentInput
+                      medicaments={medicaments}
+                      updateMedicaments={updateMedicaments}
                       formIndex={formIndex}
-                      value={form.diagnoses}
+                      rowIndex={rowIndex}
+                      value={row.medicaments}
                       locked={form.locked}
                       forms={forms}
                       setForms={setForms}
-                      localStorageKey="anesthesiologyForms"
-                      onDiagnosesId={(diagnosis_id) =>
-                        onFieldChange(formIndex, "diagnosis_id", diagnosis_id)
+                      localStorageKey="operatingForms"
+                      onMedicamentId={(medicament_id) =>
+                        onFieldChange(formIndex, "medicament_id", medicament_id)
                       }
                     />
                   </td>
                   <td>
-                    <p className="form2-table-column1-text">Дата народження:</p>
-                  </td>
-                  <td>
-                    <p className="form2-table-time">{form.birthday}</p>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <p className="form2-table-column1-text">
-                      <span className="required">*</span>&nbsp;Операція:
-                    </p>
-                  </td>
-                  <td colSpan="3">
-                    <OperationsInput
-                      operations={operations}
-                      updateOperations={updateOperations}
+                    <QuantityInput
                       formIndex={formIndex}
-                      value={form.operations}
+                      rowIndex={rowIndex}
+                      value={row.quantity_of_medicament}
                       locked={form.locked}
                       forms={forms}
                       setForms={setForms}
-                      localStorageKey="anesthesiologyForms"
-                      onOperationId={(operation_id) =>
-                        onFieldChange(formIndex, "operation_id", operation_id)
-                      }
+                      localStorageKey="operatingForms"
                     />
                   </td>
                   <td>
-                    <p className="form2-table-column1-text">
-                      <span className="required">*</span>&nbsp;К-сть. діб:
-                    </p>
-                  </td>
-                  <td>
-                    <DayInput
-                      days={days}
-                      updateDays={updateDays}
+                    <TypeSelect
                       formIndex={formIndex}
-                      value={form.day}
+                      rowIndex={rowIndex}
+                      value={row.unit_of_measurement}
                       locked={form.locked}
                       forms={forms}
                       setForms={setForms}
-                      localStorageKey="anesthesiologyForms"
-                      onDayId={(preoperative_day_id) =>
-                        onFieldChange(
-                          formIndex,
-                          "preoperative_day_id",
-                          preoperative_day_id
-                        )
-                      }
+                      localStorageKey="operatingForms"
+                    />
+                  </td>
+                  <td>
+                    <NotesInput
+                      formIndex={formIndex}
+                      rowIndex={rowIndex}
+                      value={row.notation}
+                      locked={form.locked}
+                      forms={forms}
+                      setForms={setForms}
+                      localStorageKey="operatingForms"
+                    />
+                  </td>
+                  <td className="btn-row">
+                    <CopyRowButton
+                      formIndex={formIndex}
+                      rowIndex={rowIndex}
+                      formLocked={form.locked}
+                      forms={forms}
+                      setFormsWithStorage={setFormsWithStorage}
+                    />
+                    <DeleteRowButton
+                      formIndex={formIndex}
+                      rowIndex={rowIndex}
+                      formLocked={form.locked}
+                      forms={forms}
+                      setFormsWithStorage={setFormsWithStorage}
                     />
                   </td>
                 </tr>
-                <tr className="form2-table2">
-                  <td>№</td>
-                  <td>
-                    <span className="required">*</span>&nbsp;Назва препарату
-                  </td>
-                  <td className="form2-table-size3">
-                    <p title="Кількість">
-                      <span className="required">*</span>&nbsp;К-сть.
-                    </p>
-                  </td>
-                  <td className="form2-table-size4">
-                    <p title="Одиниці вимірювання">
-                      <span className="required">*</span>&nbsp;Од. вим.
-                    </p>
-                  </td>
-                  <td>Примітки</td>
-                  <td>Управління</td>
-                </tr>
-                {form.rows.map((row, rowIndex) => (
-                  <tr
-                    className="form2-new-row"
-                    key={`${formIndex}-${rowIndex}`}
-                  >
-                    <td>{rowIndex + 1}</td>
-                    <td>
-                      <MedicamentInput
-                        medicaments={medicaments}
-                        updateMedicaments={updateMedicaments}
-                        formIndex={formIndex}
-                        rowIndex={rowIndex}
-                        value={row.medicaments}
-                        locked={form.locked}
-                        forms={forms}
-                        setForms={setForms}
-                        localStorageKey="anesthesiologyForms"
-                        onMedicamentId={(medicament_id) =>
-                          onFieldChange(
-                            formIndex,
-                            "medicament_id",
-                            medicament_id
-                          )
-                        }
-                      />
-                    </td>
-                    <td>
-                      <QuantityInput
-                        formIndex={formIndex}
-                        rowIndex={rowIndex}
-                        value={row.quantity_of_medicament}
-                        locked={form.locked}
-                        forms={forms}
-                        setForms={setForms}
-                        localStorageKey="anesthesiologyForms"
-                      />
-                    </td>
-                    <td>
-                      <TypeSelect
-                        formIndex={formIndex}
-                        rowIndex={rowIndex}
-                        value={row.unit_of_measurement}
-                        locked={form.locked}
-                        forms={forms}
-                        setForms={setForms}
-                        localStorageKey="anesthesiologyForms"
-                      />
-                    </td>
-                    <td>
-                      <NotesInput
-                        formIndex={formIndex}
-                        rowIndex={rowIndex}
-                        value={row.notation}
-                        locked={form.locked}
-                        forms={forms}
-                        setForms={setForms}
-                        localStorageKey="anesthesiologyForms"
-                      />
-                    </td>
-                    <td className="btn-row">
-                      <CopyRowButton
-                        formIndex={formIndex}
-                        rowIndex={rowIndex}
-                        formLocked={form.locked}
-                        forms={forms}
-                        setFormsWithStorage={setFormsWithStorage}
-                      />
-                      <DeleteRowButton
-                        formIndex={formIndex}
-                        rowIndex={rowIndex}
-                        formLocked={form.locked}
-                        forms={forms}
-                        setFormsWithStorage={setFormsWithStorage}
-                      />
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            <div className="form1-btns">
-              <button
-                type="button"
-                className="form1-btn-save"
-                disabled={form.locked}
-                onClick={() => openSaveModalWithIndex(formIndex)}
-              >
-                Зберегти форму
-              </button>
-              <button
-                type="button"
-                onClick={() => onAddRow(formIndex)}
-                className="form1-btn-add"
-                disabled={form.locked}
-              >
-                <i className="bx bx-plus bx-sm"></i>
-              </button>
-            </div>
+              ))}
+            </tbody>
+          </table>
+          <div className="form1-btns">
+            <button
+              type="button"
+              className="form1-btn-save"
+              disabled={form.locked}
+              onClick={() => openSaveModalWithIndex(formIndex)}
+            >
+              Зберегти форму
+            </button>
+            <button
+              type="button"
+              onClick={() => onAddRow(formIndex)}
+              className="form1-btn-add"
+              disabled={form.locked}
+            >
+              <i className="bx bx-plus bx-sm"></i>
+            </button>
           </div>
+        </div>
         </animated.div>
       ))}
       <button
@@ -754,7 +736,7 @@ export const FormAnesthesiology = () => {
       )}
       <ModalPatientSearch
         isOpen={isModalOpenSearch}
-        onClose={toggleModalSearch}
+        onClose={onModalSearch}
         value={
           activeFormIndex !== null ? forms[activeFormIndex].patientName : ""
         }
@@ -769,7 +751,7 @@ export const FormAnesthesiology = () => {
       />
       <ModalPatientCreate
         isOpen={isModalOpenCreate}
-        onClose={toggleModalCreate}
+        onClose={onModalCreate}
         value={
           activeFormIndex !== null ? forms[activeFormIndex].patientName : ""
         }

@@ -2,6 +2,7 @@ import { Routes, Route } from "react-router";
 import { Auth } from "./pages/AuthForm";
 import { HomePage } from "./pages/HomePage";
 import { ToastContainer } from "react-toastify";
+
 import './App.css'
 
 function App() {
