@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef  } from "react";
 import $api from "../../api/api";
 import UserBanCheckbox from "./UserBanCheckbox";
+import { CreateUserModal } from "./CreateUserModal";
 
 import "./UserManagement.css";
 
@@ -26,8 +27,9 @@ const User = ({ user }) => {
 };
 
 export const UserManagement = () => {
-  const [users, setUsers] = useState([]);
-  // const [onModalCreateUser, setModalCreateUser] = useState(false);
+
+const [users, setUsers] = useState([]);
+  const [isModalOpen, setModalOpen] = useState(false);
   const [childRight, setChildRight] = useState(0);
   const parentRef = useRef(null);
 
@@ -52,9 +54,9 @@ export const UserManagement = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await $api.get("/users?skip=0&limit=99");
-        console.log(response.data);
-        setUsers(response.data);
+        const response = await $api.get("/users?page=1&limit=20");
+        console.log(response.data.users);
+        setUsers(response.data.users);
       } catch (error) {
         console.log(error);
       }
@@ -72,10 +74,11 @@ export const UserManagement = () => {
         ))}
       </div>
       <div className="container-btn-create-new-users" style={{ right: childRight }}>
-        <button type="button" className="create-new-user">
+        <button type="button" className="create-new-user" onClick={() => setModalOpen(true)}>
         <i className="bx bx-plus bx-sm"></i>
         </button>
       </div>
+      <CreateUserModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} />
     </div>
   );
 };

@@ -20,19 +20,6 @@ export const UserCreate = () => {
     e.preventDefault();
     
     const accessToken = async () => {
-      const access_token = localStorage.getItem("access_token");
-      if (!access_token) {
-        console.error("Access token not found.");
-        return;
-      }
-
-      const instance = axios.create({
-        headers: {
-          Authorization: `Bearer ${access_token}`,
-          "Content-Type": "application/json",
-        },
-      });
-
       const data = {
         first_name,
         last_name,
@@ -41,28 +28,11 @@ export const UserCreate = () => {
         password,
       };
 
-      const response = await instance.post("/users/create", data);
-      console.log(response.data);
     };
 
     try {
-      const access_token = localStorage.getItem("access_token");
 
-      const instance = axios.create({
-        headers: {
-          Authorization: `Bearer ${access_token}`,
-          "Content-Type": "application/json",
-        },
-      });
 
-      console.log(instance);
-      const data = {
-        first_name,
-        last_name,
-        email,
-        username,
-        password,
-      };
       console.log(data);
       const response = await instance.post("/users/create", data);
 
@@ -94,7 +64,7 @@ export const UserCreate = () => {
       <div className="create-user">
         <form onSubmit={onCreateUser}>
           <div>
-            <label>first_name</label>
+            <label>first_name</label> 
             <input
               type="text"
               value={first_name}

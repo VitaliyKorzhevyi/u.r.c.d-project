@@ -214,12 +214,12 @@ export const EditReports = () => {
   //* ДЛЯ ВІДОБРАЖЕННЯ СПИСКУ ТАБЛИЦІ
   const onButtonClick = () => {
     if (selectedStartDate && selectedEndDate) {
-      const url = `/reports?skip=0&limit=99&&from_created_at=${selectedStartDate}&to_created_at=${selectedEndDate}`;
+      const url = `/reports?page=1&limit=20&from_created_at=${selectedStartDate}&to_created_at=${selectedEndDate}`;
 
       $api
         .get(url)
         .then((response) => {
-          setData(response.data);
+          setData(response.data.reports);
           setTimeout(() => {
             targetComponentRef.current.scrollIntoView({
               behavior: 'smooth',

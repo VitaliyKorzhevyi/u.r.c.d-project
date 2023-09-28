@@ -1,12 +1,12 @@
 import { useState } from "react";
 import $api from "../../api/api";
-import DatepickerComponent from "../SavedForms/Сalendar";
+import DatepickerComponent from "../EditReports/Сalendar";
 
 import { ItemFormset } from "./ItemFormset";
 
-import "./Pharmacy.css";
+import "./Marks.css";
 
-export const Pharmacy = () => {
+export const Marks = () => {
   const [selectedStartDate, setSelectedStartDate] = useState(null);
   const [selectedEndDate, setSelectedEndDate] = useState(null);
 
@@ -21,12 +21,12 @@ export const Pharmacy = () => {
   //* ДЛЯ ВІДОБРАЖЕННЯ СПИСКУ ТАБЛИЦІ
   const onButtonClick = () => {
     if (selectedStartDate && selectedEndDate) {
-      const url = `/reports?skip=0&limit=99&&from_created_at=${selectedStartDate}&to_created_at=${selectedEndDate}`;
+      const url = `/reports?page=1&limit=20&from_created_at=${selectedStartDate}&to_created_at=${selectedEndDate}`;
 
       $api
         .get(url)
         .then((response) => {
-          setData(response.data);
+          setData(response.data.reports);
         })
         .catch((error) => {
           console.error("Error fetching data:", error);
@@ -39,8 +39,8 @@ export const Pharmacy = () => {
   };
 
   return (
-    <div className="container-pharmacy-forms">
-      <div className="calendar-pharmacy-forms">
+    <div className="container-marks-forms">
+      <div className="calendar-marks-forms">
         <DatepickerComponent onDateChange={onDateChange} />
         <button type="button" className="btn-calendar" onClick={onButtonClick}>
           Знайти

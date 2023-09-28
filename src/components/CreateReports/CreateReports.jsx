@@ -75,34 +75,32 @@ export const CreateReports = ({ userData }) => {
 
   const userHasAnyAccess = FORMS_DATA.some(userHasAccess);
 
-  return (
-    userHasAnyAccess ? (
-      <div>
-        <div className="forms-header">
-          <ul className="forms-btns-list">
-            {FORMS_DATA.map(
-              (form) =>
-                userHasAccess(form) && (
-                  <li key={form.id}>
-                    <button
-                      type="button"
-                      onClick={() => onFormChange(form.id)}
-                      className={`base-style-btns-forms ${
-                        activeForm === form.id ? "active-btn-forms" : ""
-                      }`}
-                    >
-                      {form.label}
-                    </button>
-                  </li>
-                )
-            )}
-          </ul>
-        </div>
-        {FORMS_DATA.map(
-          (form) =>
-            activeForm === form.id && userHasAccess(form) && <form.component />
-        )}
+
+  return userHasAnyAccess ? (
+    <div className="container-create-reports">
+      <div className="forms-header">
+        <p>Тип звіту:</p>
+        <select
+          value={activeForm}
+          onChange={(e) => onFormChange(e.target.value)}
+          className="list-create-reports"
+        >
+          {FORMS_DATA.map(
+            (form) =>
+              userHasAccess(form) && (
+                <option key={form.id} value={form.id} className="item-create-reports">
+                  {form.label}
+                </option>
+              )
+          )}
+        </select>
       </div>
-    ) : null 
-  );
+      {FORMS_DATA.map(
+        (form) =>
+          activeForm === form.id && userHasAccess(form) && (
+            <form.component key={form.id} />
+          )
+      )}
+    </div>
+  ) : null;
 };

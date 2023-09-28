@@ -235,7 +235,7 @@ th {
   position: relative;
   margin: 0 auto;
   max-width: 1200px;
-  padding: 52px 15px 8px 0;
+  padding: 52px 0 8px 0;
   transform: translateY(0);
   opacity: 1;
   transition: transform 500ms ease-out, opacity 500ms ease-out;
