@@ -17,40 +17,44 @@
 }
 
 .size-table-formset {
-    width: 20.9%;
+  width: 20.9%;
 }
 
 .size-table-formset1 {
-    width: 9.2%;
+  width: 9.2%;
 }
 
 .size-table-formset2 {
-    width: 6.5%;
+  width: 6.5%;
 }
 
 .size-table-formset3 {
-    width: 4.7%;
+  width: 4.7%;
 }
 
 .size-table-formset4 {
-    width: 5%;
+  width: 5%;
 }
 
 .size-table-formset5 {
-    width: 9.2%;
+  width: 9.2%;
+}
+
+.surgery-background {
+  background-color: #dbecff; /* Желтый цвет для operating */
 }
 
 .operating-background {
-    background-color: #fff7c7; /* Желтый цвет для operating */
-  }
-  
-  .anesthesiology-background {
-    background-color: #d7f7e7; /* Красный цвет для anesthesiology */
-  }
-  
-  .resuscitation-background {
-    background-color: #e6e7ff; /* Фиолетовый цвет для resuscitation */
-  }
+  background-color: #fff7c7; /* Желтый цвет для operating */
+}
+
+.anesthesiology-background {
+  background-color: #d7f7e7; /* Красный цвет для anesthesiology */
+}
+
+.resuscitation-background {
+  background-color: #e6e7ff; /* Фиолетовый цвет для resuscitation */
+}
 
 .item-formset-table .text-size {
   font-family: "Montserrat", sans-serif;
@@ -74,8 +78,8 @@
 }
 
 .custom-checkbox {
-    display: flex;
-    justify-content: center;
+  display: flex;
+  justify-content: center;
 }
 
 .hidden-checkbox {
@@ -105,7 +109,7 @@
 }
 
 .btns-table-formset {
-    display: flex;
-    justify-content: flex-end;
-    padding: 12px 0 12px;
+  display: flex;
+  justify-content: flex-end;
+  padding: 12px 0 12px;
 }

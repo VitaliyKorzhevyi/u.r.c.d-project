@@ -6,6 +6,7 @@ import { Marks } from "../Marks/Marks";
 import { FullInfoReports } from "../FullInfoReports/FullInfoReports";
 import { DataEditing } from "../DataEditing/DataEditing";
 
+
 import { SECTION_PERMISSIONS } from "../../constants/permissions";
 
 import "./Reports.css";

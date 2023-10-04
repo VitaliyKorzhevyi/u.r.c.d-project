@@ -9,6 +9,7 @@ const REPORT_TYPE_NAMES = {
   operating: "Операційна",
   anesthesiology: "Анестезіологія",
   resuscitation: "Реанімація",
+  surgery: "Хірургія",
 };
 
 const formatReportUrl = (id, type) => `reports/${type}/${id}`;
@@ -178,13 +179,6 @@ export const ItemFormset = ({ data, userData }) => {
 
   const hasPharmacyPermission = userData.permissions.includes(PERMISSIONS.UPDATING_PHARMACY_MARKS);
   const hasAccountingPermission = userData.permissions.includes(PERMISSIONS.UPDATING_ACCOUNTING_MARKS);
-  
-  // let userRole = '';
-  // if (hasPharmacyRole) {
-  //   userRole = ROLES.PHARMACY;
-  // } else if (hasAccountingRole) {
-  //   userRole = ROLES.ACCOUNTING;
-  // }
 
   const currentItemDetails = detailedData[activeItemId];
 

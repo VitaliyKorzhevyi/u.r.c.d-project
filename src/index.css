@@ -417,10 +417,6 @@ th {
   padding: 4px 5px;
 }
 
-.btn-patient {
-  padding: 4px;
-}
-
 .delete-button1 {
   margin-right: 8px;
 }
@@ -430,6 +426,7 @@ th {
 }
 
 .btn-patient {
+  padding: 4px;
   cursor: pointer;
 }
 

@@ -2,7 +2,6 @@
   margin: 0 auto;
   max-width: 1700px;
   display: flex;
-  justify-content: flex-start;
   gap: 12px;
 }
 
@@ -15,6 +14,10 @@
   padding-top: 60px;
   flex-direction: column;
   align-items: center;
+}
+
+.container-saved-forms-size {
+  flex: 1;
 }
 
 .management-saved-forms {
@@ -59,7 +62,7 @@
 .item-saved-forms {
   display: flex;
   flex-direction: column;
-  padding: 16px 15px 4px;
+  padding: 8px 8px ;
 
   background-color: #f1f1f193;
 
@@ -79,6 +82,10 @@
   background-color: #dfdfdf;
 }
 
+.table-save {
+  margin-top: 12px;
+}
+
 .table-save input,
 .table-save select,
 .mini-form input {
@@ -92,7 +99,6 @@
 .mini-form {
   display: flex;
   justify-content: space-between;
-  padding-bottom: 12px;
 }
 
 .table-save-size {

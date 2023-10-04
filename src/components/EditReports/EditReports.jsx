@@ -34,6 +34,8 @@ export const EditReports = ({ userData }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
 
+  const [currentFormData, setCurrentFormData] = useState({});
+
   console.log("Редагувіання таблиці", userData);
 
   //* ДЛЯ ЗБЕРАГІННЯ ВІДРЕДАГОВАНИХ ЗНАЧЕНЬ
@@ -264,10 +266,30 @@ export const EditReports = ({ userData }) => {
       });
   }, [getCurrentDate, getDateFromDaysAgo]);
 
-  //* при натисканны на кнопку
+  //* при натисканні на кнопку
+
+  const handleFormDataChange = (newFormData) => {
+    setCurrentFormData(newFormData);
+  };
   const onButtonClick = () => {
     if (selectedStartDate && selectedEndDate) {
-      const url = `/reports?page=1&limit=20&from_created_at=${selectedStartDate}&to_created_at=${selectedEndDate}`;
+      const initialParams = {
+        page: 1,
+        from_created_at: selectedStartDate,
+        to_created_at: selectedEndDate,
+        ...currentFormData,
+      };
+
+      const params = Object.keys(initialParams)
+        .filter((key) => initialParams[key]) // Отбираем только те ключи, значения которых заданы
+        .reduce((obj, key) => {
+          obj[key] = initialParams[key]; // Создаем новый объект с отобранными ключами
+          return obj;
+        }, {});
+
+      const queryString = new URLSearchParams(params).toString();
+      const url = `/reports?${queryString}`;
+      console.log(url);
 
       $api
         .get(url)
@@ -298,8 +320,23 @@ export const EditReports = ({ userData }) => {
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
-    const newUrl = `/reports?page=${page}&limit=20&from_created_at=${selectedStartDate}&to_created_at=${selectedEndDate}`;
-    fetchData(newUrl);
+    const initialParams = {
+      page: page,
+      from_created_at: selectedStartDate,
+      to_created_at: selectedEndDate,
+      limit: currentFormData.limit,
+    };
+
+    const params = Object.keys(initialParams)
+      .filter((key) => initialParams[key]) // Отбираем только те ключи, значения которых заданы
+      .reduce((obj, key) => {
+        obj[key] = initialParams[key]; // Создаем новый объект с отобранными ключами
+        return obj;
+      }, {});
+
+    const queryString = new URLSearchParams(params).toString();
+    const url = `/reports?${queryString}`;
+    fetchData(url);
   };
 
   const targetComponentRef = useRef(null);
@@ -345,6 +382,7 @@ export const EditReports = ({ userData }) => {
     operating: "Операційна",
     anesthesiology: "Анестезіологія",
     resuscitation: "Реанімація",
+    surgery: "Хірургія",
   };
 
   //* ДЛЯ відправки інформації на сервер
@@ -378,14 +416,24 @@ export const EditReports = ({ userData }) => {
     <div className="container-saved-forms">
       <div className="calendar-saved-forms">
         <div className="management-saved-forms">
-          <DatepickerComponent onDateChange={onDateChange} />
-          <ReportManagement userData={userData} />
+          <div>
+            <DatepickerComponent onDateChange={onDateChange} />
+          </div>
+
+          <ReportManagement
+            userData={userData}
+            onFormDataChange={handleFormDataChange}
+          />
+          <button
+            type="button"
+            className="btn-calendar"
+            onClick={onButtonClick}
+          >
+            Знайти
+          </button>
         </div>
-        <button type="button" className="btn-calendar" onClick={onButtonClick}>
-          Знайти
-        </button>
       </div>
-      <div>
+      <div className="container-saved-forms-size">
         <ul className="list-saved-forms" ref={targetComponentRef}>
           {data.map(
             ({ id, type, patient_full_name, history_number, created_at }) => {
