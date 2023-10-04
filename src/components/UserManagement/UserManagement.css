@@ -1,8 +1,69 @@
+.user-info-container {
+  padding: 6px;
+
+  background-color: #e4e4e4;
+  border: 3px solid #818181;
+  border-radius: 6px;
+}
+
+
+
+.user-info-table-size2 {
+  width: 25%;
+}
+
+.user-info-table-size3 {
+  width: 14%;
+  text-align: center;
+}
+
+.user-info-table-size4 {
+  width: 4%;
+  text-align: center;
+  cursor: pointer;
+}
+
+.checkbox-ban:hover {
+  color: red;
+}
+
+.user-info-table-size5 {
+  width: 13.2%;
+}
+
+.user-info-table-size6 {
+  width: 4.2%;
+  cursor: pointer;
+}
+
+.user-info-table-size6:hover {
+  background-color: #dddddd;
+}
+
+.btn-user-edit {
+  width: 150px;
+  padding: 8px 12px;
+  background-color: #e0e0e0;
+  border: 2px solid #afafaf;
+
+  cursor: pointer;
+  border-radius: 6px;
+
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+}
+
+.btn-user-edit:hover {
+  background-color: #c3ddff;
+  border-color: #3981f7;
+  color: #1a6ff8;
+}
+
 .users-container {
-  position: relative;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 40px 15px 0;
+  padding: 40px 0px 0;
 }
 
 .users-list {
@@ -11,41 +72,113 @@
   gap: 16px;
 }
 
-.info-list {
+.user-info-table {
   font-family: "Montserrat", sans-serif;
-  font-weight: 700;
-  font-size: 20px;
-  display: flex;
-  justify-content: space-between;
+  font-weight: 500;
+  font-size: 18px;
 }
 
 .title-users {
-  padding: 0 0 30px;
+  margin: 0 auto;
+  width: 300px;
+  padding: 0 0 8px;
+  margin-bottom: 62px;
+  border-bottom: 2px solid #000000;
 }
 
 .container-btn-create-new-users {
-  position: fixed;
+  margin-left: auto;
+  padding-bottom: 16px;
   display: flex;
-  bottom: 40px;
+  justify-content: flex-end;
+  width: 268px;
+  border-bottom: 2px solid #000000;
+  margin-bottom: 36px;
 }
+
 
 .create-new-user {
   display: flex;
   align-items: center;
   justify-content: center;
+  height: 40px;
+  width: 200px;
 
-  height: 60px;
-  width: 60px;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  font-size: 16px;
 
   cursor: pointer;
-  background-color: var(--primary-bg-color);
-  border: 2px solid var(--btns-brdr-color);
-  border-radius: 100px;
+  background-color: var(--green-btns-bg-color);
+  color: var(--save-btns-color);
+  border: 2px solid var(--save-btns-color);
+  border-radius: 6px;
+
+  box-shadow: -1px 1px 3px 1px #e0e0e0;
 }
+
 
 .create-new-user:hover,
 .create-new-user:focus {
-  background-color: var(--secondary-bg-color);
+  background-color: var(--save-btn-hover-bg-color);
   color: var(--white-btns-color);
-  border: 2px solid #0148bb;
+  border: 2px solid #008545;
+}
+
+.roles-dropdown {
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.roles-dropdown li {
+  padding: 8px 12px;
+  cursor: pointer;
+  border-bottom: 1px solid #e1e1e1;
+}
+
+.roles-dropdown li:last-child {
+  border-bottom: none;
+}
+
+.roles-dropdown li:hover {
+  background-color: #ddd;
+}
+
+.bx-md {
+  transition: transform 0.3s ease-in-out;
+}
+
+.rotated-full-info-user {
+  transform: rotate(180deg);
+}
+
+.checkbox-clicked,
+.checkbox-clicked .user-info-table {
+  background-color: #e4e4e4;
+}
+
+.user-info-table {
+  background-color: #ffffff;
+}
+
+.user-details-table {
+  margin-top: 4px;
+}
+
+.user-details-tbody td {
+  padding: 8px;
+  background-color: #ffffff;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+}
+
+.user-details-size {
+  width: 42%;
 }

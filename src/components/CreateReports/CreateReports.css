@@ -1,3 +1,8 @@
+.container-create-reports {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
 .forms-header {
   width: 310px;
   padding: 40px 0 6px;

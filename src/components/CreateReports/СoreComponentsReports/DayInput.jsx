@@ -122,7 +122,7 @@ export const DayInput = ({
   const onAddNewDay = async () => {
     try {
       const response = await $api.post("/preoperative-days", inputValue);
-      toast.success(`Нова к-сть. днів успішно додана`);
+      toast.success(`Нова к-сть. діб успішно додана`);
       updateDays(response.data);
       onDayId(response.data.id);
       setShowModal(false);

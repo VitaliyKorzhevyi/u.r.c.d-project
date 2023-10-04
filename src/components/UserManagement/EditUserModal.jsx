@@ -2,40 +2,47 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import $api from "../../api/api";
 
-import "./CreateUserModal.css";
+import "./EditUserModal.css";
 
-export const CreateUserModal = ({ isOpen, onClose, afterCreate }) => {
-  const [first_name, setFirstName] = useState("");
-  const [last_name, setLastName] = useState("");
-  const [middle_name, setMiddleName] = useState("");
-  const [birthday, setBirthday] = useState("");
-  const [phone, setPhone] = useState("");
-  const [email, setEmail] = useState("");
-  const [job_title, setJobTitle] = useState("");
-  const [username, setUsername] = useState("");
+
+export const EditUserModal = ({ isOpen, onClose, afterCreate, userData }) => {
+  const [first_name, setFirstName] = useState(userData.first_name || "");
+  const [last_name, setLastName] = useState(userData.last_name || "");
+  const [middle_name, setMiddleName] = useState(userData.middle_name || "");
+  const [birthday, setBirthday] = useState(userData.birthday || "");
+  const [phone, setPhone] = useState(userData.phone || "");
+  const [email, setEmail] = useState(userData.email || "");
+  const [job_title, setJobTitle] = useState(userData.job_title || "");
+  const [username, setUsername] = useState(userData.username || "");
   const [password, setPassword] = useState("");
 
   const onCreateUser = () => {
     const data = {
-      first_name,
-      last_name,
-      middle_name,
-      birthday,
-      phone,
-      email,
-      job_title,
-      username,
-      password,
+      first_name: first_name || null,
+      last_name: last_name || null,
+      middle_name: middle_name || null,
+      birthday: birthday || null,
+      phone: phone || null,
+      email: email || null,
+      job_title: job_title || null,
+      username: username || null,
+      password: password || null,
     };
 
-    const URL = "/users";
-    console.log(data);
+    const userId = userData.id;
+    const URL = `/users/${userId}`;
     $api
-      .post(URL, data)
+      .patch(URL, data)
       .then((response) => {
         console.log(response);
         const userId = response.data.id;
-        changeUserRole(userId);
+        if (selectedRoles.length > 0) { // Проверка на наличие выбранных ролей
+            changeUserRole(userId);
+          } else {
+            toast.success(`Дані користувача успішно оновлено`, { autoClose: 1500 });
+            onClose();
+            if (afterCreate) afterCreate();
+          }
       })
       .catch((error) => {
         console.log(error);
@@ -45,12 +52,12 @@ export const CreateUserModal = ({ isOpen, onClose, afterCreate }) => {
   const changeUserRole = (userId) => {
     const rolesData = { roles: selectedRoles };
     const URL = `/users/${userId}/change-role`;
-
+console.log('на бек', rolesData);
     $api
       .patch(URL, rolesData)
       .then((response) => {
         console.log("Roles updated:", response);
-        toast.success(`Новий юзер успішно створений`, {
+        toast.success(`Дані користувача успішно оновлено`, {
           autoClose: 1500,
         });
         onClose();
@@ -83,7 +90,9 @@ export const CreateUserModal = ({ isOpen, onClose, afterCreate }) => {
     resuscitation: "Реанімація",
   };
 
-  const [selectedRoles, setSelectedRoles] = useState([]);
+  const [selectedRoles, setSelectedRoles] = useState(userData.advanced_roles || []);
+
+  console.log("Выбранные роли:", selectedRoles);
 
   const handleCheckboxChange = (role) => {
     if (selectedRoles.includes(role)) {
@@ -98,12 +107,12 @@ export const CreateUserModal = ({ isOpen, onClose, afterCreate }) => {
   const capitalize = (string) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
   };
-  
+
   if (!isOpen) return null;
 
   return (
-    <div className="modal-create-user">
-      <div className="modal-content-create-user">
+    <div className="modal-edit-user">
+      <div className="modal-content-edit-user">
         <div
           className="btn-close-modal"
           onClick={() => {
@@ -112,7 +121,7 @@ export const CreateUserModal = ({ isOpen, onClose, afterCreate }) => {
         >
           <img src="/images/cross.svg" alt="Х" className="logo-autorization" />
         </div>
-        <p className="modal-create-user-title">Створити користувача</p>
+        <p className="modal-create-user-title">Оновити користувача</p>
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -186,7 +195,7 @@ export const CreateUserModal = ({ isOpen, onClose, afterCreate }) => {
             </div>
             <div className="modal-content-group password">
               <input
-                type="text"
+                type="password"
                 placeholder="Пароль"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -209,7 +218,7 @@ export const CreateUserModal = ({ isOpen, onClose, afterCreate }) => {
             ))}
           </div>
           <button type="submit" className="modal-create-user-btn">
-            Створити
+            Оновити
           </button>
         </form>
       </div>

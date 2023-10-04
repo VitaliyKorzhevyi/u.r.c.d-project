@@ -106,7 +106,7 @@ export const ReportsSurgical = () => {
   };
 
   //* ЗБЕРЕЖЕННЯ ДАННИХ З ФОРМ У ЛОКАЛЬНЕ СХОВИЩЕ
-  const savedForms = localStorage.getItem("surgicalForms");
+  const savedForms = localStorage.getItem("surgeryForms");
   const initialForms = savedForms
     ? JSON.parse(savedForms)
     : [
@@ -177,12 +177,12 @@ export const ReportsSurgical = () => {
   };
 
   const setFormsWithStorage = (newForms) => {
-    localStorage.setItem("surgicalForms", JSON.stringify(newForms));
+    localStorage.setItem("surgeryForms", JSON.stringify(newForms));
     setForms(newForms);
   };
 
   useEffect(() => {
-    const savedForms = localStorage.getItem("surgicalForms");
+    const savedForms = localStorage.getItem("surgeryForms");
     if (savedForms) {
       setForms(JSON.parse(savedForms));
     }
@@ -253,9 +253,9 @@ export const ReportsSurgical = () => {
       return value;
     };
     return {
-      history_number: form.history_number,
+      history_number: sanitizeValue(form.history_number),
       patient_id: form.patient_id,
-      diagnosis_id: form.diagnosis_id,
+      diagnosis_id: form.diagnosis_id ? form.diagnosis_id : null,
       operation_id: form.operation_id,
       preoperative_day_id: form.preoperative_day_id,
       rows: form.rows.map((row) => ({
@@ -273,7 +273,7 @@ export const ReportsSurgical = () => {
     console.log(dataToSend);
 
     $api
-      .post("/reports/anesthesiology", dataToSend)
+      .post("/reports/surgery", dataToSend)
       .then((response) => {
         console.log(response);
         toast.success(`Нова таблиця успішно збережена`, {
@@ -291,9 +291,8 @@ export const ReportsSurgical = () => {
   //* ПОМИЛКИ ДЛЯ ІНПУТІВ
   // Основні поля для перевірки в формі
   const MAIN_FIELDS = {
-    history_number: '"Номер історії"',
+
     patientName: '"Ім\'я пацієнта"',
-    diagnoses: '"Діагноз"',
     operations: '"Операція"',
     day: '"К-сть. діб"',
   };
@@ -543,7 +542,7 @@ export const ReportsSurgical = () => {
                       locked={form.locked}
                       forms={forms}
                       setForms={setForms}
-                      localStorageKey="anesthesiologyForms"
+                      localStorageKey="surgeryForms"
                       onDiagnosesId={(diagnosis_id) =>
                         onFieldChange(formIndex, "diagnosis_id", diagnosis_id)
                       }
@@ -571,7 +570,7 @@ export const ReportsSurgical = () => {
                       locked={form.locked}
                       forms={forms}
                       setForms={setForms}
-                      localStorageKey="anesthesiologyForms"
+                      localStorageKey="surgeryForms"
                       onOperationId={(operation_id) =>
                         onFieldChange(formIndex, "operation_id", operation_id)
                       }
@@ -591,7 +590,7 @@ export const ReportsSurgical = () => {
                       locked={form.locked}
                       forms={forms}
                       setForms={setForms}
-                      localStorageKey="anesthesiologyForms"
+                      localStorageKey="surgeryForms"
                       onDayId={(preoperative_day_id) =>
                         onFieldChange(
                           formIndex,
@@ -636,7 +635,7 @@ export const ReportsSurgical = () => {
                         locked={form.locked}
                         forms={forms}
                         setForms={setForms}
-                        localStorageKey="anesthesiologyForms"
+                        localStorageKey="surgeryForms"
                         onMedicamentId={(medicament_id) =>
                           onFieldChange(
                             formIndex,
@@ -654,7 +653,7 @@ export const ReportsSurgical = () => {
                         locked={form.locked}
                         forms={forms}
                         setForms={setForms}
-                        localStorageKey="anesthesiologyForms"
+                        localStorageKey="surgeryForms"
                       />
                     </td>
                     <td>
@@ -665,7 +664,7 @@ export const ReportsSurgical = () => {
                         locked={form.locked}
                         forms={forms}
                         setForms={setForms}
-                        localStorageKey="anesthesiologyForms"
+                        localStorageKey="surgeryForms"
                       />
                     </td>
                     <td>
@@ -676,7 +675,7 @@ export const ReportsSurgical = () => {
                         locked={form.locked}
                         forms={forms}
                         setForms={setForms}
-                        localStorageKey="anesthesiologyForms"
+                        localStorageKey="surgeryForms"
                       />
                     </td>
                     <td className="btn-row">

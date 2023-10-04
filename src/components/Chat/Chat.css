@@ -1,0 +1,8 @@
+.chat-container {
+    margin-top: 40px;
+}
+
+.message-list {
+    height: 800px;
+    overflow-y: auto;
+}

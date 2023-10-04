@@ -1,6 +1,8 @@
 import { useState } from "react";
 import $api from "../../api/api";
 
+import { PERMISSIONS } from "../../constants/permissions";
+
 import "./ItemFormset.css";
 
 const REPORT_TYPE_NAMES = {
@@ -11,7 +13,8 @@ const REPORT_TYPE_NAMES = {
 
 const formatReportUrl = (id, type) => `reports/${type}/${id}`;
 
-export const ItemFormset = ({ data }) => {
+export const ItemFormset = ({ data, userData }) => {
+  console.log(userData);
   const [detailedData, setDetailedData] = useState({});
   const [activeItemId, setActiveItemId] = useState(null);
 
@@ -172,7 +175,16 @@ export const ItemFormset = ({ data }) => {
         console.error("Error sending data:", error);
       });
   };
-  const userRole = "pharmacy"; //accounting pharmacy
+
+  const hasPharmacyPermission = userData.permissions.includes(PERMISSIONS.UPDATING_PHARMACY_MARKS);
+  const hasAccountingPermission = userData.permissions.includes(PERMISSIONS.UPDATING_ACCOUNTING_MARKS);
+  
+  // let userRole = '';
+  // if (hasPharmacyRole) {
+  //   userRole = ROLES.PHARMACY;
+  // } else if (hasAccountingRole) {
+  //   userRole = ROLES.ACCOUNTING;
+  // }
 
   const currentItemDetails = detailedData[activeItemId];
 
@@ -327,7 +339,7 @@ export const ItemFormset = ({ data }) => {
                         </td>
                         <td>
                           <div>
-                            {userRole === "pharmacy" ? (
+                            {hasPharmacyPermission ? (
                               <div className="custom-checkbox">
                                 <input
                                   type="checkbox"
@@ -367,7 +379,7 @@ export const ItemFormset = ({ data }) => {
                             ) : (
                               <span className="static-checkmark-formset">
                                 {backendChecksPharmacy[row.id] ? (
-                                  <i class="bx bx-check bx-md"></i>
+                                  <i className="bx bx-check bx-md"></i>
                                 ) : (
                                   ""
                                 )}
@@ -376,7 +388,7 @@ export const ItemFormset = ({ data }) => {
                           </div>
                         </td>
                         <td>
-                          {userRole === "accounting" ? (
+                          {hasAccountingPermission ? (
                             <div className="custom-checkbox">
                               <input
                                 type="checkbox"
@@ -428,7 +440,7 @@ export const ItemFormset = ({ data }) => {
                   </tbody>
                 </table>
                 <div className="btns-table-formset">
-                  {userRole === "pharmacy" && (
+                  {hasPharmacyPermission && (
                     <button
                       type="button"
                       className="btn-save-table"
@@ -438,7 +450,7 @@ export const ItemFormset = ({ data }) => {
                     </button>
                   )}
 
-                  {userRole === "accounting" && (
+                  {hasAccountingPermission && (
                     <button
                       type="button"
                       className="btn-save-table"

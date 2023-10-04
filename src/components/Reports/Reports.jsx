@@ -6,29 +6,31 @@ import { Marks } from "../Marks/Marks";
 import { FullInfoReports } from "../FullInfoReports/FullInfoReports";
 import { DataEditing } from "../DataEditing/DataEditing";
 
-import { DEFAULT_ROLES, ROLES } from "../../constants/roles";
+import { SECTION_PERMISSIONS } from "../../constants/permissions";
 
 import "./Reports.css";
 
 const AccessibleButton = ({
   id,
-  roles,
-  defaultRoles,
+  section,
   onClick,
   children,
   userData,
   activeModal,
 }) => {
-  const userHasRoleAccess =
-    roles.length === 0 ||
-    roles.some((role) => userData.advanced_roles?.includes(role));
-  const userHasDefaultRoleAccess =
-    !defaultRoles || defaultRoles.includes(userData.default_role);
+  const requiredPermissions = SECTION_PERMISSIONS[section];
 
-  if (!userHasRoleAccess || !userHasDefaultRoleAccess) return null;
+ 
+  const userHasPermission = requiredPermissions.some((permission) =>
+    userData.permissions?.includes(permission)
+  );
+
+  if (!userHasPermission) return null;
+
   const buttonClass = `base-style-btns-reports ${
     activeModal === id ? "active-btn-reports" : ""
   }`;
+
   return (
     <button type="button" onClick={onClick} className={buttonClass}>
       {children}
@@ -51,27 +53,17 @@ export const Reports = ({ userData }) => {
       <div className="reports-buttons">
         <AccessibleButton
           id="create"
-          roles={[
-            ROLES.SURGERY,
-            ROLES.OPERATING,
-            ROLES.ANESTHESIOLOGY,
-            ROLES.RESUSCITATION,
-          ]}
+          section="create-report"
           onClick={openCreateModal}
           userData={userData}
           activeModal={openModal}
         >
           Створити звіт
         </AccessibleButton>
-
+ 
         <AccessibleButton
           id="edit"
-          roles={[
-            ROLES.SURGERY,
-            ROLES.OPERATING,
-            ROLES.ANESTHESIOLOGY,
-            ROLES.RESUSCITATION,
-          ]}
+          section="edit-report"
           onClick={openEditModal}
           userData={userData}
           activeModal={openModal}
@@ -81,7 +73,7 @@ export const Reports = ({ userData }) => {
 
         <AccessibleButton
           id="marks"
-          roles={[ROLES.PHARMACY, ROLES.ACCOUNTING]}
+          section="marks-report"
           onClick={openMarksModal}
           userData={userData}
           activeModal={openModal}
@@ -90,7 +82,7 @@ export const Reports = ({ userData }) => {
         </AccessibleButton>
         <AccessibleButton
           id="dataEdit"
-          roles={[]}
+          section="edit-data"
           onClick={openDataEditModal}
           userData={userData}
           activeModal={openModal}
@@ -100,8 +92,7 @@ export const Reports = ({ userData }) => {
 
         <AccessibleButton
           id="full-info"
-          roles={[]}
-          defaultRoles={[DEFAULT_ROLES.ADMIN, ROLES.HEAD_DOCTOR]}
+          section="full-info-report"
           onClick={openFullInfoModal}
           userData={userData}
           activeModal={openModal}
@@ -114,8 +105,8 @@ export const Reports = ({ userData }) => {
       {openModal === "create" && (
         <CreateReports userData={userData} onClose={closeModal} />
       )}
-      {openModal === "edit" && <EditReports onClose={closeModal} />}
-      {openModal === "marks" && <Marks onClose={closeModal} />}
+      {openModal === "edit" && <EditReports onClose={closeModal} userData={userData}/>}
+      {openModal === "marks" && <Marks userData={userData} onClose={closeModal} />}
       {openModal === "dataEdit" && <DataEditing onClose={closeModal} />}
       {openModal === "fullInfo" && <FullInfoReports onClose={closeModal} />}
     </div>

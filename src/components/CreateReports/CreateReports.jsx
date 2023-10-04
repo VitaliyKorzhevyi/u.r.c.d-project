@@ -8,7 +8,7 @@ import { ReportsResuscitation } from "./ReportsResuscitation";
 import { ReportsSurgical } from "./ReportsSurgical";
 import { ReportsConsultation } from "./ReportsConsultation";
 
-import { ROLES } from "../../constants/roles";
+import { PERMISSIONS } from "../../constants/permissions";
 
 import "./CreateReports.css";
 
@@ -35,42 +35,37 @@ export const CreateReports = ({ userData }) => {
       id: "anesthesiology",
       label: "Анестезіологія",
       component: ReportsAnesthesiology,
-      roles: [ROLES.ANESTHESIOLOGY],
+      permissions: [PERMISSIONS.CREATE_ANESTHESIOLOGY_REPORT]
     },
     {
       id: "operating",
       label: "Операційна",
       component: ReportsOperating,
-      roles: [ROLES.OPERATING],
+      permissions: [PERMISSIONS.CREATE_OPERATING_REPORT]
     },
     {
       id: "resuscitation",
       label: "Реанімація",
       component: ReportsResuscitation,
-      roles: [ROLES.RESUSCITATION],
+      permissions: [PERMISSIONS.CREATE_RESUSCITATION_REPORT]
     },
     {
       id: "surgical",
       label: "Хірургія",
       component: ReportsSurgical,
-      roles: [ROLES.SURGERY],
+      permissions: [PERMISSIONS.CREATE_SURGERY_REPORT]
     },
     {
       id: "consultation",
       label: "Консультація",
       component: ReportsConsultation,
-      roles: [
-        ROLES.SURGERY,
-        ROLES.OPERATING,
-        ROLES.ANESTHESIOLOGY,
-        ROLES.RESUSCITATION,
-      ],
+      permissions: []
     },
   ];
 
   const userHasAccess = (form) => {
-    if (!form.roles) return true;
-    return form.roles.some((role) => userData.advanced_roles?.includes(role));
+    if (!form.permissions) return true;
+    return form.permissions.some((permissions) => userData.permissions?.includes(permissions));
   };
 
   const userHasAnyAccess = FORMS_DATA.some(userHasAccess);

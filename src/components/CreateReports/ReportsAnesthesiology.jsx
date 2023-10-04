@@ -208,7 +208,7 @@ export const ReportsAnesthesiology = () => {
   // копіювання форми
   const onCopyForm = (formIndex) => {
     const formToCopy = forms[formIndex];
-    const copiedForm = { ...formToCopy, id: nextFormId };
+    const copiedForm = { ...formToCopy, id: nextFormId + 1};
     setNextFormId(nextFormId + 1);
     const updatedForms = [...forms, copiedForm];
     setFormsWithStorage(updatedForms);
@@ -254,7 +254,7 @@ export const ReportsAnesthesiology = () => {
       return value;
     };
     return {
-      history_number: form.history_number,
+      history_number: form.history_number ,
       patient_id: form.patient_id,
       diagnosis_id: form.diagnosis_id,
       operation_id: form.operation_id,

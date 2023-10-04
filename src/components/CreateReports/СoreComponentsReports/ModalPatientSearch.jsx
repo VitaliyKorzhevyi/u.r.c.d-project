@@ -1,5 +1,5 @@
 //todo перевірити пошук за номером
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { toast } from "react-toastify";
 import $api from "../../../api/api";
 
@@ -22,8 +22,89 @@ export const ModalPatientSearch = ({
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [birthday, setBirthday] = useState("");
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [page, setPage] = useState(1);
+  const MIN_LENGTH = 4;
 
-  // Очищення полів
+  const validateParams = useCallback((params) => {
+    for (let value of Object.values(params)) {
+      if (value && value.length < MIN_LENGTH) {
+        toast.warn(`Рядок повинен містити не менше ${MIN_LENGTH} символів!`);
+        return false;
+      }
+    }
+    return true;
+  }, []);
+
+  const createQueryString = useCallback((params) => {
+    return Object.entries(params)
+      .filter(([_, value]) => value && value.length >= MIN_LENGTH)
+      .map(([key, value]) => `${key}=${value}`)
+      .join("&");
+  }, []);
+
+  const fetchData = useCallback(async (params, nextPage = 1) => {
+    if (!validateParams(params)) return;
+    const queryString = createQueryString(params);
+    console.log("Sending request with params:", queryString);
+    if (!queryString) return;
+    try {
+      const response = await $api.get(
+        `patients?page=${nextPage}&limit=20&${queryString}&sort=-id`
+      );
+      if (!response.data.patients.length) {
+        toast.warn("Пацієнт не знайдений.");
+      } else {
+        setPatients(prevPatients => {
+          const updatedPatients = [...prevPatients, ...response.data.patients];
+          return updatedPatients.filter(
+              (patient, index, self) =>
+                  index === self.findIndex((p) => p.id === patient.id)
+          );
+      });
+        console.log(response.data.patients);
+      }
+      return response;
+    } catch (error) {
+      console.error("Пошук не вдався", error);
+      toast.error("Помилка під час пошуку. Будь ласка, спробуйте пізніше.");
+    }
+  }, [validateParams, createQueryString]);
+
+  const handleScroll = useCallback(
+    (e) => {
+      const bottom =
+        e.target.scrollHeight - e.target.scrollTop ===
+        e.target.clientHeight;
+      if (bottom && !loadingMore) {
+        setLoadingMore(true);
+        setPage((prev) => prev + 1);
+        fetchData(
+          {
+            last_name: lastName,
+            first_name: firstName,
+            middle_name: middleName,
+            phone: phone,
+            email: email,
+            birthday: birthday,
+          },
+          page + 1
+        ).finally(() => setLoadingMore(false));
+      }
+    },
+    [loadingMore, lastName, firstName, middleName, phone, email, birthday, page, fetchData]
+  );
+
+  useEffect(() => {
+    const listElem = document.querySelector(".patients-list");
+    if (listElem) {
+        listElem.addEventListener("scroll", handleScroll);
+        return () => listElem.removeEventListener("scroll", handleScroll);
+    }
+}, [handleScroll]);
+
+  if (!isOpen) return null;
+
   const resetFields = () => {
     setFirstName("");
     setLastName("");
@@ -34,58 +115,21 @@ export const ModalPatientSearch = ({
     setPatients([]);
   };
 
-  // Якщо модальне вікно не відкрите, нічого не рендерити
   if (!isOpen) return null;
 
-  const MIN_LENGTH = 4;
-  const DEFAULT_LIMIT = 8;
-  const DEFAULT_SKIP = 0;
+  const capitalize = (string) => {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  };
 
-  // Перевірки даних перед відправкою запиту
-  const validateParams = (params) => {
-    for (let value of Object.values(params)) {
-      if (value && value.length < MIN_LENGTH) {
-        toast.warn(`Рядок повинен містити не менше ${MIN_LENGTH} символів!`);
-        return false;
-      }
+  const onPhoneChange = (e) => {
+    let phoneNumber = e.target.value.replace(/\+/g, "");
+    phoneNumber = phoneNumber.replace(/[^0-9]/g, "");
+    if (phoneNumber.length > 15) {
+      phoneNumber = phoneNumber.slice(3, 15);
     }
-    return true;
+    setPhone(phoneNumber);
   };
 
-  // Створення рядка параметрів для URL
-  const createQueryString = (params) => {
-    return Object.entries(params)
-      .filter(([_, value]) => value && value.length >= MIN_LENGTH)
-      .map(([key, value]) => `${key}=${value}`)
-      .join("&");
-  };
-
-  // Отримання даних про пацієнтів
-  const fetchData = async (params) => {
-    if (!validateParams(params)) return;
-
-    const queryString = createQueryString(params);
-    console.log("Sending request with params:", queryString);
-
-    if (!queryString) return;
-
-    try {
-      const response = await $api.get(
-        `/patients?skip=${DEFAULT_SKIP}&limit=${DEFAULT_LIMIT}&${queryString}`
-      );
-      if (!response.data.length) {
-        toast.warn("Пацієнт не знайдений.");
-      } else {
-        setPatients(response.data);
-        console.log(response.data);
-      }
-    } catch (error) {
-      console.error("Пошук не вдався", error);
-      toast.error("Помилка під час пошуку. Будь ласка, спробуйте пізніше.");
-    }
-  };
-
-  // Обробник події натиснення кнопки "Пошук", предача данних на бек
   const onSearchPatient = (e) => {
     e.preventDefault();
     fetchData({
@@ -98,37 +142,18 @@ export const ModalPatientSearch = ({
     });
   };
 
-  // Першої велика літера
-  const capitalize = (string) => {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-  };
-
-  // Валідація для телефону
-  const onPhoneChange = (e) => {
-    let phoneNumber = e.target.value.replace(/\+/g, "");
-
-    phoneNumber = phoneNumber.replace(/[^0-9]/g, "");
-    if (phoneNumber.length > 15) {
-      phoneNumber = phoneNumber.slice(3, 15);
-    }
-    setPhone(phoneNumber);
-  };
-
-  // Вибір пацієнта зі списку
   const onItemClick = (patient) => {
     console.log("Selected patient:", patient);
-    onGetFullName(patient.full_name);
-    onGetAge(patient.age);
-    onGetBirthday(patient.birthday);
-    onGetId(patient.id);
+    onGetFullName?.(patient.full_name);
+    onGetAge?.(patient.age);
+    onGetBirthday?.(patient.birthday);
+    onGetId?.(patient.id);
     onGetPhone?.(patient.phone);
     console.log(patient.phone);
-
-    // Очистити всі поля
     resetFields();
-
     onClose();
   };
+
 
   return (
     <div className="modal-overlay">

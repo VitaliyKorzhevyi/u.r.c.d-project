@@ -14,7 +14,7 @@ export const DayInputEditing = ({
     setInputValue(selectedItem || "");
   }, [selectedItem]);
 
-  const MIN_INPUT_LENGTH = 2;
+  const MIN_INPUT_LENGTH = 1;
 
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
@@ -33,6 +33,7 @@ export const DayInputEditing = ({
           id="dayInput"
           type="text"
           className="input-size-save-table"
+          autoComplete="off"
           value={inputValue}
           onChange={handleInputChange}
           disabled={disabledInput}

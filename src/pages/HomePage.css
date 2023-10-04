@@ -1,7 +1,8 @@
 .admin-header {
-    max-width: 1200px;
+    max-width: 1700px;
     margin: 0 auto;
     padding: 40px 15px 0;
+
 }
 
 .admin-container-btns {
@@ -9,6 +10,9 @@
     justify-content: space-between;
 }
 
+.header-logo {
+  height: 32px;  
+}
 
 .admin-btns {
     padding: 4px 20px;

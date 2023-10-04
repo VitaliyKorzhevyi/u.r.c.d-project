@@ -1,0 +1,80 @@
+.management-container {
+  width: 100%;
+}
+
+.list-management-report {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  border-top: 1px solid #000;
+  padding-top: 28px;
+}
+
+.item-management-report {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.item-management-report input,
+.item-management-report select {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.select-value-page {
+  height: 30px;
+  width: 60px;
+}
+
+.select-value-type {
+  height: 30px;
+  width: 140px;
+}
+
+.select-sort-reports {
+    height: 30px;
+    width: 190px;
+}
+
+.input-size-filter {
+    width: 200px;
+    height: 30px;
+  }
+
+.container-dropdown-filter {
+    position: relative;
+    width: 200px;
+  }
+
+.dropdown-filter {
+    position: absolute;
+    top: 100%;
+    width: 100%;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    z-index: 2;
+    max-height: 150px;
+    overflow-y: auto;
+  }
+  
+  .dropdown-filter li{
+    padding: 5px 4px;
+    cursor: pointer;
+    border-top: 1px solid #ccc;
+  }
+  
+  .dropdown-filter li:hover {
+    background-color: #d0e4fa;
+  }
+
+  .input-size-filter {
+    padding-left: 4px;
+  }
+
