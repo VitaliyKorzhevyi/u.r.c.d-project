@@ -23,8 +23,8 @@
 .management-saved-forms {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  width: 224px;
+  gap: 6px;
+  width: 230px;
 }
 
 .btn-calendar {

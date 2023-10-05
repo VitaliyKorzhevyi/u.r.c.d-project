@@ -7,9 +7,9 @@ import "react-datepicker/dist/react-datepicker.css";
 
 import "./Calendar.css";
 
-function DatepickerComponent({ onDateChange }) {
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(null);
+function DatepickerComponent({ onDateChange, startDate: initialStartDate, endDate: initialEndDate }) {
+  const [startDate, setStartDate] = useState(initialStartDate);
+  const [endDate, setEndDate] = useState(initialEndDate);
 
   const formatDate = (date) => {
     return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(

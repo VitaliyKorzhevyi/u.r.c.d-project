@@ -22,8 +22,6 @@ import "./EditReports.css";
 import { isThreeDaysOld } from "./СoreComponentsReports/dateUtils";
 
 export const EditReports = ({ userData }) => {
-  const [selectedStartDate, setSelectedStartDate] = useState(null);
-  const [selectedEndDate, setSelectedEndDate] = useState(null);
   const [data, setData] = useState([]);
 
   const [selectedItem, setSelectedItem] = useState(null);
@@ -214,10 +212,30 @@ export const EditReports = ({ userData }) => {
   };
 
   //* ДЛЯ ВИБОРУ ДАТИ
+  const formatDateDefoult = (date) => {
+    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(
+      2,
+      "0"
+    )}-${String(date.getDate()).padStart(2, "0")}`;
+  };
+
+  const currentDate = new Date();
+  const thirtyDaysAgo = new Date(currentDate);
+  thirtyDaysAgo.setDate(currentDate.getDate() - 30);
+  
+  const formattedThirtyDaysAgo = formatDateDefoult(thirtyDaysAgo);
+  const formattedCurrentDate = formatDateDefoult(currentDate);
+  
+  const [selectedStartDate, setSelectedStartDate] = useState(formattedThirtyDaysAgo);
+  const [selectedEndDate, setSelectedEndDate] = useState(formattedCurrentDate);
+  
+
+
   const onDateChange = (start, end) => {
     setSelectedStartDate(start);
     setSelectedEndDate(end);
   };
+
 
   //* ДЛЯ ВІДОБРАЖЕННЯ СПИСКУ ТАБЛИЦІ
   //* по дефолту
@@ -271,6 +289,7 @@ export const EditReports = ({ userData }) => {
   const handleFormDataChange = (newFormData) => {
     setCurrentFormData(newFormData);
   };
+
   const onButtonClick = () => {
     if (selectedStartDate && selectedEndDate) {
       const initialParams = {
@@ -279,7 +298,7 @@ export const EditReports = ({ userData }) => {
         to_created_at: selectedEndDate,
         ...currentFormData,
       };
-
+console.log(initialParams);
       const params = Object.keys(initialParams)
         .filter((key) => initialParams[key]) // Отбираем только те ключи, значения которых заданы
         .reduce((obj, key) => {
@@ -324,7 +343,7 @@ export const EditReports = ({ userData }) => {
       page: page,
       from_created_at: selectedStartDate,
       to_created_at: selectedEndDate,
-      limit: currentFormData.limit,
+      ...currentFormData,
     };
 
     const params = Object.keys(initialParams)
@@ -417,7 +436,11 @@ export const EditReports = ({ userData }) => {
       <div className="calendar-saved-forms">
         <div className="management-saved-forms">
           <div>
-            <DatepickerComponent onDateChange={onDateChange} />
+            <DatepickerComponent
+              onDateChange={onDateChange}
+              startDate={thirtyDaysAgo}
+              endDate={currentDate}
+            />
           </div>
 
           <ReportManagement

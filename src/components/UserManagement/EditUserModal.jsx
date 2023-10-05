@@ -4,7 +4,6 @@ import $api from "../../api/api";
 
 import "./EditUserModal.css";
 
-
 export const EditUserModal = ({ isOpen, onClose, afterCreate, userData }) => {
   const [first_name, setFirstName] = useState(userData.first_name || "");
   const [last_name, setLastName] = useState(userData.last_name || "");
@@ -16,7 +15,7 @@ export const EditUserModal = ({ isOpen, onClose, afterCreate, userData }) => {
   const [username, setUsername] = useState(userData.username || "");
   const [password, setPassword] = useState("");
 
-  const onCreateUser = () => {
+  const onEditUser = () => {
     const data = {
       first_name: first_name || null,
       last_name: last_name || null,
@@ -36,13 +35,16 @@ export const EditUserModal = ({ isOpen, onClose, afterCreate, userData }) => {
       .then((response) => {
         console.log(response);
         const userId = response.data.id;
-        if (selectedRoles.length > 0) { // Проверка на наличие выбранных ролей
-            changeUserRole(userId);
-          } else {
-            toast.success(`Дані користувача успішно оновлено`, { autoClose: 1500 });
-            onClose();
-            if (afterCreate) afterCreate();
-          }
+        if (selectedRoles.length > 0) {
+          // Проверка на наличие выбранных ролей
+          changeUserRole(userId);
+        } else {
+          toast.success(`Дані користувача успішно оновлено`, {
+            autoClose: 1500,
+          });
+          onClose();
+          if (afterCreate) afterCreate();
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -52,7 +54,7 @@ export const EditUserModal = ({ isOpen, onClose, afterCreate, userData }) => {
   const changeUserRole = (userId) => {
     const rolesData = { roles: selectedRoles };
     const URL = `/users/${userId}/change-role`;
-console.log('на бек', rolesData);
+    console.log("на бек", rolesData);
     $api
       .patch(URL, rolesData)
       .then((response) => {
@@ -90,7 +92,9 @@ console.log('на бек', rolesData);
     resuscitation: "Реанімація",
   };
 
-  const [selectedRoles, setSelectedRoles] = useState(userData.advanced_roles || []);
+  const [selectedRoles, setSelectedRoles] = useState(
+    userData.advanced_roles || []
+  );
 
   console.log("Выбранные роли:", selectedRoles);
 
@@ -125,7 +129,7 @@ console.log('на бек', rolesData);
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            onCreateUser();
+            onEditUser();
           }}
           className="modal-create-user-list"
         >

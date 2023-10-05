@@ -19,7 +19,9 @@ export const ReportManagement = ({ userData, onFormDataChange }) => {
     limit: '',
     history_number: '',
     sort: '',
+    user_id: '',
   });
+
   useEffect(() => {
     if (onFormDataChange) {
       onFormDataChange(formData);
@@ -71,7 +73,7 @@ export const ReportManagement = ({ userData, onFormDataChange }) => {
     }));
   };
 
-  // console.log("ред", userData);
+  //! console.log("ред", userData); допрацювати
 
   //* ВИБІР ПАЦІЄНТА
   const [isModalOpenSearch, setModalOpenSearch] = useState(false);
@@ -141,7 +143,7 @@ export const ReportManagement = ({ userData, onFormDataChange }) => {
             onChange={onReportValueLimit}
             defaultValue=""
           >
-            <option value=""></option>
+            <option value="">20</option>
             <option value="30">30</option>
             <option value="50">50</option>
             <option value="100">100</option>
@@ -158,7 +160,7 @@ export const ReportManagement = ({ userData, onFormDataChange }) => {
             onChange={onReportTypeChange}
             defaultValue=""
           >
-            <option value=""></option>
+            <option value="">Показати всі</option>
             <option value="anesthesiology">Анестезіологія</option>
             <option value="operating">Операційна</option>
             <option value="resuscitation">Реанімація</option>
@@ -174,9 +176,7 @@ export const ReportManagement = ({ userData, onFormDataChange }) => {
             id=""
             className="select-sort-reports"
             onChange={onReportSortChange}
-            defaultValue=""
           >
-            <option value=""></option>
             <option value="-created_at">Спочатку нові звіти</option>
             <option value="created_at">Спочатку старі звіти</option>
             <option value="updated_at">Останні оновлені</option>
@@ -237,6 +237,15 @@ export const ReportManagement = ({ userData, onFormDataChange }) => {
             >
               <i className="bx bx-search bx-sm"></i>
             </button>
+          </div>
+
+          <p className="input-patient-fullname-filter">{patientFullName}</p>
+        </li>
+        <li className="item-management-report">
+          <div className="item-management-search-patient">
+            <p>
+              <strong>Пошук по користувачу</strong>
+            </p>
           </div>
 
           <p className="input-patient-fullname-filter">{patientFullName}</p>

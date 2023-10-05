@@ -9,7 +9,7 @@ export const DiagnosesInputFilter = ({
   const [inputValue, setInputValue] = useState("");
 
 
-  const MIN_INPUT_LENGTH = 3;
+  const MIN_INPUT_LENGTH = 1;
 
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
