@@ -41,19 +41,19 @@
 }
 
 .surgery-background {
-  background-color: #dbecff; /* Желтый цвет для operating */
+  background-color: #e2edfc; 
 }
 
 .operating-background {
-  background-color: #fff7c7; /* Желтый цвет для operating */
+  background-color: #fffde7; 
 }
 
 .anesthesiology-background {
-  background-color: #d7f7e7; /* Красный цвет для anesthesiology */
+  background-color: #eaf6f0; 
 }
 
 .resuscitation-background {
-  background-color: #e6e7ff; /* Фиолетовый цвет для resuscitation */
+  background-color: #eaebff; 
 }
 
 .item-formset-table .text-size {

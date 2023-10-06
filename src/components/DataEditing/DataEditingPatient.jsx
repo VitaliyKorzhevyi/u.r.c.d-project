@@ -19,9 +19,7 @@ export const DataEditingPatient = ({ patientData }) => {
     setEmail(patientData.email || "");
   }, [patientData]);
 
-  console.log("Прийшло", first_name);
-
-  const onCreateUser = () => {
+  const onEditUser = () => {
     const data = {
       first_name: first_name,
       last_name: last_name,
@@ -32,18 +30,18 @@ export const DataEditingPatient = ({ patientData }) => {
     };
 
     const fieldNames = {
-        first_name: "Ім'я",
-        last_name: "Призвіще",
-        middle_name: "По-батькові",
-        birthday: "Дата народження"
-      };
-    
-      for (const [key, value] of Object.entries(fieldNames)) {
-        if (!data[key]) {
-          toast.warn(`Поле '${value}' не може бути порожнім`);
-          return;
-        }
+      first_name: "Ім'я",
+      last_name: "Прізвище",
+      middle_name: "По-батькові",
+      birthday: "Дата народження",
+    };
+
+    for (const [key, value] of Object.entries(fieldNames)) {
+      if (!data[key]) {
+        toast.warn(`Поле '${value}' не може бути порожнім`);
+        return;
       }
+    }
 
     const patientId = patientData.id;
     const URL = `/patients/${patientId}`;
@@ -53,10 +51,17 @@ export const DataEditingPatient = ({ patientData }) => {
       .then((response) => {
         console.log(response);
 
-          toast.success(`Дані користувача успішно оновлено`, {
-            autoClose: 1500,
-          });
-        
+        toast.success(`Дані пацієнта успішно оновлено`, {
+          autoClose: 1000,
+        });
+        setTimeout(() => {
+          setFirstName("");
+          setLastName("");
+          setMiddleName("");
+          setBirthday("");
+          setPhone("");
+          setEmail("");
+        }, 2000);
       })
       .catch((error) => {
         console.log(error);
@@ -68,51 +73,51 @@ export const DataEditingPatient = ({ patientData }) => {
   };
 
   return (
-    <div>
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          onCreateUser();
-        }}
-      >
-        <div>
-          <label>
-            Призвіще:
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        onEditUser();
+      }}
+      className="form-patient-container"
+    >
+      <div className="form-patient-semi-container">
+        <div className="form-patient-editing form1">
+          <div>
+            <label htmlFor="last_name">Прізвище:&nbsp;</label>
             <input
+              id="last_name"
               type="text"
               value={last_name}
               onChange={(e) => setLastName(capitalize(e.target.value))}
+              className="form-patient-editing-input"
             />
-          </label>
-          <label>
-            Ім'я:
+          </div>
+          <div>
+            <label htmlFor="birthday">Дата народження:&nbsp;</label>
             <input
-              type="text"
-              value={first_name}
-              onChange={(e) => setFirstName(capitalize(e.target.value))}
-            />
-          </label>
-          <label>
-            По-батькові:
-            <input
-              type="text"
-              value={middle_name}
-              onChange={(e) => setMiddleName(capitalize(e.target.value))}
-            />
-          </label>
-        </div>
-        <div>
-          <label>
-            Дата народження:
-            <input
+              id="birthday"
               type="date"
               value={birthday}
               onChange={(e) => setBirthday(e.target.value)}
+              className="form-patient-editing-birthday"
             />
-          </label>
-          <label>
-            Телефон:
+          </div>
+        </div>
+        <div className="form-patient-editing form2">
+          <div>
+            <label htmlFor="first_name">Ім'я:&nbsp;</label>
             <input
+              id="first_name"
+              type="text"
+              value={first_name}
+              onChange={(e) => setFirstName(capitalize(e.target.value))}
+              className="form-patient-editing-input"
+            />
+          </div>
+          <div>
+            <label htmlFor="phone">Телефон:&nbsp;</label>
+            <input
+              id="phone"
               type="phone"
               value={phone}
               onChange={(e) => {
@@ -124,21 +129,38 @@ export const DataEditingPatient = ({ patientData }) => {
                   }
                 }
               }}
+              className="form-patient-editing-input"
             />
-          </label>
-          <label>
-            Пошта:
+          </div>
+        </div>
+
+        <div className="form-patient-editing form3">
+          <div>
+            <label htmlFor="middle_name">По-батькові:&nbsp;</label>
             <input
+              id="middle_name"
+              type="text"
+              value={middle_name}
+              onChange={(e) => setMiddleName(capitalize(e.target.value))}
+              // className="form-patient-editing-input"
+            />
+          </div>
+          <div>
+            <label htmlFor="email">Пошта:&nbsp;</label>
+            <input
+              id="email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              className="form-patient-editing-input"
             />
-          </label>
+          </div>
         </div>
-        <button type="submit" className="modal-create-user-btn">
-          Оновити
-        </button>
-      </form>
-    </div>
+      </div>
+
+      <button type="submit" className="form-patient-editing-btn">
+        Редагувати
+      </button>
+    </form>
   );
 };

@@ -1,23 +1,14 @@
-//todo перевірити пошук за номером
 import { useState, useEffect, useCallback } from "react";
 import { toast } from "react-toastify";
 import $api from "../../../api/api";
 
-import "./ModalPatientSearch.css";
+import "../../CreateReports/СoreComponentsReports/ModalPatientSearch.css";
 
-
-export const ModalPatientSearch = ({
+export const ModalUserSearch = ({
   isOpen,
   onClose,
-  onGetAge,
-  onGetFullName,
-  onGetBirthday,
   onGetId,
-  onGetPhone,
-  onGetLastName,
-  onGetFirstName,
-  onGetMiddleName,
-  onGetEmail,
+  onGetFullName,
 }) => {
   const [patients, setPatients] = useState([]);
   const [lastName, setLastName] = useState("");
@@ -47,39 +38,44 @@ export const ModalPatientSearch = ({
       .join("&");
   }, []);
 
-  const fetchData = useCallback(async (params, nextPage = 1) => {
-    if (!validateParams(params)) return;
-    const queryString = createQueryString(params);
-    console.log("Sending request with params:", queryString);
-    if (!queryString) return;
-    try {
-      const response = await $api.get(
-        `patients?page=${nextPage}&limit=20&${queryString}&sort=-id`
-      );
-      if (!response.data.patients.length) {
-        toast.warn("Пацієнт не знайдений.");
-      } else {
-        setPatients(prevPatients => {
-          const updatedPatients = [...prevPatients, ...response.data.patients];
-          return updatedPatients.filter(
+  const fetchData = useCallback(
+    async (params, nextPage = 1) => {
+      if (!validateParams(params)) return;
+      const queryString = createQueryString(params);
+      console.log("Sending request with params:", queryString);
+      if (!queryString) return;
+      try {
+        const response = await $api.get(
+          `users?page=${nextPage}&limit=20&${queryString}&sort=last_name`
+        );
+        if (!response.data.users.length) {
+          toast.warn("Юзер не знайдений.");
+        } else {
+          setPatients((prevPatients) => {
+            const updatedPatients = [
+              ...prevPatients,
+              ...response.data.users,
+            ];
+            return updatedPatients.filter(
               (patient, index, self) =>
-                  index === self.findIndex((p) => p.id === patient.id)
-          );
-      });
-        console.log(response.data.patients);
+                index === self.findIndex((p) => p.id === patient.id)
+            );
+          });
+          console.log(response.data.users);
+        }
+        return response;
+      } catch (error) {
+        console.error("Пошук не вдався", error);
+        toast.error("Помилка під час пошуку. Будь ласка, спробуйте пізніше.");
       }
-      return response;
-    } catch (error) {
-      console.error("Пошук не вдався", error);
-      toast.error("Помилка під час пошуку. Будь ласка, спробуйте пізніше.");
-    }
-  }, [validateParams, createQueryString]);
+    },
+    [validateParams, createQueryString]
+  );
 
   const handleScroll = useCallback(
     (e) => {
       const bottom =
-        e.target.scrollHeight - e.target.scrollTop ===
-        e.target.clientHeight;
+        e.target.scrollHeight - e.target.scrollTop === e.target.clientHeight;
       if (bottom && !loadingMore) {
         setLoadingMore(true);
         setPage((prev) => prev + 1);
@@ -96,16 +92,26 @@ export const ModalPatientSearch = ({
         ).finally(() => setLoadingMore(false));
       }
     },
-    [loadingMore, lastName, firstName, middleName, phone, email, birthday, page, fetchData]
+    [
+      loadingMore,
+      lastName,
+      firstName,
+      middleName,
+      phone,
+      email,
+      birthday,
+      page,
+      fetchData,
+    ]
   );
 
   useEffect(() => {
     const listElem = document.querySelector(".patients-list");
     if (listElem) {
-        listElem.addEventListener("scroll", handleScroll);
-        return () => listElem.removeEventListener("scroll", handleScroll);
+      listElem.addEventListener("scroll", handleScroll);
+      return () => listElem.removeEventListener("scroll", handleScroll);
     }
-}, [handleScroll]);
+  }, [handleScroll]);
 
   if (!isOpen) return null;
 
@@ -149,20 +155,12 @@ export const ModalPatientSearch = ({
   const onItemClick = (patient) => {
     console.log("Selected patient:", patient);
     onGetFullName?.(patient.full_name);
-    onGetAge?.(patient.age);
 
-    onGetBirthday?.(patient.birthday);
     onGetId?.(patient.id);
-    onGetPhone?.(patient.phone);
-    onGetLastName?.(patient.last_name);
-    onGetFirstName?.(patient.first_name);
-    onGetMiddleName?.(patient.middle_name);
-    onGetEmail?.(patient.email);
 
     resetFields();
     onClose();
   };
-
 
   return (
     <div className="modal-overlay">
@@ -174,13 +172,9 @@ export const ModalPatientSearch = ({
             onClose();
           }}
         >
-                <img
-          src="/images/cross.svg"
-          alt="Х"
-          className="logo-autorization"
-        />
+          <img src="/images/cross.svg" alt="Х" className="logo-autorization" />
         </div>
-        <p className="modal-search-title">Пошук пацієнта</p>
+        <p className="modal-search-title">Пошук Користувача</p>
 
         <form onSubmit={onSearchPatient} className="modal-container">
           <div className="input-container">
@@ -249,17 +243,12 @@ export const ModalPatientSearch = ({
               <ul className="patient-list-info">
                 <li>
                   <p>
-                    <strong>Ім'я:</strong> {patient.full_name}
+                    <strong>Name:</strong> {patient.full_name}
                   </p>
                 </li>
                 <li>
                   <p>
-                    <strong>День народження:</strong> {patient.birthday}
-                  </p>
-                </li>
-                <li>
-                  <p>
-                    <strong>Вік:</strong> {patient.age}
+                    <strong>Посада:</strong> {patient.job_title}
                   </p>
                 </li>
                 <li>

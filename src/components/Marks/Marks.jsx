@@ -1,30 +1,114 @@
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import $api from "../../api/api";
 import DatepickerComponent from "../EditReports/Сalendar";
 
+import { ReportManagement } from "../ReportManagement/ReportManagement";
 import { ItemFormset } from "./ItemFormset";
 
 import "./Marks.css";
 
-export const Marks = ({userData}) => {
-  const [selectedStartDate, setSelectedStartDate] = useState(null);
-  const [selectedEndDate, setSelectedEndDate] = useState(null);
-
+export const Marks = ({ userData }) => {
   const [data, setData] = useState([]);
-
+  const [currentFormData, setCurrentFormData] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
 
   //* ДЛЯ ВИБОРУ ДАТИ
+  const formatDateDefoult = (date) => {
+    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(
+      2,
+      "0"
+    )}-${String(date.getDate()).padStart(2, "0")}`;
+  };
+
+  const currentDate = new Date();
+  const thirtyDaysAgo = new Date(currentDate);
+  thirtyDaysAgo.setDate(currentDate.getDate() - 30);
+
+  const formattedThirtyDaysAgo = formatDateDefoult(thirtyDaysAgo);
+  const formattedCurrentDate = formatDateDefoult(currentDate);
+
+  const [selectedStartDate, setSelectedStartDate] = useState(
+    formattedThirtyDaysAgo
+  );
+  const [selectedEndDate, setSelectedEndDate] = useState(formattedCurrentDate);
+
   const onDateChange = (start, end) => {
     setSelectedStartDate(start);
     setSelectedEndDate(end);
   };
 
+  const onFormDataChange = (newFormData) => {
+    setCurrentFormData(newFormData);
+  };
+
+  //* ДЛЯ ВІДОБРАЖЕННЯ СПИСКУ ТАБЛИЦІ
+  //* по дефолту
+
+  const formatDate = (date) => {
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0"); // Месяцы начинаются с 0, поэтому добавляем 1
+    const year = date.getFullYear();
+    return `${year}-${month}-${day}`;
+  };
+
+  const getCurrentDate = useCallback(() => {
+    return formatDate(new Date());
+  }, []);
+
+  const getDateFromDaysAgo = useCallback((daysAgo) => {
+    const date = new Date();
+    date.setDate(date.getDate() - daysAgo);
+    return formatDate(date);
+  }, []);
+
+  useEffect(() => {
+    const currentDate = getCurrentDate();
+    const dateTenDaysAgo = getDateFromDaysAgo(10);
+
+    const url = `/reports`;
+    const options = {
+      params: {
+        page: 1,
+        limit: 20,
+        from_created_at: dateTenDaysAgo,
+        to_created_at: currentDate,
+      },
+    };
+
+    $api
+      .get(url, options)
+      .then((response) => {
+        setData(response.data.reports);
+      })
+      .catch((error) => {
+        console.error(
+          "Error fetching data:",
+          error.response ? error.response.data : error
+        );
+      });
+  }, [getCurrentDate, getDateFromDaysAgo]);
+
   //* ДЛЯ ВІДОБРАЖЕННЯ СПИСКУ ТАБЛИЦІ
   const onButtonClick = () => {
     if (selectedStartDate && selectedEndDate) {
-      const url = `/reports?page=1&limit=20&from_created_at=${selectedStartDate}&to_created_at=${selectedEndDate}`;
+      const initialParams = {
+        page: 1,
+        from_created_at: selectedStartDate,
+        to_created_at: selectedEndDate,
+        ...currentFormData,
+      };
+
+      const params = Object.keys(initialParams)
+        .filter((key) => initialParams[key]) // Отбираем только те ключи, значения которых заданы
+        .reduce((obj, key) => {
+          obj[key] = initialParams[key]; // Создаем новый объект с отобранными ключами
+          return obj;
+        }, {});
+
+      const queryString = new URLSearchParams(params).toString();
+      const url = `/reports?${queryString}`;
+      console.log(url);
 
       $api
         .get(url)
@@ -33,7 +117,10 @@ export const Marks = ({userData}) => {
           setTotalPages(response.data.total_pages);
         })
         .catch((error) => {
-          console.error("Error fetching data:", error);
+          console.error(
+            "Error fetching data:",
+            error.response ? error.response.data : error
+          );
         });
     } else {
       console.warn(
@@ -42,6 +129,7 @@ export const Marks = ({userData}) => {
     }
   };
 
+  //* ПАГІНАЦІЯ
   const fetchData = (url) => {
     $api.get(url).then((response) => {
       setData(response.data.reports);
@@ -51,33 +139,66 @@ export const Marks = ({userData}) => {
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
-    const newUrl = `/reports?page=${page}&limit=20&from_created_at=${selectedStartDate}&to_created_at=${selectedEndDate}`;
-    fetchData(newUrl);
+    const initialParams = {
+      page: page,
+      from_created_at: selectedStartDate,
+      to_created_at: selectedEndDate,
+      ...currentFormData,
+    };
+
+    const params = Object.keys(initialParams)
+      .filter((key) => initialParams[key]) // Отбираем только те ключи, значения которых заданы
+      .reduce((obj, key) => {
+        obj[key] = initialParams[key]; // Создаем новый объект с отобранными ключами
+        return obj;
+      }, {});
+
+    const queryString = new URLSearchParams(params).toString();
+    const url = `/reports?${queryString}`;
+    fetchData(url);
   };
 
   return (
     <div className="container-marks-forms">
-      <div className="calendar-marks-forms">
-        <DatepickerComponent onDateChange={onDateChange} />
-        <button type="button" className="btn-calendar" onClick={onButtonClick}>
-          Знайти
-        </button>
-      </div>
-      <div>
-        <ItemFormset data={data} userData={userData}/>
-      </div>
-      <div className="pagination">
-        {totalPages > 1 && Array.from({ length: totalPages }).map((_, index) => (
+      <div className="calendar-saved-forms">
+        <div className="management-saved-forms">
+          <div>
+            <DatepickerComponent
+              onDateChange={onDateChange}
+              startDate={thirtyDaysAgo}
+              endDate={currentDate}
+            />
+          </div>
+
+          <ReportManagement
+            userData={userData}
+            onFormDataChange={onFormDataChange}
+          />
           <button
-            key={index}
-            className={`pagination-button ${
-              index + 1 === currentPage ? "active" : ""
-            }`}
-            onClick={() => handlePageChange(index + 1)}
+            type="button"
+            className="btn-calendar"
+            onClick={onButtonClick}
           >
-            {index + 1}
+            Знайти
           </button>
-        ))}
+        </div>
+      </div>
+      <div className="container-marks-forms-size">
+        <ItemFormset data={data} userData={userData} />
+        <div className="pagination">
+          {totalPages > 1 &&
+            Array.from({ length: totalPages }).map((_, index) => (
+              <button
+                key={index}
+                className={`pagination-button ${
+                  index + 1 === currentPage ? "active" : ""
+                }`}
+                onClick={() => handlePageChange(index + 1)}
+              >
+                {index + 1}
+              </button>
+            ))}
+        </div>
       </div>
     </div>
   );

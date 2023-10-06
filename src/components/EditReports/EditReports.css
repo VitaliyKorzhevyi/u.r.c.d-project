@@ -2,7 +2,8 @@
   margin: 0 auto;
   max-width: 1700px;
   display: flex;
-  gap: 12px;
+  gap: 8px;
+  
 }
 
 .container-saved-forms td {
@@ -28,6 +29,7 @@
 }
 
 .btn-calendar {
+  width: 200px;
   margin-top: 12px;
   padding: 14px 28px;
 
@@ -43,6 +45,7 @@
 }
 
 .btn-calendar:hover {
+  color: #fff;
   background-color: #72aefd;
   border-color: #1b7eff;
 }
@@ -265,11 +268,11 @@
 }
 
 .yellow-background {
-  background-color: rgb(255, 248, 234);
+  background-color: #fffde7;
 }
 
 .green-background {
-  background-color: rgb(228, 248, 228);
+  background-color: #eaf6f0;
 }
 
 .history-input {

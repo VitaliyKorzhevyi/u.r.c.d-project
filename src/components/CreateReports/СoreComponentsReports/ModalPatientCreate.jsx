@@ -34,7 +34,7 @@ export const ModalPatientCreate = ({
   //* ПЕРЕВІРКА ДЛЯ ІНПУТІВ
   const MAIN_FIELDS = {
     first_name: '"Ім\'я"',
-    last_name: '"Призвіще"',
+    last_name: '"Прізвище"',
     middle_name: '"По-батькові"',
     birthday: '"Дата народження"',
   };
@@ -156,7 +156,7 @@ export const ModalPatientCreate = ({
             <label>
               <input
                 type="text"
-                placeholder="Призвіще"
+                placeholder="Прізвище"
                 value={last_name}
                 onChange={(e) =>
                   setLastName(

@@ -222,20 +222,19 @@ export const EditReports = ({ userData }) => {
   const currentDate = new Date();
   const thirtyDaysAgo = new Date(currentDate);
   thirtyDaysAgo.setDate(currentDate.getDate() - 30);
-  
+
   const formattedThirtyDaysAgo = formatDateDefoult(thirtyDaysAgo);
   const formattedCurrentDate = formatDateDefoult(currentDate);
-  
-  const [selectedStartDate, setSelectedStartDate] = useState(formattedThirtyDaysAgo);
-  const [selectedEndDate, setSelectedEndDate] = useState(formattedCurrentDate);
-  
 
+  const [selectedStartDate, setSelectedStartDate] = useState(
+    formattedThirtyDaysAgo
+  );
+  const [selectedEndDate, setSelectedEndDate] = useState(formattedCurrentDate);
 
   const onDateChange = (start, end) => {
     setSelectedStartDate(start);
     setSelectedEndDate(end);
   };
-
 
   //* ДЛЯ ВІДОБРАЖЕННЯ СПИСКУ ТАБЛИЦІ
   //* по дефолту
@@ -286,7 +285,7 @@ export const EditReports = ({ userData }) => {
 
   //* при натисканні на кнопку
 
-  const handleFormDataChange = (newFormData) => {
+  const onFormDataChange = (newFormData) => {
     setCurrentFormData(newFormData);
   };
 
@@ -298,7 +297,7 @@ export const EditReports = ({ userData }) => {
         to_created_at: selectedEndDate,
         ...currentFormData,
       };
-console.log(initialParams);
+
       const params = Object.keys(initialParams)
         .filter((key) => initialParams[key]) // Отбираем только те ключи, значения которых заданы
         .reduce((obj, key) => {
@@ -347,9 +346,9 @@ console.log(initialParams);
     };
 
     const params = Object.keys(initialParams)
-      .filter((key) => initialParams[key]) // Отбираем только те ключи, значения которых заданы
+      .filter((key) => initialParams[key])
       .reduce((obj, key) => {
-        obj[key] = initialParams[key]; // Создаем новый объект с отобранными ключами
+        obj[key] = initialParams[key]; 
         return obj;
       }, {});
 
@@ -445,7 +444,7 @@ console.log(initialParams);
 
           <ReportManagement
             userData={userData}
-            onFormDataChange={handleFormDataChange}
+            onFormDataChange={onFormDataChange}
           />
           <button
             type="button"

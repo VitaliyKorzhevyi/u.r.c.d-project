@@ -6,20 +6,21 @@ import { DayInputFilter } from "./CoreComponentsFilter/DayInputFilter";
 import { DiagnosesInputFilter } from "./CoreComponentsFilter/DiagnosesInputFilter";
 import { OperatingInputFilter } from "./CoreComponentsFilter/OperatingInputFilter";
 import { ModalPatientSearch } from "../CreateReports/СoreComponentsReports/ModalPatientSearch";
+import { ModalUserSearch } from "./CoreComponentsFilter/ModalUserSearch";
 
 import "./ReportManagement.css";
 
 export const ReportManagement = ({ userData, onFormDataChange }) => {
   const [formData, setFormData] = useState({
-    preoperative_day_id: '',
-    diagnosis_id: '',
-    operation_id: '',
-    patient_id: '',
-    report_type: '',
-    limit: '',
-    history_number: '',
-    sort: '',
-    user_id: '',
+    preoperative_day_id: "",
+    diagnosis_id: "",
+    operation_id: "",
+    patient_id: "",
+    report_type: "",
+    limit: "",
+    history_number: "",
+    sort: "",
+    user_id: "",
   });
 
   useEffect(() => {
@@ -92,6 +93,25 @@ export const ReportManagement = ({ userData, onFormDataChange }) => {
 
   const onSetPatientFullName = (fullName) => {
     setPatientFullName(fullName);
+  };
+//* мм
+  //* ВИБІР ЮЗЕРА
+  const [isModalOpenSearchUser, setModalOpenSearchUser] = useState(false);
+  const [userFullName, setUserFullName] = useState("");
+
+  const toggleModalSearchUser = () => {
+    setModalOpenSearchUser(!isModalOpenSearchUser);
+  };
+
+  const onUserSelect = (selectedUserId) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      user_id: selectedUserId,
+    }));
+  };
+
+  const onSetUserFullName = (fullName) => {
+    setUserFullName(fullName);
   };
 
   //* ТИП ЗВІТУ
@@ -246,11 +266,26 @@ export const ReportManagement = ({ userData, onFormDataChange }) => {
             <p>
               <strong>Пошук по користувачу</strong>
             </p>
+            <button
+              type="button"
+              className="btn-search-patient-filter"
+              onClick={() => {
+                toggleModalSearchUser();
+              }}
+            >
+              <i className="bx bx-search bx-sm"></i>
+            </button>
           </div>
 
-          <p className="input-patient-fullname-filter">{patientFullName}</p>
+          <p className="input-patient-fullname-filter">{userFullName}</p>
         </li>
       </ul>
+      <ModalUserSearch
+        isOpen={isModalOpenSearchUser}
+        onClose={toggleModalSearchUser}
+        onGetId={onUserSelect}
+        onGetFullName={onSetUserFullName}
+      />
       <ModalPatientSearch
         isOpen={isModalOpenSearch}
         onClose={toggleModalSearch}
