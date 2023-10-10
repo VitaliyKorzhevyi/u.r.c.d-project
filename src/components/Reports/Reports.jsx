@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+
 import { CreateReports } from "../CreateReports/CreateReports";
 import { EditReports } from "../EditReports/EditReports";
 import { Marks } from "../Marks/Marks";
@@ -42,12 +43,15 @@ const AccessibleButton = ({
 export const Reports = ({ userData }) => {
   const [openModal, setOpenModal] = useState(null);
 
-  const openCreateModal = () => setOpenModal("create");
+  const openCreateModal = () => 
+    setOpenModal("create");
+  ;
   const openEditModal = () => setOpenModal("edit");
   const openMarksModal = () => setOpenModal("marks");
   const openDataEditModal = () => setOpenModal("dataEdit");
   const openFullInfoModal = () => setOpenModal("fullInfo");
   const closeModal = () => setOpenModal(null);
+
 
   return (
     <div className="reports-container">

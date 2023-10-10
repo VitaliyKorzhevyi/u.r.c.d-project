@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { toast } from "react-toastify";
 import DatepickerComponent from "./Сalendar";
+import ReactPaginate from "react-paginate";
 import $api from "../../api/api";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -15,7 +16,7 @@ import { MedicamentInputEditing } from "./СoreComponentsReports/MedicamentInput
 
 import { ModalPatientSearch } from "../CreateReports/СoreComponentsReports/ModalPatientSearch";
 
-import { ReportManagement } from "../ReportManagement/ReportManagement";
+import { ReportsManagement } from "../ReportsManagement/ReportsManagement";
 
 import "./EditReports.css";
 
@@ -29,12 +30,9 @@ export const EditReports = ({ userData }) => {
 
   const [loading, setLoading] = useState(false);
 
-  const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
 
   const [currentFormData, setCurrentFormData] = useState({});
-
-  console.log("Редагувіання таблиці", userData);
 
   //* ДЛЯ ЗБЕРАГІННЯ ВІДРЕДАГОВАНИХ ЗНАЧЕНЬ
   const [formData, setFormData] = useState({
@@ -61,7 +59,7 @@ export const EditReports = ({ userData }) => {
 
   useEffect(() => {
     $api.get("/preoperative-days").then((response) => {
-      console.log("Доба:", response.data);
+      // console.log("Доба:", response.data);
       setDays(response.data);
     });
   }, []);
@@ -274,6 +272,8 @@ export const EditReports = ({ userData }) => {
       .get(url, options)
       .then((response) => {
         setData(response.data.reports);
+        setTotalPages(response.data.total_pages);
+        console.log("Total pages from server:", response.data.total_pages);
       })
       .catch((error) => {
         console.error(
@@ -314,6 +314,7 @@ export const EditReports = ({ userData }) => {
         .then((response) => {
           setData(response.data.reports);
           setTotalPages(response.data.total_pages);
+          console.log("Total pages from server:", response.data.total_pages);
         })
         .catch((error) => {
           console.error(
@@ -337,7 +338,7 @@ export const EditReports = ({ userData }) => {
   };
 
   const handlePageChange = (page) => {
-    setCurrentPage(page);
+    // setCurrentPage(page);
     const initialParams = {
       page: page,
       from_created_at: selectedStartDate,
@@ -348,7 +349,7 @@ export const EditReports = ({ userData }) => {
     const params = Object.keys(initialParams)
       .filter((key) => initialParams[key])
       .reduce((obj, key) => {
-        obj[key] = initialParams[key]; 
+        obj[key] = initialParams[key];
         return obj;
       }, {});
 
@@ -417,7 +418,7 @@ export const EditReports = ({ userData }) => {
       .then((response) => {
         const item = response.data;
         onFormDataById(item);
-        toast.success(`Нова таблиця успішно оновлена`, {
+        toast.success(`Новий звіт успішно оновлена`, {
           autoClose: 1500,
         });
       })
@@ -442,7 +443,7 @@ export const EditReports = ({ userData }) => {
             />
           </div>
 
-          <ReportManagement
+          <ReportsManagement
             userData={userData}
             onFormDataChange={onFormDataChange}
           />
@@ -526,9 +527,9 @@ export const EditReports = ({ userData }) => {
                             <i
                               className={`bx ${
                                 itemKey === activeKey
-                                  ? "rotate-180"
-                                  : "rotate-0"
-                              } bx-chevron-down bx-md`}
+                                  ? "bx-refresh bx-md"
+                                  : "bx-chevron-down bx-md"
+                              }`}
                             ></i>
                           </td>
                         </tr>
@@ -809,21 +810,24 @@ export const EditReports = ({ userData }) => {
               );
             }
           )}
+          {totalPages > 1 && (
+            <ReactPaginate
+              previousLabel={<i className="bx bxs-chevron-left bx-md"></i>}
+              nextLabel={<i className="bx bxs-chevron-right bx-md"></i>}
+              forcePage={totalPages - 1}
+              breakLabel={"..."}
+              breakClassName={"break-me"}
+              pageCount={totalPages}
+              marginPagesDisplayed={2}
+              pageRangeDisplayed={5}
+              onPageChange={({ selected }) => handlePageChange(selected + 1)}
+              containerClassName={"pagination-edit-reports"}
+              subContainerClassName={"pagination-edit-reports-sub"}
+              activeClassName={"active"}
+              pageClassName={"page-item"}
+            />
+          )}
         </ul>
-        <div className="pagination">
-          {totalPages > 1 &&
-            Array.from({ length: totalPages }).map((_, index) => (
-              <button
-                key={index}
-                className={`pagination-button ${
-                  index + 1 === currentPage ? "active" : ""
-                }`}
-                onClick={() => handlePageChange(index + 1)}
-              >
-                {index + 1}
-              </button>
-            ))}
-        </div>
       </div>
 
       <ModalPatientSearch

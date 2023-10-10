@@ -6,8 +6,6 @@
   border-radius: 6px;
 }
 
-
-
 .user-info-table-size2 {
   width: 25%;
 }
@@ -61,15 +59,22 @@
 }
 
 .users-container {
-  max-width: 1200px;
+  max-width: 1700px;
   margin: 0 auto;
   padding: 40px 0px 0;
+}
+
+.big-container-users-management {
+  display: flex;
+  gap: 8px;
 }
 
 .users-list {
   display: flex;
   flex-direction: column;
   gap: 16px;
+
+  padding: 0 0 40px 0;
 }
 
 .user-info-table {
@@ -96,7 +101,6 @@
   margin-bottom: 36px;
 }
 
-
 .create-new-user {
   display: flex;
   align-items: center;
@@ -116,7 +120,6 @@
 
   box-shadow: -1px 1px 3px 1px #e0e0e0;
 }
-
 
 .create-new-user:hover,
 .create-new-user:focus {
@@ -181,4 +184,69 @@
 
 .user-details-size {
   width: 42%;
+} 
+
+.users-management-container {
+  max-width: 1200px;
+  flex: 1;
+  padding: 0 0 100px 0;
 }
+
+.users-sorting-container {
+  padding: 92px 0 0;
+  width: 230px;
+}
+
+.user-sorting-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.user-sorting-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.select-value-sort {
+  width: 100px;
+  height: 30px;
+}
+
+.inp-sort input {
+  width: 200px;
+  height: 30px;
+}
+
+.users-sorting-btn {
+  margin-top: 20px;
+}
+
+.users-sorting-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  width: 200px;
+
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+
+  cursor: pointer;
+  background-color: var(--green-btns-bg-color);
+  background-color: #c6dfff;
+  border: 2px solid #72aefd;
+  border-radius: 6px;
+
+  box-shadow: -1px 1px 3px 1px #e0e0e0;
+}
+
+.users-sorting-btn:hover,
+.users-sorting-btn:focus {
+  color: #fff;
+  background-color: #72aefd;
+  border-color: #1b7eff;
+}
+

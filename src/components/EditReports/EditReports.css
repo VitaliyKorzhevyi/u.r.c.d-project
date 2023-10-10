@@ -31,17 +31,18 @@
 .btn-calendar {
   width: 200px;
   margin-top: 12px;
-  padding: 14px 28px;
+  height: 40px;
 
   cursor: pointer;
 
   background-color: #c6dfff;
-  border: 3px solid #72aefd;
-  border-radius: 8px;
+  border: 2px solid #72aefd;
+  border-radius: 6px;
+  box-shadow: -1px 1px 3px 1px #e0e0e0;
 
   font-family: "Montserrat", sans-serif;
-  font-weight: 400;
-  font-size: 18px;
+  font-weight: 500;
+  font-size: 16px;
 }
 
 .btn-calendar:hover {
@@ -55,7 +56,7 @@
   flex-direction: column;
   gap: 12px;
   max-width: 1200px;
-  padding: 60px 0;
+  padding: 60px 0 100px;
 
   font-family: "Montserrat", sans-serif;
   font-weight: 500;
@@ -318,4 +319,32 @@
 
 .btn-save-table[disabled] {
   cursor: default;
+}
+
+.pagination-edit-reports {
+  padding: 20px 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.pagination-edit-reports .active {
+  color: #1b7cfa;
+  background-color: #f0f0f0;
+}
+
+
+.pagination-edit-reports .page-item {
+  padding: 4px;
+  cursor: pointer;
+  border: 1px solid #000;
+}
+
+/* .pagination-edit-reports .break-me {
+  
+} */
+
+.pagination-edit-reports .previous, .pagination-edit-reports .next {
+  cursor: pointer;
 }

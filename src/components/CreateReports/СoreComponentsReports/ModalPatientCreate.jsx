@@ -35,7 +35,7 @@ export const ModalPatientCreate = ({
   const MAIN_FIELDS = {
     first_name: '"Ім\'я"',
     last_name: '"Прізвище"',
-    middle_name: '"По-батькові"',
+    middle_name: '"По батькові"',
     birthday: '"Дата народження"',
   };
   const getMissingFieldsMessage = (fields) => {
@@ -184,7 +184,7 @@ export const ModalPatientCreate = ({
             <label>
               <input
                 type="text"
-                placeholder="По-батькові"
+                placeholder="По батькові"
                 value={middle_name}
                 onChange={(e) =>
                   setMiddleName(

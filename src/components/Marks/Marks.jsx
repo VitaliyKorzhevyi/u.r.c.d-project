@@ -1,8 +1,9 @@
 import { useState, useEffect, useCallback } from "react";
 import $api from "../../api/api";
 import DatepickerComponent from "../EditReports/Сalendar";
+import ReactPaginate from "react-paginate";
 
-import { ReportManagement } from "../ReportManagement/ReportManagement";
+import { ReportsManagement } from "../ReportsManagement/ReportsManagement";
 import { ItemFormset } from "./ItemFormset";
 
 import "./Marks.css";
@@ -10,7 +11,7 @@ import "./Marks.css";
 export const Marks = ({ userData }) => {
   const [data, setData] = useState([]);
   const [currentFormData, setCurrentFormData] = useState({});
-  const [currentPage, setCurrentPage] = useState(1);
+
   const [totalPages, setTotalPages] = useState(0);
 
   //* ДЛЯ ВИБОРУ ДАТИ
@@ -80,6 +81,7 @@ export const Marks = ({ userData }) => {
       .get(url, options)
       .then((response) => {
         setData(response.data.reports);
+        setTotalPages(response.data.total_pages);
       })
       .catch((error) => {
         console.error(
@@ -138,7 +140,7 @@ export const Marks = ({ userData }) => {
   };
 
   const handlePageChange = (page) => {
-    setCurrentPage(page);
+    // setCurrentPage(page);
     const initialParams = {
       page: page,
       from_created_at: selectedStartDate,
@@ -170,7 +172,7 @@ export const Marks = ({ userData }) => {
             />
           </div>
 
-          <ReportManagement
+          <ReportsManagement
             userData={userData}
             onFormDataChange={onFormDataChange}
           />
@@ -185,20 +187,24 @@ export const Marks = ({ userData }) => {
       </div>
       <div className="container-marks-forms-size">
         <ItemFormset data={data} userData={userData} />
-        <div className="pagination">
-          {totalPages > 1 &&
-            Array.from({ length: totalPages }).map((_, index) => (
-              <button
-                key={index}
-                className={`pagination-button ${
-                  index + 1 === currentPage ? "active" : ""
-                }`}
-                onClick={() => handlePageChange(index + 1)}
-              >
-                {index + 1}
-              </button>
-            ))}
-        </div>
+
+        {totalPages > 1 && (
+          <ReactPaginate
+            previousLabel={<i className="bx bxs-chevron-left bx-md"></i>}
+            nextLabel={<i className="bx bxs-chevron-right bx-md"></i>}
+            forcePage={totalPages - 1}
+            breakLabel={"..."}
+            breakClassName={"break-me"}
+            pageCount={totalPages}
+            marginPagesDisplayed={2}
+            pageRangeDisplayed={5}
+            onPageChange={({ selected }) => handlePageChange(selected + 1)}
+            containerClassName={"pagination-edit-reports"}
+            subContainerClassName={"pagination-edit-reports-sub"}
+            activeClassName={"active"}
+            pageClassName={"page-item"}
+          />
+        )}
       </div>
     </div>
   );

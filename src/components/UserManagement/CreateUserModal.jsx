@@ -138,7 +138,7 @@ export const CreateUserModal = ({ isOpen, onClose, afterCreate }) => {
             <div className="modal-content-group">
               <input
                 type="text"
-                placeholder="По-батькові"
+                placeholder="По батькові"
                 value={middle_name}
                 onChange={(e) => setMiddleName(capitalize(e.target.value))}
               />

@@ -8,9 +8,9 @@ import { OperatingInputFilter } from "./CoreComponentsFilter/OperatingInputFilte
 import { ModalPatientSearch } from "../CreateReports/СoreComponentsReports/ModalPatientSearch";
 import { ModalUserSearch } from "./CoreComponentsFilter/ModalUserSearch";
 
-import "./ReportManagement.css";
+import "./ReportsManagement.css";
 
-export const ReportManagement = ({ userData, onFormDataChange }) => {
+export const ReportsManagement = ({ userData, onFormDataChange }) => {
   const [formData, setFormData] = useState({
     preoperative_day_id: "",
     diagnosis_id: "",
@@ -94,7 +94,7 @@ export const ReportManagement = ({ userData, onFormDataChange }) => {
   const onSetPatientFullName = (fullName) => {
     setPatientFullName(fullName);
   };
-//* мм
+
   //* ВИБІР ЮЗЕРА
   const [isModalOpenSearchUser, setModalOpenSearchUser] = useState(false);
   const [userFullName, setUserFullName] = useState("");

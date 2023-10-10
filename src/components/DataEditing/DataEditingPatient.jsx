@@ -32,7 +32,7 @@ export const DataEditingPatient = ({ patientData }) => {
     const fieldNames = {
       first_name: "Ім'я",
       last_name: "Прізвище",
-      middle_name: "По-батькові",
+      middle_name: "По батькові",
       birthday: "Дата народження",
     };
 
@@ -136,7 +136,7 @@ export const DataEditingPatient = ({ patientData }) => {
 
         <div className="form-patient-editing form3">
           <div>
-            <label htmlFor="middle_name">По-батькові:&nbsp;</label>
+            <label htmlFor="middle_name">По батькові:&nbsp;</label>
             <input
               id="middle_name"
               type="text"

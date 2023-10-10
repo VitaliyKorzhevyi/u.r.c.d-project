@@ -203,7 +203,7 @@ export const ModalPatientSearch = ({
             <label>
               <input
                 value={middleName}
-                placeholder="По-батькові"
+                placeholder="По батькові"
                 onChange={(e) => setMiddleName(capitalize(e.target.value))}
               />
             </label>

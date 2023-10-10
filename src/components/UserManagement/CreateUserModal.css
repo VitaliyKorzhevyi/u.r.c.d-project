@@ -56,7 +56,22 @@
 }
 
 .modal-content-group.password input {
-  width: 49%;
+  width: 48.9%;
+}
+
+.modal-content-password {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 0 10px 0;
+
+  background-color: #dddddd;
+  border-radius: 10px;
+}
+
+
+
+.modal-content-password input {
   padding: 6px 6px;
   border: 1px solid #949494;
   border-radius: 6px;
@@ -82,25 +97,44 @@
 }
 
 .modal-create-user-btn {
-    margin: 0 auto;
-    width: 120px;
-    padding: 6px 20px;
-    margin-top: 8px;
-    background-color: #e0e0e0;
-    border: 2px solid #afafaf;
-  
-    cursor: pointer;
-    border-radius: 6px;
-  
-    font-family: "Montserrat", sans-serif;
-    font-weight: 500;
-    font-size: 16px;
-  }
-  
-  
-  .modal-create-user-btn:hover {
-    background-color: #ceefdf;
-    border-color: #0aaf60;
-    color: #0aaf60;
-  }
-  
+  margin: 0 auto;
+  width: 120px;
+  padding: 6px 20px;
+  margin-top: 8px;
+  background-color: #e0e0e0;
+  border: 2px solid #afafaf;
+
+  cursor: pointer;
+  border-radius: 6px;
+
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+}
+
+.modal-create-user-btn:hover {
+  background-color: #ceefdf;
+  border-color: #0aaf60;
+  color: #0aaf60;
+}
+
+.modal-edit-user-btn-password {
+  width: 180px;
+  margin-right: 14px;
+  padding: 6px 20px;
+  background-color: #fcfcfc;
+  border: 2px solid #afafaf;
+
+  cursor: pointer;
+  border-radius: 6px;
+
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+}
+
+.modal-edit-user-btn-password:hover {
+  background-color: #ceefdf;
+  border-color: #0aaf60;
+  color: #0aaf60;
+}

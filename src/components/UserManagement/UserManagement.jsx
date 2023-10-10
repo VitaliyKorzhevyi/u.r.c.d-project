@@ -1,9 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import $api from "../../api/api";
 
 import UserBanCheckbox from "./UserBanCheckbox";
 import { CreateUserModal } from "./CreateUserModal";
 import { EditUserModal } from "./EditUserModal";
+import { UsersSorting } from "./UsersSorting";
 
 import "./UserManagement.css";
 
@@ -30,7 +31,7 @@ const UserDetails = ({ user }) => {
     const hours = String(date.getHours()).padStart(2, "0");
     const minutes = String(date.getMinutes()).padStart(2, "0");
 
-    return `${day}.${month}.${year} ${hours}:${minutes}`;
+    return `${day}.${month}.${year} (${hours}:${minutes})`;
   };
   return (
     <table className="user-details-table">
@@ -65,10 +66,10 @@ const UserDetails = ({ user }) => {
         </tr>
         <tr>
           <td colSpan="2">
-            <strong>Дата створення:</strong> {formatDate(user.created_at)}
+            <strong>Дата і час створення:</strong> {formatDate(user.created_at)}
           </td>
           <td colSpan="3">
-            <strong>Дата оновлення:</strong>{" "}
+            <strong>Дата і час оновлення:</strong>{" "}
             {user.updated_at ? formatDate(user.updated_at) : "не оновлювався"}
           </td>
         </tr>
@@ -81,7 +82,8 @@ const User = ({ user, afterCreate }) => {
   const [showDetails, setShowDetails] = useState(false);
   const [isModalOpenEdit, setModalOpenEdit] = useState(false);
   const [isUserBanned, setIsUserBanned] = useState(!user.is_active);
-
+  
+  console.log("Rendering User:", user.id, "isUserBanned:", isUserBanned);
   return (
     <div
       className={`user-info-container ${
@@ -144,42 +146,135 @@ const User = ({ user, afterCreate }) => {
 export const UserManagement = () => {
   const [users, setUsers] = useState([]);
   const [isModalOpenCreate, setModalOpenCreate] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+
+  const [currentFormData, setCurrentFormData] = useState({});
+
+  const onFormDataChange = (newFormData) => {
+    setCurrentFormData(newFormData);
+  };
 
   useEffect(() => {
-    fetchData();
+    const url = `/users`;
+    const options = {
+      params: {
+        page: 1,
+        limit: 20,
+      },
+    };
+
+    $api
+      .get(url, options)
+      .then((response) => {
+        setUsers(response.data.users);
+        setTotalPages(response.data.total_pages);
+      })
+      .catch((error) => {
+        console.error(
+          "Error fetching data:",
+          error.response ? error.response.data : error
+        );
+      });
   }, []);
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
-      const response = await $api.get("/users?page=1&limit=20");
+      const initialParams = {
+        page: 1,
+        ...currentFormData,
+      };
+
+      const params = Object.keys(initialParams)
+        .filter((key) => initialParams[key])
+        .reduce((obj, key) => {
+          obj[key] = initialParams[key];
+          return obj;
+        }, {});
+
+      const queryString = new URLSearchParams(params).toString();
+      const url = `/users?${queryString}`;
+      console.log(url);
+
+      const response = await $api.get(url);
       console.log(response.data.users);
       setUsers(response.data.users);
+      setTotalPages(response.data.total_pages);
     } catch (error) {
       console.log(error);
     }
+  }, [currentFormData]);
+
+  const paginationData = (url) => {
+    $api.get(url).then((response) => {
+      setUsers(response.data.users);
+      setTotalPages(response.data.total_pages);
+    });
+  };
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    const initialParams = {
+      page: page,
+      ...currentFormData,
+    };
+
+    const params = Object.keys(initialParams)
+      .filter((key) => initialParams[key]) // Отбираем только те ключи, значения которых заданы
+      .reduce((obj, key) => {
+        obj[key] = initialParams[key]; // Создаем новый объект с отобранными ключами
+        return obj;
+      }, {});
+
+    const queryString = new URLSearchParams(params).toString();
+    const url = `/users?${queryString}`;
+    paginationData(url);
   };
 
   return (
     <div className="users-container">
       <h2 className="title-users">Дані користувачів</h2>
-      {/* <div
-        className="container-btn-create-new-users"
-      >
-
-      </div> */}
-      <div className="container-btn-create-new-users">
-        <button
-          type="button"
-          className="create-new-user"
-          onClick={() => setModalOpenCreate(true)}
-        >
-          Додати користувача
-        </button>
-      </div>
-      <div className="users-list">
-        {users.map((user, index) => (
-          <User key={index} user={user} afterCreate={fetchData} />
-        ))}
+      <div className="big-container-users-management">
+        <div className="users-sorting-container">
+          <UsersSorting onFormDataChange={onFormDataChange} />
+          <button
+            type="button"
+            className="users-sorting-btn"
+            onClick={fetchData}
+          >
+            Знайти
+          </button>
+        </div>
+        <div className="users-management-container">
+          <div className="container-btn-create-new-users">
+            <button
+              type="button"
+              className="create-new-user"
+              onClick={() => setModalOpenCreate(true)}
+            >
+              Додати користувача
+            </button>
+          </div>
+          <div className="users-list">
+            {users.map((user) => (
+              <User key={user.id} user={user} afterCreate={fetchData} />
+            ))}
+          </div>
+          <div className="pagination">
+            {totalPages > 1 &&
+              Array.from({ length: totalPages }).map((_, index) => (
+                <button
+                  key={index}
+                  className={`pagination-button ${
+                    index + 1 === currentPage ? "active" : ""
+                  }`}
+                  onClick={() => handlePageChange(index + 1)}
+                >
+                  {index + 1}
+                </button>
+              ))}
+          </div>
+        </div>
       </div>
 
       <CreateUserModal

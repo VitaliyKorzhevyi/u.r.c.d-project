@@ -15,6 +15,30 @@ export const EditUserModal = ({ isOpen, onClose, afterCreate, userData }) => {
   const [username, setUsername] = useState(userData.username || "");
   const [password, setPassword] = useState("");
 
+  const onPasswordUser = () => {
+    const data = {
+      password: password,
+    };
+
+    const userId = userData.id;
+    const URL = `/users/${userId}`;
+    $api
+      .patch(URL, data)
+      .then((response) => {
+        console.log(response);
+          toast.success(`Пароль успішно оновлено`, {
+            autoClose: 1500,
+          });
+          onClose();
+          if (afterCreate) afterCreate();
+        
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+  };
+
   const onEditUser = () => {
     const data = {
       first_name: first_name || null,
@@ -25,13 +49,12 @@ export const EditUserModal = ({ isOpen, onClose, afterCreate, userData }) => {
       email: email || null,
       job_title: job_title || null,
       username: username || null,
-      password: password || null,
     };
 
     const userId = userData.id;
     const URL = `/users/${userId}`;
     $api
-      .patch(URL, data)
+      .put(URL, data)
       .then((response) => {
         console.log(response);
         const userId = response.data.id;
@@ -151,7 +174,7 @@ export const EditUserModal = ({ isOpen, onClose, afterCreate, userData }) => {
             <div className="modal-content-group">
               <input
                 type="text"
-                placeholder="По-батькові"
+                placeholder="По батькові"
                 value={middle_name}
                 onChange={(e) => setMiddleName(capitalize(e.target.value))}
               />
@@ -197,14 +220,6 @@ export const EditUserModal = ({ isOpen, onClose, afterCreate, userData }) => {
                 onChange={(e) => setUsername(e.target.value)}
               />
             </div>
-            <div className="modal-content-group password">
-              <input
-                type="password"
-                placeholder="Пароль"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </div>
           </div>
 
           <div className="modal-list-role-create">
@@ -224,6 +239,17 @@ export const EditUserModal = ({ isOpen, onClose, afterCreate, userData }) => {
           <button type="submit" className="modal-create-user-btn">
             Оновити
           </button>
+          <div className="modal-content-password">
+            <input
+              type="text"
+              placeholder="Пароль"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <button type="button" className="modal-edit-user-btn-password" onClick={onPasswordUser}>
+              Змінити пароль
+            </button>
+          </div>
         </form>
       </div>
     </div>
