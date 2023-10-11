@@ -123,9 +123,9 @@ export const ModalPatientCreate = ({
       // Очистити всі поля
       // resetFields();
 
-      // setTimeout(() => {
-      //   onClose();
-      // }, 600);
+      setTimeout(() => {
+        onClose();
+      }, 600);
     } catch (error) {
       if (error.response && error.response.status === 409) {
         toast.info("Пацієнт із таким номером телефону вже існує!", {
@@ -156,6 +156,7 @@ export const ModalPatientCreate = ({
             <label>
               <input
                 type="text"
+                autoComplete="off"
                 placeholder="Прізвище"
                 value={last_name}
                 onChange={(e) =>
@@ -169,6 +170,7 @@ export const ModalPatientCreate = ({
             <label>
               <input
                 type="text"
+                autoComplete="off"
                 placeholder="Ім'я"
                 value={first_name}
                 onChange={(e) =>
@@ -184,6 +186,7 @@ export const ModalPatientCreate = ({
             <label>
               <input
                 type="text"
+                autoComplete="off"
                 placeholder="По батькові"
                 value={middle_name}
                 onChange={(e) =>
@@ -197,6 +200,7 @@ export const ModalPatientCreate = ({
             <label>
               <input
                 type="date"
+                autoComplete="off"
                 value={birthday}
                 onChange={(e) => setBirthday(e.target.value)}
               />
@@ -206,6 +210,7 @@ export const ModalPatientCreate = ({
             <label>
               <input
                 type="email"
+                autoComplete="off"
                 placeholder="Пошта"
                 value={email}
                 pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
@@ -215,6 +220,7 @@ export const ModalPatientCreate = ({
             <label>
               <input
                 type="tel"
+                autoComplete="off"
                 value={phone}
                 placeholder="Телефон"
                 onChange={(e) => {

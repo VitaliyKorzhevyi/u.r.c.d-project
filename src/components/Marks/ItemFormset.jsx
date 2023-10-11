@@ -192,6 +192,9 @@ export const ItemFormset = ({ data, userData }) => {
           <li key={itemId} className="item-formset">
             <div className="mini-form">
               <table>
+                <thead>
+                  
+                </thead>
                 <tbody>
                   <tr>
                     <td className={`size-table-formset ${type}-background`}>
@@ -223,8 +226,8 @@ export const ItemFormset = ({ data, userData }) => {
                     >
                       <i
                         className={`bx ${
-                          activeItemId === itemId ? "rotate-180" : "rotate-0"
-                        } bx-chevron-down bx-md`}
+                          activeItemId === itemId ? "bx-refresh bx-md" : "bx-chevron-down bx-md"
+                        }`}
                       ></i>
                     </td>
                   </tr>
@@ -337,6 +340,7 @@ export const ItemFormset = ({ data, userData }) => {
                               <div className="custom-checkbox">
                                 <input
                                   type="checkbox"
+                                  autoComplete="off"
                                   id={`pharmacy-${row.id}`}
                                   className="hidden-checkbox"
                                   checked={
@@ -386,6 +390,7 @@ export const ItemFormset = ({ data, userData }) => {
                             <div className="custom-checkbox">
                               <input
                                 type="checkbox"
+                                autoComplete="off"
                                 id={`pharmacy-${row.id}`}
                                 className="hidden-checkbox"
                                 checked={

@@ -95,9 +95,9 @@
 
 .btn-search-patient-filter:hover,
 .btn-search-patient-filter:focus {
-  color: var(--white-btns-color);
-  background-color: var(--secondary-bg-color);
-  border: 2px solid #194488;
+  color: #fff;
+  background-color: #72aefd;
+  border-color: #1b7eff;
 }
 
 .input-patient-fullname-filter {

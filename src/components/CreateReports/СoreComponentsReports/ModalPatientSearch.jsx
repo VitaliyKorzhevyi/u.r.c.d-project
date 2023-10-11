@@ -5,7 +5,6 @@ import $api from "../../../api/api";
 
 import "./ModalPatientSearch.css";
 
-
 export const ModalPatientSearch = ({
   isOpen,
   onClose,
@@ -47,39 +46,44 @@ export const ModalPatientSearch = ({
       .join("&");
   }, []);
 
-  const fetchData = useCallback(async (params, nextPage = 1) => {
-    if (!validateParams(params)) return;
-    const queryString = createQueryString(params);
-    console.log("Sending request with params:", queryString);
-    if (!queryString) return;
-    try {
-      const response = await $api.get(
-        `patients?page=${nextPage}&limit=20&${queryString}&sort=-id`
-      );
-      if (!response.data.patients.length) {
-        toast.warn("Пацієнт не знайдений.");
-      } else {
-        setPatients(prevPatients => {
-          const updatedPatients = [...prevPatients, ...response.data.patients];
-          return updatedPatients.filter(
+  const fetchData = useCallback(
+    async (params, nextPage = 1) => {
+      if (!validateParams(params)) return;
+      const queryString = createQueryString(params);
+      console.log("Sending request with params:", queryString);
+      if (!queryString) return;
+      try {
+        const response = await $api.get(
+          `patients?page=${nextPage}&limit=20&${queryString}&sort=-id`
+        );
+        if (!response.data.patients.length) {
+          toast.warn("Пацієнт не знайдений.");
+        } else {
+          setPatients((prevPatients) => {
+            const updatedPatients = [
+              ...prevPatients,
+              ...response.data.patients,
+            ];
+            return updatedPatients.filter(
               (patient, index, self) =>
-                  index === self.findIndex((p) => p.id === patient.id)
-          );
-      });
-        console.log(response.data.patients);
+                index === self.findIndex((p) => p.id === patient.id)
+            );
+          });
+          console.log(response.data.patients);
+        }
+        return response;
+      } catch (error) {
+        console.error("Пошук не вдався", error);
+        toast.error("Помилка під час пошуку. Будь ласка, спробуйте пізніше.");
       }
-      return response;
-    } catch (error) {
-      console.error("Пошук не вдався", error);
-      toast.error("Помилка під час пошуку. Будь ласка, спробуйте пізніше.");
-    }
-  }, [validateParams, createQueryString]);
+    },
+    [validateParams, createQueryString]
+  );
 
   const handleScroll = useCallback(
     (e) => {
       const bottom =
-        e.target.scrollHeight - e.target.scrollTop ===
-        e.target.clientHeight;
+        e.target.scrollHeight - e.target.scrollTop === e.target.clientHeight;
       if (bottom && !loadingMore) {
         setLoadingMore(true);
         setPage((prev) => prev + 1);
@@ -96,16 +100,26 @@ export const ModalPatientSearch = ({
         ).finally(() => setLoadingMore(false));
       }
     },
-    [loadingMore, lastName, firstName, middleName, phone, email, birthday, page, fetchData]
+    [
+      loadingMore,
+      lastName,
+      firstName,
+      middleName,
+      phone,
+      email,
+      birthday,
+      page,
+      fetchData,
+    ]
   );
 
   useEffect(() => {
     const listElem = document.querySelector(".patients-list");
     if (listElem) {
-        listElem.addEventListener("scroll", handleScroll);
-        return () => listElem.removeEventListener("scroll", handleScroll);
+      listElem.addEventListener("scroll", handleScroll);
+      return () => listElem.removeEventListener("scroll", handleScroll);
     }
-}, [handleScroll]);
+  }, [handleScroll]);
 
   if (!isOpen) return null;
 
@@ -163,7 +177,6 @@ export const ModalPatientSearch = ({
     onClose();
   };
 
-
   return (
     <div className="modal-overlay">
       <div className="modal-content">
@@ -174,11 +187,7 @@ export const ModalPatientSearch = ({
             onClose();
           }}
         >
-                <img
-          src="/images/cross.svg"
-          alt="Х"
-          className="logo-autorization"
-        />
+          <img src="/images/cross.svg" alt="Х" className="logo-autorization" />
         </div>
         <p className="modal-search-title">Пошук пацієнта</p>
 
@@ -186,6 +195,7 @@ export const ModalPatientSearch = ({
           <div className="input-container">
             <label>
               <input
+                autoComplete="off"
                 value={lastName}
                 placeholder="Прізвище"
                 onChange={(e) => setLastName(capitalize(e.target.value))}
@@ -193,6 +203,7 @@ export const ModalPatientSearch = ({
             </label>
             <label>
               <input
+                autoComplete="off"
                 value={firstName}
                 placeholder="Ім'я"
                 onChange={(e) => setFirstName(capitalize(e.target.value))}
@@ -202,6 +213,7 @@ export const ModalPatientSearch = ({
           <div className="input-container">
             <label>
               <input
+                autoComplete="off"
                 value={middleName}
                 placeholder="По батькові"
                 onChange={(e) => setMiddleName(capitalize(e.target.value))}
@@ -210,6 +222,7 @@ export const ModalPatientSearch = ({
 
             <label>
               <input
+                autoComplete="off"
                 type="date"
                 value={birthday}
                 onChange={(e) => setBirthday(e.target.value)}
@@ -219,6 +232,7 @@ export const ModalPatientSearch = ({
           <div className="input-container">
             <label>
               <input
+                autoComplete="off"
                 value={email}
                 placeholder="Пошта"
                 onChange={(e) => setEmail(e.target.value)}
@@ -227,6 +241,7 @@ export const ModalPatientSearch = ({
             <label>
               <input
                 type="text"
+                autoComplete="off"
                 placeholder="Телефон"
                 value={phone}
                 onChange={onPhoneChange}

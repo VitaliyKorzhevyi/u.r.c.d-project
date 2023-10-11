@@ -503,6 +503,7 @@ export const EditReports = ({ userData }) => {
                                 <input
                                   id="historyInput"
                                   type="text"
+                                  autoComplete="off"
                                   title={history_number}
                                   style={{ textAlign: "center" }}
                                   className="history-input"
@@ -686,6 +687,7 @@ export const EditReports = ({ userData }) => {
                                     <input
                                       type="number"
                                       className="history-input"
+                                      autoComplete="off"
                                       style={{ textAlign: "center" }}
                                       value={row.quantity_of_medicament}
                                       onChange={(e) =>
@@ -736,6 +738,7 @@ export const EditReports = ({ userData }) => {
                                   ) : (
                                     <input
                                       type="text"
+                                      autoComplete="off"
                                       className="history-input"
                                       title={row.notation || ""}
                                       value={row.notation || ""}
@@ -814,7 +817,6 @@ export const EditReports = ({ userData }) => {
             <ReactPaginate
               previousLabel={<i className="bx bxs-chevron-left bx-md"></i>}
               nextLabel={<i className="bx bxs-chevron-right bx-md"></i>}
-              forcePage={totalPages - 1}
               breakLabel={"..."}
               breakClassName={"break-me"}
               pageCount={totalPages}

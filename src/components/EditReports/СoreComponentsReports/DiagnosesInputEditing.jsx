@@ -14,7 +14,7 @@ export const DiagnosesInputEditing = ({
     setInputValue(selectedItem || "");
   }, [selectedItem]);
 
-  const MIN_INPUT_LENGTH = 2;
+  const MIN_INPUT_LENGTH = 1;
 
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
@@ -33,6 +33,7 @@ export const DiagnosesInputEditing = ({
         className="medicament-input input-size-save-table"
           id="diagnosesInput"
           type="text"
+          autoComplete="off"
           title={inputValue}
           value={inputValue}
           onChange={handleInputChange}

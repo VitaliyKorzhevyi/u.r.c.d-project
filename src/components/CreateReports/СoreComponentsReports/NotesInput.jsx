@@ -17,6 +17,7 @@ export const NotesInput = ({
   return (
     <input
       type="text"
+      autoComplete="off"
       name="notation"
       className="form1-table-text-name"
       value={value}

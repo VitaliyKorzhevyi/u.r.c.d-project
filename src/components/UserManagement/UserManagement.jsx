@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback } from "react";
 import $api from "../../api/api";
 
+import ReactPaginate from "react-paginate";
+
 import UserBanCheckbox from "./UserBanCheckbox";
 import { CreateUserModal } from "./CreateUserModal";
 import { EditUserModal } from "./EditUserModal";
@@ -82,8 +84,7 @@ const User = ({ user, afterCreate }) => {
   const [showDetails, setShowDetails] = useState(false);
   const [isModalOpenEdit, setModalOpenEdit] = useState(false);
   const [isUserBanned, setIsUserBanned] = useState(!user.is_active);
-  
-  console.log("Rendering User:", user.id, "isUserBanned:", isUserBanned);
+
   return (
     <div
       className={`user-info-container ${
@@ -146,7 +147,6 @@ const User = ({ user, afterCreate }) => {
 export const UserManagement = () => {
   const [users, setUsers] = useState([]);
   const [isModalOpenCreate, setModalOpenCreate] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
 
   const [currentFormData, setCurrentFormData] = useState({});
@@ -213,7 +213,7 @@ export const UserManagement = () => {
   };
 
   const handlePageChange = (page) => {
-    setCurrentPage(page);
+    // setCurrentPage(page);
     const initialParams = {
       page: page,
       ...currentFormData,
@@ -261,18 +261,23 @@ export const UserManagement = () => {
             ))}
           </div>
           <div className="pagination">
-            {totalPages > 1 &&
-              Array.from({ length: totalPages }).map((_, index) => (
-                <button
-                  key={index}
-                  className={`pagination-button ${
-                    index + 1 === currentPage ? "active" : ""
-                  }`}
-                  onClick={() => handlePageChange(index + 1)}
-                >
-                  {index + 1}
-                </button>
-              ))}
+
+          {totalPages > 1 && (
+            <ReactPaginate
+              previousLabel={<i className="bx bxs-chevron-left bx-md"></i>}
+              nextLabel={<i className="bx bxs-chevron-right bx-md"></i>}
+              breakLabel={"..."}
+              breakClassName={"break-me"}
+              pageCount={totalPages}
+              marginPagesDisplayed={2}
+              pageRangeDisplayed={5}
+              onPageChange={({ selected }) => handlePageChange(selected + 1)}
+              containerClassName={"pagination-edit-reports"}
+              subContainerClassName={"pagination-edit-reports-sub"}
+              activeClassName={"active"}
+              pageClassName={"page-item"}
+            />
+          )}
           </div>
         </div>
       </div>

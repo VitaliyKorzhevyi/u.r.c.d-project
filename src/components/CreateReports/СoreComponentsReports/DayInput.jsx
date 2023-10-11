@@ -23,11 +23,12 @@ export const DayInput = ({
   const onInputChange = (e) => {
     const inputValue = e.target.value;
     setInputValue(inputValue);
-
+  
     if (inputValue.length >= 1) {
+      const regex = new RegExp(inputValue.split('').join('.*'), 'i'); 
       setFilteredDays(
         days.filter((day) =>
-          day.title.toLowerCase().startsWith(inputValue.toLowerCase())
+          regex.test(day.title)
         )
       );
     } else {

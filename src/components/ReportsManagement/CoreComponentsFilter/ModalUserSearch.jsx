@@ -180,6 +180,7 @@ export const ModalUserSearch = ({
           <div className="input-container">
             <label>
               <input
+              autoComplete="off"
                 value={lastName}
                 placeholder="Прізвище"
                 onChange={(e) => setLastName(capitalize(e.target.value))}
@@ -187,6 +188,7 @@ export const ModalUserSearch = ({
             </label>
             <label>
               <input
+              autoComplete="off"
                 value={firstName}
                 placeholder="Ім'я"
                 onChange={(e) => setFirstName(capitalize(e.target.value))}
@@ -196,6 +198,7 @@ export const ModalUserSearch = ({
           <div className="input-container">
             <label>
               <input
+              autoComplete="off"
                 value={middleName}
                 placeholder="По батькові"
                 onChange={(e) => setMiddleName(capitalize(e.target.value))}
@@ -205,6 +208,7 @@ export const ModalUserSearch = ({
             <label>
               <input
                 type="date"
+                autoComplete="off"
                 value={birthday}
                 onChange={(e) => setBirthday(e.target.value)}
               />
@@ -213,6 +217,7 @@ export const ModalUserSearch = ({
           <div className="input-container">
             <label>
               <input
+              autoComplete="off"
                 value={email}
                 placeholder="Пошта"
                 onChange={(e) => setEmail(e.target.value)}
@@ -221,6 +226,7 @@ export const ModalUserSearch = ({
             <label>
               <input
                 type="text"
+                autoComplete="off"
                 placeholder="Телефон"
                 value={phone}
                 onChange={onPhoneChange}

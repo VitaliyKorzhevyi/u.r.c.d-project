@@ -42,7 +42,7 @@ $api.interceptors.response.use(response => {
                 console.log("Failed to refresh tokens, redirecting to root...");
                 setTimeout(() => {
                     window.location.href = "/";
-                }, 600);
+                }, 100);
             } else {
                 console.error("Unknown error occurred:", refreshError);
                 return Promise.reject(refreshError);

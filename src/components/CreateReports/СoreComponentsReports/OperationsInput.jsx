@@ -31,10 +31,11 @@ export const OperationsInput = ({
     inputValue = capitalizeFirstLetter(inputValue);
     setInputValue(inputValue);
 
-    if (inputValue.length >= 3) {
+    if (inputValue.length >= 1) {
+      const regex = new RegExp(inputValue.split('').join('.*'), 'i');
       setFilteredOperations(
         operations.filter((operations) =>
-          operations.title.toLowerCase().startsWith(inputValue.toLowerCase())
+        regex.test(operations.title)
         )
       );
     } else {

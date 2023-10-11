@@ -9,7 +9,7 @@ export const MedicamentInputEditing = ({
 }) => {
   const [inputValue, setInputValue] = useState(selectedItem || "");
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
-  const MIN_INPUT_LENGTH = 3;
+  const MIN_INPUT_LENGTH = 1;
 
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
@@ -24,6 +24,7 @@ export const MedicamentInputEditing = ({
         <input
           className="medicament-input input-size-save-table"
           type="text"
+          autoComplete="off"
           title={inputValue}
           value={inputValue}
           onChange={handleInputChange}

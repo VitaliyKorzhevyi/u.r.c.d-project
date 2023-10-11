@@ -1,19 +1,107 @@
 .admin-header {
-    max-width: 1700px;
-    margin: 0 auto;
-    padding: 40px 15px 0;
-
+  max-width: 1700px;
+  margin: 0 auto;
+  padding: 0 15px;
 }
 
 .admin-container-btns {
-    display: flex;
-    justify-content: space-between;
+  padding: 10px 15px;
+  margin: 0 auto;
+  justify-content: center;
+  display: flex;
+
+  background-color: #d2dce9;
+  border-radius: 6px;
+}
+
+.admin-sub-container-nav {
+  display: flex;
+  align-items: center;
+}
+
+.admin-sub-container-btns {
+  max-width: 1200px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: 1;
+}
+
+.home-page-header-nav {
+  cursor: pointer;
+  color: #353637;
+
+  font-family: "Montserrat Alternates", sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  letter-spacing: 2%;
+  line-height: 26px;
 }
 
 .header-logo {
-  height: 32px;  
+  height: 40px;
 }
 
 .admin-btns {
-    padding: 4px 20px;
+  padding: 4px 20px;
+  border: none;
+  background-color: inherit;
 }
+
+.admin-btns-active p {
+  color: #4c6991;
+}
+
+.admin-container-btns p::after {
+  content: "";
+  height: 2px;
+  width: 0%;
+  display: block;
+  transition: 0.3s;
+}
+
+.admin-btns-active p::after,
+.admin-container-btns p:hover::after {
+  content: "";
+  height: 2px;
+  width: 100%;
+  background-color: #4c6991;
+  display: block;
+  transition: 0.3s;
+}
+
+.admin-container-time {
+  padding: 10px 10px;
+  background-color: #597193ad;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 400;
+  font-size: 34px;
+  border-radius: 6px;
+  cursor: default;
+}
+
+.admin-container-sub-cont {
+  padding: 0 0 0 12px;
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.admin-container-icons {
+  display: flex;
+  gap: 6px;
+}
+
+.admin-container-icons button {
+  cursor: pointer;
+  background-color: inherit;
+  border: none;
+}
+
+.admin-container-icons button:nth-child(1):hover {
+  color: #4c6991;
+}
+
+.admin-container-icons button:nth-child(2):hover {
+    color: #ffffff;
+  }

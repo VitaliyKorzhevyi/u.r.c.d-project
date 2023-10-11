@@ -479,6 +479,7 @@ export const ReportsResuscitation = () => {
                     name="history_number"
                     className="form1-table-number"
                     value={form.history_number}
+                    autoComplete="off"
                     onChange={(e) =>
                       onFieldChange(formIndex, "history_number", e.target.value)
                     }

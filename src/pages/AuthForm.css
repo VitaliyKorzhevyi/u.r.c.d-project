@@ -14,7 +14,7 @@
 
 .main-title {
   margin-top: 20px;
-  color: #279b48;
+  color: #7290bb;
   font-family: "Rubik", sans-serif;
   text-transform: uppercase;
   font-size: 24px;
@@ -100,4 +100,9 @@ input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
     -webkit-box-shadow: 0 0 0 30px white inset !important;
+}
+
+.err-auth {
+  color: red;
+  white-space: pre-wrap;
 }

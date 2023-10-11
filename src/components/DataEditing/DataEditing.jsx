@@ -183,6 +183,7 @@ export const DataEditing = () => {
               <input
                 id="edit-medicaments"
                 type="text"
+                autoComplete="off"
                 value={medicamentItem}
                 onChange={(e) => setMedicamentsItem(e.target.value)}
               />
@@ -210,6 +211,7 @@ export const DataEditing = () => {
               <input
                 id="edit-diagnoses"
                 type="text"
+                autoComplete="off"
                 value={diagnosesItem}
                 onChange={(e) => setDiagnosesItem(e.target.value)}
               />
@@ -237,6 +239,7 @@ export const DataEditing = () => {
               <input
                 id="edit-operations"
                 type="text"
+                autoComplete="off"
                 value={operationsItem}
                 onChange={(e) => setOperationsItem(e.target.value)}
               />
@@ -264,6 +267,7 @@ export const DataEditing = () => {
               <input
                 id="edit-days"
                 type="text"
+                autoComplete="off"
                 value={daysItem}
                 onChange={(e) => setDaysItem(e.target.value)}
               />

@@ -19,6 +19,44 @@ export const Auth = () => {
     setShowPassword((prevState) => !prevState);
   };
 
+  const handleAuthErrors = (error) => {
+    if (error.response) {
+      const status = error.response.status;
+      if (status === 401) {
+        const errorData = error.response.data;
+        if (errorData && errorData.detail) {
+          switch (errorData.detail) {
+            case "Invalid email or username":
+              return "Невірна електронна адреса або логін";
+            case "Invalid password":
+              return "Недійсний пароль";
+            default:
+              return "Помилка авторизації";
+          }
+        } else {
+          return "Помилка авторизації";
+        }
+      } else if (status === 422) {
+        return "Не валідні дані";
+      } else if (status === 400) {
+        const errorData = error.response.data;
+        if (errorData && errorData.detail === "Inactive user") {
+          return "Неактивний користувач (заблокований)";
+        }
+        return "Помилка запиту до сервера";
+      } else if (status === 500) {
+        return "Помилка серверу";
+      } else {
+        return "Помилка авторизації";
+      }
+    } else if (!navigator.onLine) {
+      return "Відсутнє з'єднання з інтернетом";
+    } else {
+      return "Невідома помилка";
+    }
+  };
+  
+
   const onSubmit = async (e) => {
     e.preventDefault();
 
@@ -43,13 +81,14 @@ export const Auth = () => {
       console.log(refresh_token);
       setIsAuthenticated(true);
     } catch (err) {
-      setError("Неправильне ім'я користувача, або пароль");
+      const errorMessage = handleAuthErrors(err);
+      setError(errorMessage);
       console.log(err);
     }
   };
 
   if (isAuthenticated) {
-    return <Navigate to="/homepage" />;
+    return <Navigate to="/homepage/main-page" />;
   }
 
   return (
@@ -93,7 +132,7 @@ export const Auth = () => {
               className="password-toggle-icon"
             />
           </div>
-          {error && <p style={{ color: "red" }}>{error}</p>}
+          {error && <p className="err-auth">{error}</p>}
           <button type="submit" className="autorization-btn">
             Увійти
           </button>

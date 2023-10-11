@@ -210,6 +210,7 @@ export const ReportsManagement = ({ userData, onFormDataChange }) => {
           </p>
           <input
             type="text"
+            autoComplete="off"
             className="input-size-filter"
             value={formData.history_number}
             onChange={onHistoryNumberChange}

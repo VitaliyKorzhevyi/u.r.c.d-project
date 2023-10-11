@@ -32,10 +32,11 @@ export const MedicamentInput = ({
     inputValue = capitalizeFirstLetter(inputValue);
     setInputValue(inputValue);
 
-    if (inputValue.length >= 3) {
+    if (inputValue.length >= 1) {
+      const regex = new RegExp(inputValue.split('').join('.*'), 'i'); 
       setFilteredMedicaments(
         medicaments.filter((medicaments) =>
-          medicaments.title.toLowerCase().startsWith(inputValue.toLowerCase())
+        regex.test(medicaments.title)
         )
       );
     } else {

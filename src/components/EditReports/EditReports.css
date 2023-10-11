@@ -297,20 +297,26 @@
 .btn-save-table.blue {
   background-color: #c6dfff;
   border: 2px solid #76b0fc;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
 }
 
 .btn-save-table.blue:hover {
-  background-color: #8abdff;
-  border-color: #1b7cfa;
+  color: #fff;
+  background-color: #72aefd;
+  border-color: #1b7eff;
 }
 
 .btn-save-table.green {
-  background-color: #ade9cc;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  background-color: #bcf0d7;
   border: 2px solid #3adb8d;
 }
 .btn-save-table.green:hover {
-  background-color: #3adb8d;
-  border-color: #33be7b;
+  color: #fff;
+  background-color: #86e0ab;
+  border-color: #32c27c;
 }
 
 .custom-tooltip {

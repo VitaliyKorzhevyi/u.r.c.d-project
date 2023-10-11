@@ -87,6 +87,7 @@ export const DataEditingPatient = ({ patientData }) => {
             <input
               id="last_name"
               type="text"
+              autoComplete="off"
               value={last_name}
               onChange={(e) => setLastName(capitalize(e.target.value))}
               className="form-patient-editing-input"
@@ -97,6 +98,7 @@ export const DataEditingPatient = ({ patientData }) => {
             <input
               id="birthday"
               type="date"
+              autoComplete="off"
               value={birthday}
               onChange={(e) => setBirthday(e.target.value)}
               className="form-patient-editing-birthday"
@@ -109,6 +111,7 @@ export const DataEditingPatient = ({ patientData }) => {
             <input
               id="first_name"
               type="text"
+              autoComplete="off"
               value={first_name}
               onChange={(e) => setFirstName(capitalize(e.target.value))}
               className="form-patient-editing-input"
@@ -119,6 +122,7 @@ export const DataEditingPatient = ({ patientData }) => {
             <input
               id="phone"
               type="phone"
+              autoComplete="off"
               value={phone}
               onChange={(e) => {
                 if (/^[+\d]+$/.test(e.target.value)) {
@@ -140,6 +144,7 @@ export const DataEditingPatient = ({ patientData }) => {
             <input
               id="middle_name"
               type="text"
+              autoComplete="off"
               value={middle_name}
               onChange={(e) => setMiddleName(capitalize(e.target.value))}
               // className="form-patient-editing-input"
@@ -150,6 +155,7 @@ export const DataEditingPatient = ({ patientData }) => {
             <input
               id="email"
               type="email"
+              autoComplete="off"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="form-patient-editing-input"

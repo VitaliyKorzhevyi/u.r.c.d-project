@@ -22,6 +22,7 @@ export const DataEditingInputs = ({
           id="medicament-edit"
           className="medicament-input-edit-data"
           type="text"
+          autoComplete="off"
           title={inputValue}
           value={inputValue}
           onChange={handleInputChange}

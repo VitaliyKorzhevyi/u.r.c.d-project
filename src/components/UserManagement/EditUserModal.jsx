@@ -119,8 +119,6 @@ export const EditUserModal = ({ isOpen, onClose, afterCreate, userData }) => {
     userData.advanced_roles || []
   );
 
-  console.log("Выбранные роли:", selectedRoles);
-
   const handleCheckboxChange = (role) => {
     if (selectedRoles.includes(role)) {
       // Если роль уже выбрана, удаляем ее из списка
@@ -160,12 +158,14 @@ export const EditUserModal = ({ isOpen, onClose, afterCreate, userData }) => {
             <div className="modal-content-group">
               <input
                 type="text"
+                autoComplete="off"
                 placeholder="Прізвище"
                 value={last_name}
                 onChange={(e) => setLastName(capitalize(e.target.value))}
               />
               <input
                 type="text"
+                autoComplete="off"
                 placeholder="Ім'я"
                 value={first_name}
                 onChange={(e) => setFirstName(capitalize(e.target.value))}
@@ -174,12 +174,14 @@ export const EditUserModal = ({ isOpen, onClose, afterCreate, userData }) => {
             <div className="modal-content-group">
               <input
                 type="text"
+                autoComplete="off"
                 placeholder="По батькові"
                 value={middle_name}
                 onChange={(e) => setMiddleName(capitalize(e.target.value))}
               />
               <input
                 type="date"
+                autoComplete="off"
                 value={birthday}
                 onChange={(e) => setBirthday(e.target.value)}
               />
@@ -187,6 +189,7 @@ export const EditUserModal = ({ isOpen, onClose, afterCreate, userData }) => {
             <div className="modal-content-group">
               <input
                 type="tel"
+                autoComplete="off"
                 value={phone}
                 placeholder="Телефон"
                 onChange={(e) => {
@@ -201,6 +204,7 @@ export const EditUserModal = ({ isOpen, onClose, afterCreate, userData }) => {
               />
               <input
                 type="email"
+                autoComplete="off"
                 placeholder="Пошта"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -209,12 +213,14 @@ export const EditUserModal = ({ isOpen, onClose, afterCreate, userData }) => {
             <div className="modal-content-group">
               <input
                 type="text"
+                autoComplete="off"
                 placeholder="Посада"
                 value={job_title}
                 onChange={(e) => setJobTitle(capitalize(e.target.value))}
               />
               <input
                 type="text"
+                autoComplete="off"
                 placeholder="Логін"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
@@ -228,6 +234,7 @@ export const EditUserModal = ({ isOpen, onClose, afterCreate, userData }) => {
                 <label className="modal-list-role-checkbox">
                   <input
                     type="checkbox"
+                    autoComplete="off"
                     checked={selectedRoles.includes(role)}
                     onChange={() => handleCheckboxChange(role)}
                   />
@@ -242,6 +249,7 @@ export const EditUserModal = ({ isOpen, onClose, afterCreate, userData }) => {
           <div className="modal-content-password">
             <input
               type="text"
+              autoComplete="off"
               placeholder="Пароль"
               value={password}
               onChange={(e) => setPassword(e.target.value)}

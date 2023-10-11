@@ -62,6 +62,8 @@
   max-width: 1700px;
   margin: 0 auto;
   padding: 40px 0px 0;
+  background-color: #f7fafd;
+  border-radius: 6px;
 }
 
 .big-container-users-management {
@@ -249,4 +251,3 @@
   background-color: #72aefd;
   border-color: #1b7eff;
 }
-

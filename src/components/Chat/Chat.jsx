@@ -83,6 +83,7 @@ export const Chat = () => {
           value={inputMessage}
           onChange={(e) => setInputMessage(e.target.value)}
           placeholder="Type a message..."
+          autoComplete="off"
         />
         <button
           className="send-button"

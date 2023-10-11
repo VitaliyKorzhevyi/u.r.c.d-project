@@ -30,11 +30,12 @@ export const DiagnosesInput = ({
     let inputVal = e.target.value;
     inputVal = capitalizeFirstLetter(inputVal);
     setInputValue(inputVal);
-
-    if (inputVal.length >= 3) {
+  
+    if (inputVal.length >= 1) {
+      const regex = new RegExp(inputVal.split('').join('.*'), 'i'); 
       setFilteredDiagnoses(
-        diagnoses.filter((diagnoses) =>
-          diagnoses.title.toLowerCase().startsWith(inputVal.toLowerCase())
+        diagnoses.filter((diagnos) =>
+          regex.test(diagnos.title)
         )
       );
     } else {

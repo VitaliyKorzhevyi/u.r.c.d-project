@@ -192,7 +192,6 @@ export const Marks = ({ userData }) => {
           <ReactPaginate
             previousLabel={<i className="bx bxs-chevron-left bx-md"></i>}
             nextLabel={<i className="bx bxs-chevron-right bx-md"></i>}
-            forcePage={totalPages - 1}
             breakLabel={"..."}
             breakClassName={"break-me"}
             pageCount={totalPages}

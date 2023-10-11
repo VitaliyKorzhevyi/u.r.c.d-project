@@ -17,6 +17,7 @@ export const QuantityInput = ({
   return (
     <input
       type="number"
+      autoComplete="off"
       name="quantity_of_medicament"
       className="form1-table-text-name"
       value={value}

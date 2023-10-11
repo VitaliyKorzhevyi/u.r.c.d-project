@@ -22,6 +22,16 @@ p {
   margin: 0;
 }
 
+body {
+  overflow-y: scroll;
+  overflow-x: hidden; /* hides horizontal scrollbar */
+  margin-right: calc(-1 * (100vw - 100%)); 
+}
+
+/* html {
+	overflow: scroll;
+} */
+
 h2 {
   text-align: center;
 }
@@ -56,10 +66,6 @@ input[type="number"]::-webkit-outer-spin-button {
     margin: 0;
 }
 
-/* Для Firefox */
-input[type="number"] {
-    -moz-appearance: textfield;
-}
 
 :root {
   /* color */
@@ -97,8 +103,8 @@ input[type="number"] {
   --green-btns-bg-color: #ceefdf;
   --search-patients-btn-bg-color: #cadeff;
   --control-btns-bg-color: #fff;
-  --save-btn-hover-bg-color: #61bd90;
-  --del-btn-hover-bg-color: #f73939;
+  --save-btn-hover-bg-color: #6bd1a0;
+  --del-btn-hover-bg-color: #ff5e5e;
   --invalid-forms-bg-color: #ffe6e6;
  
  /* border color */
@@ -168,9 +174,9 @@ th {
 
 .table1-btn.blue:hover,
 .table1-btn.blue:focus {
-  color: var(--white-btns-color);
-  background-color: var(--secondary-bg-color);
-  border: 2px solid #194488;
+  color: #fff;
+  background-color: #72aefd;
+  border-color: #1b7eff;
 }
 
 .table1-btn.red:hover,
@@ -188,7 +194,7 @@ th {
 
 .form1-btn-add {
   display: flex;
-  align-items: center;
+  padding: 6px;
   margin-left: 8px;
 
   height: 40px;
@@ -200,9 +206,9 @@ th {
 
 .form1-btn-add:hover,
 .form1-btn-add:focus {
-  background-color: var(--secondary-bg-color);
-  color: var(--white-btns-color);
-  border: 2px solid #0148bb;
+  color: #fff;
+  background-color: #72aefd;
+  border-color: #1b7eff;
 }
 
 .form1-btn-save {
@@ -354,8 +360,9 @@ th {
   margin: 40px auto;
   max-width: 1200px;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  padding: 16px;
+  /* align-items: center;
+  justify-content: center; */
 
   height: 60px;
   width: 60px;
@@ -368,9 +375,9 @@ th {
 
 .add-new-form2:hover,
 .add-new-form2:focus {
-  background-color: var(--secondary-bg-color);
-  color: var(--white-btns-color);
-  border: 2px solid #0148bb;
+  color: #fff;
+  background-color: #72aefd;
+  border-color: #1b7eff;
 }
 
 .form2-table.locked .form1-delete {
@@ -447,9 +454,9 @@ th {
 
 .btn-patient.blue:hover,
 .btn-patient.blue:focus {
-  color: var(--white-btns-color);
-  background-color: var(--secondary-bg-color);
-  border: 2px solid #194488;
+  color: #fff;
+  background-color: #72aefd;
+  border-color: #1b7eff;
 }
 
 .btn-patient.green:hover,
@@ -499,3 +506,9 @@ th {
   }
 }
 
+.form2-table.locked .table1-btn {
+  background-color: var(--primary-bg-color);
+  color: var(--locked-color);
+  border: 2px solid var(--locked-color);
+  cursor: default;
+}

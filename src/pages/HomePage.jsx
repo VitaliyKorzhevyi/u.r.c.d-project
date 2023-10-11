@@ -1,29 +1,28 @@
-import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+
+import { Link, useNavigate, Outlet, useLocation, } from "react-router-dom";
 
 import $api from "../api/api";
 
-import { UserManagement } from "../components/UserManagement/UserManagement";
-import { Reports } from "../components/Reports/Reports";
-import { Statistics } from "../components/Statistics/Statistics";
-import { MainPage } from "../components/MainPage/MainPage";
-import { Chat } from "../components/Chat/Chat";
-
-//РОЛІ
 import { SECTION_PERMISSIONS } from "../constants/permissions";
 
 import "./HomePage.css";
-
+export const UserDataContext = React.createContext();
 export const HomePage = () => {
   const location = useLocation();
-  const params = new URLSearchParams(location.search);
-  const initialSection =
-    params.get("section") || localStorage.getItem("section") || "users";
-  const [activeSection, setActiveSection] = useState(initialSection);
-
+  const navigate = useNavigate();
+  const [currentTime, setCurrentTime] = useState(new Date());
   const [myData, setMyData] = useState({});
-  console.log(myData.permissions);
-  
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, []);
+
   useEffect(() => {
     $api.get("/users/me/").then((response) => {
       console.log("данные о пользователе:", response.data);
@@ -31,86 +30,74 @@ export const HomePage = () => {
     });
   }, []);
 
-  const onSectionChange = (section) => {
-    setActiveSection(section);
-    localStorage.setItem("section", section);
-    const newUrl = `${window.location.pathname}?section=${section}`;
-    window.history.replaceState(null, "", newUrl);
+  const formattedTime = `${String(currentTime.getHours()).padStart(
+    2,
+    "0"
+  )}:${String(currentTime.getMinutes()).padStart(2, "0")}`;
+
+  const onExitHomePage = () => {
+    $api.post("/auth/logout").then((response) => console.log(response));
+    localStorage.clear();
+    console.log("Вихід");
+
+    // window.location.replace("/");
+    navigate("/", { replace: true });
   };
 
-  useEffect(() => {
-    const currentSection =
-      new URLSearchParams(location.search).get("section") ||
-      localStorage.getItem("section") ||
-      "users";
-    setActiveSection(currentSection);
-  }, [location.search]);
+  const renderNavLink = (path, label) => {
+    const requiredPermissions = SECTION_PERMISSIONS[path.replace("/", "")];
+    const userHasPermission =
+      myData && myData.permissions && requiredPermissions
+        ? requiredPermissions.some((permission) =>
+            myData.permissions.includes(permission)
+          )
+        : false;
 
-  const AccessibleButton = ({ section, onClick, children }) => {
-    const requiredPermissions = SECTION_PERMISSIONS[section];
+    if (!userHasPermission && requiredPermissions.length) return null;
 
-    if (!requiredPermissions.length) return (
-      <button type="button" className="admin-btns" onClick={onClick}>
-        {children}
-      </button>
-    );
-
-    // Проверяем, есть ли у пользователя хотя бы одно из требуемых разрешений
-    const userHasPermission = requiredPermissions.some((permission) =>
-    myData.permissions?.includes(permission)
-  );
-
-
-    console.log(userHasPermission);
-    if (!userHasPermission) return null;
+    const fullPath = `/homepage/${path}`;
 
     return (
-      <button type="button" className="admin-btns" onClick={onClick}>
-        {children}
-      </button>
+      <Link
+        to={fullPath}
+        className={`admin-btns ${
+          location.pathname === fullPath ? "admin-btns-active" : ""
+        }`}
+      >
+        <p className="home-page-header-nav">{label}</p>
+      </Link>
     );
   };
 
   return (
     <div className="admin-header">
       <div className="admin-container-btns">
-        <img src="/images/logo-use1.png" alt="лого" className="header-logo" />
-        <AccessibleButton
-          section="main-page"
-          onClick={() => onSectionChange("main-page")}
-        >
-          Головна
-        </AccessibleButton>
-        <AccessibleButton
-          section="users"
-          onClick={() => onSectionChange("users")}
-        >
-          Керування користувачами
-        </AccessibleButton>
-        <AccessibleButton
-          section="reports"
-          onClick={() => onSectionChange("reports")}
-        >
-          Звіти
-        </AccessibleButton>
-        <AccessibleButton
-          section="statistics"
-          onClick={() => onSectionChange("statistics")}
-        >
-          Статистика по медикаментам
-        </AccessibleButton>
-        <AccessibleButton
-          section="chat"
-          onClick={() => onSectionChange("chat")}
-        >
-          Чат
-        </AccessibleButton>
+        <div className="admin-sub-container-btns">
+          <img src="/images/logo-use1.png" alt="лого" className="header-logo" />
+          <div className="admin-sub-container-nav">
+            {renderNavLink("main-page", "Головна")}
+            {renderNavLink("users", "Керування користувачами")}
+            {renderNavLink("reports", "Звіти")}
+            {renderNavLink("statistics", "Статистика")}
+            {renderNavLink("chat", "Чат")}
+
+            <div className="admin-container-sub-cont">
+              <div className="admin-container-time">{formattedTime}</div>
+              <div className="admin-container-icons">
+                <button type="button">
+                  <i className="bx bx-user bx-sm"></i>
+                </button>
+                <button type="button" onClick={onExitHomePage}>
+                  <i className="bx bx-exit bx-sm"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      {activeSection === "main-page" && <MainPage />}
-      {activeSection === "users" && <UserManagement userData={myData} />}
-      {activeSection === "reports" && <Reports userData={myData} />}
-      {activeSection === "statistics" && <Statistics />}
-      {activeSection === "chat" && <Chat />}
+      <UserDataContext.Provider value={myData}>
+        <Outlet />
+      </UserDataContext.Provider>
     </div>
   );
 };

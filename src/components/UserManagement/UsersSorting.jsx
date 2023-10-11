@@ -66,6 +66,7 @@ export const UsersSorting = ({ onFormDataChange }) => {
         </p>
         <input
           type="text"
+          autoComplete="off"
           name="last_name"
           value={formData.last_name}
           onChange={handleInputChange}
@@ -77,6 +78,7 @@ export const UsersSorting = ({ onFormDataChange }) => {
         </p>
         <input
           type="text"
+          autoComplete="off"
           name="first_name"
           value={formData.first_name}
           onChange={handleInputChange}
@@ -88,6 +90,7 @@ export const UsersSorting = ({ onFormDataChange }) => {
         </p>
         <input
           type="text"
+          autoComplete="off"
           name="middle_name"
           value={formData.middle_name}
           onChange={handleInputChange}
@@ -99,6 +102,7 @@ export const UsersSorting = ({ onFormDataChange }) => {
         </p>
         <input
           type="date"
+          autoComplete="off"
           name="birthday"
           value={formData.birthday}
           onChange={handleInputChange}
@@ -110,6 +114,7 @@ export const UsersSorting = ({ onFormDataChange }) => {
         </p>
         <input
           type="tel"
+          autoComplete="off"
           name="phone"
           value={formData.phone}
           onChange={handleInputChange}
@@ -121,6 +126,7 @@ export const UsersSorting = ({ onFormDataChange }) => {
         </p>
         <input
           type="email"
+          autoComplete="off"
           name="email"
           value={formData.email}
           onChange={handleInputChange}

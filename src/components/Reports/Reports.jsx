@@ -1,5 +1,4 @@
-import { useState } from "react";
-
+import { useState, useContext} from "react";
 
 import { CreateReports } from "../CreateReports/CreateReports";
 import { EditReports } from "../EditReports/EditReports";
@@ -11,7 +10,7 @@ import { DataEditing } from "../DataEditing/DataEditing";
 import { SECTION_PERMISSIONS } from "../../constants/permissions";
 
 import "./Reports.css";
-
+import {UserDataContext} from "../../pages/HomePage";
 const AccessibleButton = ({
   id,
   section,
@@ -40,7 +39,8 @@ const AccessibleButton = ({
   );
 };
 
-export const Reports = ({ userData }) => {
+export const Reports = () => {
+  const userData = useContext(UserDataContext);
   const [openModal, setOpenModal] = useState(null);
 
   const openCreateModal = () => 
@@ -102,7 +102,7 @@ export const Reports = ({ userData }) => {
           userData={userData}
           activeModal={openModal}
         >
-          Статистика по звітам
+          Архів звітів
         </AccessibleButton>
       </div>
 
