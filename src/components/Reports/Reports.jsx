@@ -5,12 +5,12 @@ import { EditReports } from "../EditReports/EditReports";
 import { Marks } from "../Marks/Marks";
 import { FullInfoReports } from "../FullInfoReports/FullInfoReports";
 import { DataEditing } from "../DataEditing/DataEditing";
-
+import { UserDataContext } from "../../pages/HomePage";
 
 import { SECTION_PERMISSIONS } from "../../constants/permissions";
 
 import "./Reports.css";
-import {UserDataContext} from "../../pages/HomePage";
+
 const AccessibleButton = ({
   id,
   section,
@@ -21,7 +21,6 @@ const AccessibleButton = ({
 }) => {
   const requiredPermissions = SECTION_PERMISSIONS[section];
 
- 
   const userHasPermission = requiredPermissions.some((permission) =>
     userData.permissions?.includes(permission)
   );
@@ -40,7 +39,7 @@ const AccessibleButton = ({
 };
 
 export const Reports = () => {
-  const userData = useContext(UserDataContext);
+  const { myData } = useContext(UserDataContext);
   const [openModal, setOpenModal] = useState(null);
 
   const openCreateModal = () => 
@@ -60,7 +59,7 @@ export const Reports = () => {
           id="create"
           section="create-report"
           onClick={openCreateModal}
-          userData={userData}
+          userData={myData}
           activeModal={openModal}
         >
           Створити звіт
@@ -70,7 +69,7 @@ export const Reports = () => {
           id="edit"
           section="edit-report"
           onClick={openEditModal}
-          userData={userData}
+          userData={myData}
           activeModal={openModal}
         >
           Керування звітами
@@ -80,7 +79,7 @@ export const Reports = () => {
           id="marks"
           section="marks-report"
           onClick={openMarksModal}
-          userData={userData}
+          userData={myData}
           activeModal={openModal}
         >
           Відмітки
@@ -89,7 +88,7 @@ export const Reports = () => {
           id="dataEdit"
           section="edit-data"
           onClick={openDataEditModal}
-          userData={userData}
+          userData={myData}
           activeModal={openModal}
         >
           Редагування даних
@@ -99,7 +98,7 @@ export const Reports = () => {
           id="full-info"
           section="full-info-report"
           onClick={openFullInfoModal}
-          userData={userData}
+          userData={myData}
           activeModal={openModal}
         >
           Архів звітів
@@ -108,10 +107,10 @@ export const Reports = () => {
 
       {/* Модальные окна */}
       {openModal === "create" && (
-        <CreateReports userData={userData} onClose={closeModal} />
+        <CreateReports userData={myData} onClose={closeModal} />
       )}
-      {openModal === "edit" && <EditReports onClose={closeModal} userData={userData}/>}
-      {openModal === "marks" && <Marks userData={userData} onClose={closeModal} />}
+      {openModal === "edit" && <EditReports onClose={closeModal} userData={myData}/>}
+      {openModal === "marks" && <Marks userData={myData} onClose={closeModal} />}
       {openModal === "dataEdit" && <DataEditing onClose={closeModal} />}
       {openModal === "fullInfo" && <FullInfoReports onClose={closeModal} />}
     </div>

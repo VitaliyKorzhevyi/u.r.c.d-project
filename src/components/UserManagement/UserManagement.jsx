@@ -1,4 +1,5 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useContext } from "react";
+import {UserDataContext} from "../../pages/HomePage";
 import $api from "../../api/api";
 
 import ReactPaginate from "react-paginate";
@@ -148,9 +149,11 @@ export const UserManagement = () => {
   const [users, setUsers] = useState([]);
   const [isModalOpenCreate, setModalOpenCreate] = useState(false);
   const [totalPages, setTotalPages] = useState(0);
+  const [isModalOpenEdit, setModalOpenEdit] = useState(false);
 
   const [currentFormData, setCurrentFormData] = useState({});
-
+  const { myData } = useContext(UserDataContext);
+  // const userData = useContext(UserDataContext);
   const onFormDataChange = (newFormData) => {
     setCurrentFormData(newFormData);
   };
@@ -233,7 +236,6 @@ export const UserManagement = () => {
 
   return (
     <div className="users-container">
-      <h2 className="title-users">Дані користувачів</h2>
       <div className="big-container-users-management">
         <div className="users-sorting-container">
           <UsersSorting onFormDataChange={onFormDataChange} />
@@ -254,6 +256,10 @@ export const UserManagement = () => {
             >
               Додати користувача
             </button>
+            <div className="admin-settings-icons" onClick={() => setModalOpenEdit(true)}>
+              <i className='bx bx-cog'></i>
+            </div>
+            
           </div>
           <div className="users-list">
             {users.map((user) => (
@@ -281,7 +287,11 @@ export const UserManagement = () => {
           </div>
         </div>
       </div>
-
+      <EditUserModal
+        isOpen={isModalOpenEdit}
+        onClose={() => setModalOpenEdit(false)}
+        userData={myData}
+      />
       <CreateUserModal
         isOpen={isModalOpenCreate}
         onClose={() => setModalOpenCreate(false)}

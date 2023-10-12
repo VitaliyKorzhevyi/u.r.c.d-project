@@ -61,7 +61,7 @@
 .users-container {
   max-width: 1700px;
   margin: 0 auto;
-  padding: 40px 0px 0;
+  padding: 28px 0px 0;
   background-color: #f7fafd;
   border-radius: 6px;
 }
@@ -97,10 +97,21 @@
   margin-left: auto;
   padding-bottom: 16px;
   display: flex;
+  align-items: center;
+  gap: 8px;
   justify-content: flex-end;
   width: 268px;
   border-bottom: 2px solid #000000;
-  margin-bottom: 36px;
+  margin-bottom: 20px;
+}
+
+.admin-settings-icons i {
+  font-size: 30px;
+  cursor: pointer;
+}
+
+.admin-settings-icons i:hover {
+  color: #5683a1;
 }
 
 .create-new-user {
@@ -186,7 +197,7 @@
 
 .user-details-size {
   width: 42%;
-} 
+}
 
 .users-management-container {
   max-width: 1200px;
@@ -195,7 +206,7 @@
 }
 
 .users-sorting-container {
-  padding: 92px 0 0;
+  padding: 78px 0 0;
   width: 230px;
 }
 

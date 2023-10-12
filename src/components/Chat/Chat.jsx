@@ -1,61 +1,48 @@
-import { useState, useEffect, useRef } from "react";
-import "./Chat.css";
+import React, { useContext, useState, useEffect, useRef } from "react";
+import { UserDataContext } from "../../pages/HomePage";
 import $api from "../../api/api";
 
+
 export const Chat = () => {
+  const { ws } = useContext(UserDataContext);
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState("");
-  const [ws, setWs] = useState(null);
   const [isAtBottom, setIsAtBottom] = useState(true);
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
-    $api.get("/messages?page=1&limit=30&chat=general").then((response) => {
-      console.log(response.data.messages);
+    $api.get("/messages/general?page=1&limit=30&sort=-id").then((response) => {
       setMessages(response.data.messages.reverse());
     });
   }, []);
 
   useEffect(() => {
-    const token = localStorage.getItem("access_token");
-    const websocket = new WebSocket(
-      `wss://ip-91-227-40-30-92919.vps.hosted-by-mvps.net/api/ws?token=${token}`);
-
-    websocket.onopen = () => {
-      console.log("Connected to the WebSocket");
-    };
-
-    websocket.onmessage = (event) => {
-      console.log("Ответ с сервера:", event.data);
-      const incomingMessage = JSON.parse(event.data);
+    if (ws) {
+      ws.onmessage = (event) => {
+        const incomingMessage = JSON.parse(event.data);
+        const currentScroll = messagesEndRef.current?.parentNode?.scrollTop || 0;
+        const maxScroll = messagesEndRef.current?.parentNode?.scrollHeight - messagesEndRef.current?.parentNode?.clientHeight || 0;
       
-      const currentScroll = messagesEndRef.current?.parentNode?.scrollTop || 0;
-      const maxScroll = messagesEndRef.current?.parentNode?.scrollHeight - messagesEndRef.current?.parentNode?.clientHeight || 0;
-      
-      if (currentScroll >= maxScroll - 10) {
-        setIsAtBottom(true);
-      } else {
-        setIsAtBottom(false);
-      }
+        if (currentScroll >= maxScroll - 10) {
+          setIsAtBottom(true);
+        } else {
+          setIsAtBottom(false);
+        }
 
-      setMessages((prev) => [...prev, incomingMessage]);
-    };
-
-    setWs(websocket);
-
-    return () => {
-      websocket.close();
-    };
-  }, []);
+        setMessages((prev) => [...prev, incomingMessage]);
+      };
+    }
+  }, [ws]);
 
   const sendMessage = () => {
     if (ws && ws.readyState === WebSocket.OPEN) {
       const messagePayload = {
+        method: "create",
         chat: "general",
         text: inputMessage,
       };
-      console.log(messagePayload);
       ws.send(JSON.stringify(messagePayload));
+      setInputMessage("");
     } else {
       console.error("WebSocket не открыт. Невозможно отправить сообщение.");
     }
@@ -66,14 +53,18 @@ export const Chat = () => {
       messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     }
   }, [messages, isAtBottom]);
-
   return (
     <div className="chat-container">
+      <p>чат</p>
       <ul className="message-list">
         {messages.map((message, index) => (
-          <li key={message.id} className="message" ref={index === messages.length - 1 ? messagesEndRef : null}>
+          <li
+            key={message.message.id}
+            className="message"
+            ref={index === messages.length - 1 ? messagesEndRef : null}
+          >
             <p>{message.user.full_name}</p>
-            <p>{message.text}</p>
+            <p>{message.message.text}</p>
           </li>
         ))}
       </ul>
@@ -85,17 +76,10 @@ export const Chat = () => {
           placeholder="Type a message..."
           autoComplete="off"
         />
-        <button
-          className="send-button"
-          onClick={() => {
-            sendMessage();
-            setInputMessage("");
-          }}
-        >
+        <button className="send-button" onClick={sendMessage}>
           Відправити
         </button>
       </div>
     </div>
   );
 };
-

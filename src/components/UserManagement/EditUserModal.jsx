@@ -146,7 +146,7 @@ export const EditUserModal = ({ isOpen, onClose, afterCreate, userData }) => {
         >
           <img src="/images/cross.svg" alt="Х" className="logo-autorization" />
         </div>
-        <p className="modal-create-user-title">Оновити користувача</p>
+        <p className="modal-create-user-title">Оновити дані</p>
         <form
           onSubmit={(e) => {
             e.preventDefault();

@@ -15,6 +15,7 @@ export const Auth = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const [showPassword, setShowPassword] = useState(false);
+
   const togglePasswordVisibility = () => {
     setShowPassword((prevState) => !prevState);
   };
@@ -80,6 +81,7 @@ export const Auth = () => {
       console.log(access_token);
       console.log(refresh_token);
       setIsAuthenticated(true);
+  
     } catch (err) {
       const errorMessage = handleAuthErrors(err);
       setError(errorMessage);

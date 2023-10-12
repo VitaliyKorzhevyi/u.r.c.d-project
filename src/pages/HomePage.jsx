@@ -1,18 +1,45 @@
 import React, { useState, useEffect } from "react";
-
-import { Link, useNavigate, Outlet, useLocation, } from "react-router-dom";
+import { Link, useNavigate, Outlet, useLocation } from "react-router-dom";
 
 import $api from "../api/api";
-
 import { SECTION_PERMISSIONS } from "../constants/permissions";
 
 import "./HomePage.css";
-export const UserDataContext = React.createContext();
+
+export const UserDataContext = React.createContext({
+  myData: {},
+  ws: null,
+});
+
 export const HomePage = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [currentTime, setCurrentTime] = useState(new Date());
   const [myData, setMyData] = useState({});
+  const [ws, setWs] = useState(null);
+
+  //* WEBSOCKET
+  useEffect(() => {
+    let ws = null;
+
+    const token = localStorage.getItem("access_token");
+    if (token) {
+      console.log("Token used for WebSocket:", token);
+      ws = new WebSocket(
+        `wss://ip-91-227-40-30-92919.vps.hosted-by-mvps.net/api/ws?token=${token}`
+      );
+      ws.onopen = () => {
+        console.log("Connected to the WebSocket");
+      };
+      setWs(ws);
+    }
+
+    return () => {
+      if (ws) {
+        ws.close();
+      }
+    };
+  }, []);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -25,8 +52,8 @@ export const HomePage = () => {
 
   useEffect(() => {
     $api.get("/users/me/").then((response) => {
-      console.log("данные о пользователе:", response.data);
       setMyData(response.data);
+      console.log("про мене",response.data);
     });
   }, []);
 
@@ -36,11 +63,18 @@ export const HomePage = () => {
   )}:${String(currentTime.getMinutes()).padStart(2, "0")}`;
 
   const onExitHomePage = () => {
-    $api.post("/auth/logout").then((response) => console.log(response));
-    localStorage.clear();
-    console.log("Вихід");
+    if (ws) {
+      ws.close();
+    }
 
-    // window.location.replace("/");
+    // Удалить токены из локального хранилища
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("refresh_token");
+    $api.post("/auth/logout").then((response) => console.log(response));
+    console.log("Вихід");
+    localStorage.clear();
+
+    window.location.replace("/");
     navigate("/", { replace: true });
   };
 
@@ -69,6 +103,8 @@ export const HomePage = () => {
     );
   };
 
+  //* WEBSOCETS
+
   return (
     <div className="admin-header">
       <div className="admin-container-btns">
@@ -84,9 +120,6 @@ export const HomePage = () => {
             <div className="admin-container-sub-cont">
               <div className="admin-container-time">{formattedTime}</div>
               <div className="admin-container-icons">
-                <button type="button">
-                  <i className="bx bx-user bx-sm"></i>
-                </button>
                 <button type="button" onClick={onExitHomePage}>
                   <i className="bx bx-exit bx-sm"></i>
                 </button>
@@ -95,7 +128,7 @@ export const HomePage = () => {
           </div>
         </div>
       </div>
-      <UserDataContext.Provider value={myData}>
+      <UserDataContext.Provider value={{ myData, ws }}>
         <Outlet />
       </UserDataContext.Provider>
     </div>
