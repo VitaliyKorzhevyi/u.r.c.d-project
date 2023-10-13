@@ -4,29 +4,9 @@ import $api from "../../api/api";
 
 import { PERMISSIONS } from "../../constants/permissions";
 
+import { ModalCreateNews } from "./ModalCreateNews";
+import { ModalEditNews } from "./ModalEditNews";
 import "./MainPage.css";
-
-const Modal = ({ onClose, onSendMessage, inputMessage, setInputMessage }) => (
-  <div className="modal-create-news">
-    <div className="create-news-content">
-      <div className="input-area">
-        <input
-          className="input-message"
-          value={inputMessage}
-          onChange={(e) => setInputMessage(e.target.value)}
-          placeholder="Type a message..."
-          autoComplete="off"
-        />
-        <button className="send-button" onClick={onSendMessage}>
-          Відправити
-        </button>
-        <button onClick={onClose} className="cls-button">
-          Закрыть
-        </button>
-      </div>
-    </div>
-  </div>
-);
 
 export const MainPage = () => {
   const { myData } = useContext(UserDataContext);
@@ -34,19 +14,31 @@ export const MainPage = () => {
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState("");
   const messagesEndRef = useRef(null);
-  const [showModal, setShowModal] = useState(false);
+  const [showModalCreate, setShowModalCreate] = useState(false);
+  const [showModalEdit, setShowModalEdit] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [fetching, setFetching] = useState(true);
+  const [editingMessage, setEditingMessage] = useState(null);
 
+  const formatText = (text) => {
+    return text.replace(/\*(.*?)\*/g, "<strong>$1</strong>");
+  };
   useEffect(() => {
     if (ws) {
       ws.onmessage = (event) => {
-        // console.log("Пришло новое сообщение:", event.data);
-        const newMessage = JSON.parse(event.data);
-        setMessages((prevMessages) => [...prevMessages, newMessage]);
+        const receivedData = JSON.parse(event.data);
+        
+        // Проверка на наличие ошибки в данных
+        if (receivedData.message === "Access is denied. One of the following permissions is required") {
+          console.error(receivedData.message);
+          // Дополнительные действия для обработки ошибки (если необходимо)
+        } else {
+          // Обработка нормального сообщения
+          setMessages((prevMessages) => [...prevMessages, receivedData]);
+        }
       };
     }
-
+  
     // Очистите обработчик при размонтировании компонента
     return () => {
       if (ws) {
@@ -76,7 +68,6 @@ export const MainPage = () => {
         .finally(() => setFetching(false));
     }
   }, [fetching, currentPage, messages]);
-
 
   // currentPage, messages під питанням
   useEffect(() => {
@@ -110,6 +101,25 @@ export const MainPage = () => {
     }
   };
 
+  const editMessage = () => {
+    console.log("Текст:", inputMessage);
+    console.log("ID:", editingMessage.id);
+    if (ws && ws.readyState === WebSocket.OPEN) {
+      const messagePayload = {
+        method: "update",
+        chat: "information",
+        text: inputMessage, // это редактированный текст
+        message_id: editingMessage.id, // здесь берем ID из editingMessage
+      };
+
+      ws.send(JSON.stringify(messagePayload));
+      setInputMessage("");
+      setShowModalEdit(false); // Закрыть модальное окно после отправки сообщения
+    } else {
+      console.error("WebSocket не открыт. Невозможно отправить сообщение.");
+    }
+  };
+
   return (
     <div className="news-container">
       {myData?.permissions?.includes(
@@ -118,7 +128,7 @@ export const MainPage = () => {
         <div className="container-btn-create-news">
           <button
             className="btn-create-news"
-            onClick={() => setShowModal(true)}
+            onClick={() => setShowModalCreate(true)}
           >
             Створити новину
           </button>
@@ -133,21 +143,68 @@ export const MainPage = () => {
           >
             <h2>Дуже важливо щоб ви це прочитали</h2>
 
-            <p className="message-information-text">{message.message.text}</p>
+            <p
+              className="message-information-text"
+              dangerouslySetInnerHTML={{
+                __html: formatText(message.message.text),
+              }}
+            />
             <div className="message-information-text-up">
               <p className="message-information-data">
-                {new Date(message.message.created_at).toLocaleDateString()}{" "}
+                {new Date(message.message.created_at).toLocaleDateString(
+                  "uk-UA",
+                  {
+                    year: "numeric",
+                    month: "2-digit",
+                    day: "2-digit",
+                  }
+                )}{" "}
+                (
+                {new Date(message.message.created_at).toLocaleTimeString(
+                  "uk-UA",
+                  {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  }
+                )}
+                )
               </p>
               <p className="message-information-user">
                 {message.user.full_name}
               </p>
             </div>
+            <div>
+              {/* <button
+                className="btn-create-news"
+                onClick={() => {
+                  setShowModalEdit(true);
+                  setEditingMessage({
+                    id: message.message.id,
+                    text: message.message.text,
+                  });
+                }}
+              >
+                редагувати повідомлення
+              </button> */}
+            </div>
           </li>
         ))}
       </ul>
-      {showModal && (
-        <Modal
-          onClose={() => setShowModal(false)}
+      {showModalEdit && (
+        <ModalEditNews
+          onClose={() => {
+            setShowModalEdit(false);
+            setEditingMessage(null); // сброс после закрытия модального окна
+          }}
+          onEditMessage={editMessage}
+          inputMessage={inputMessage}
+          setInputMessage={setInputMessage}
+          editingMessage={editingMessage}
+        />
+      )}
+      {showModalCreate && (
+        <ModalCreateNews
+          onClose={() => setShowModalCreate(false)}
           onSendMessage={sendMessage}
           inputMessage={inputMessage}
           setInputMessage={setInputMessage}

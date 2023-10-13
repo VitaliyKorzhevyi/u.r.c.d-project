@@ -36,8 +36,8 @@
   flex-direction: column;
   align-items: center;
   margin: 60px auto 0;
-  padding: 32px 0 64px;
-  min-width: 580px;
+  padding: 32px 0 40px;
+  min-width: 500px;
 
   background-color: #fff;
   border: 3px solid #cacace;
@@ -50,21 +50,28 @@
 }
 
 .input-1 {
-  margin: 18px 0;
+  margin: 12px 0;
 }
 
 .form-input {
-  height: 58px;
-  padding: 16px;
+  min-height: 48px;
+  padding: 0 16px;
   border: 1px solid #cacace;
   border-radius: 12px;
-  min-width: 316px;
+  min-width: 260px;
+}
+
+.form-input::placeholder {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  color: #7c7c7c;
 }
 
 .autorization-btn {
-  margin: 32px auto 36px;
-  height: 58px;
-  min-width: 316px;
+  margin: 24px auto 36px;
+  height: 48px;
+  min-width: 260px;
   background-color: #f1f1f1;
   border: 2px solid #cacace;
   border-radius: 12px;
@@ -72,7 +79,7 @@
 
   font-family: "Montserrat", sans-serif;
   font-weight: 500;
-  font-size: 18px;
+  font-size: 16px;
 }
 
 .autorization-btn:hover,
