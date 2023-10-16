@@ -13,6 +13,7 @@ export const MainPage = () => {
   const { ws } = useContext(UserDataContext);
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState("");
+  const [inputTitle, setInputTitle] = useState("");
   const messagesEndRef = useRef(null);
   const [showModalCreate, setShowModalCreate] = useState(false);
   const [showModalEdit, setShowModalEdit] = useState(false);
@@ -23,22 +24,17 @@ export const MainPage = () => {
   const formatText = (text) => {
     return text.replace(/\*(.*?)\*/g, "<strong>$1</strong>");
   };
+
   useEffect(() => {
     if (ws) {
       ws.onmessage = (event) => {
         const receivedData = JSON.parse(event.data);
-        
-        // Проверка на наличие ошибки в данных
-        if (receivedData.message === "Access is denied. One of the following permissions is required") {
-          console.error(receivedData.message);
-          // Дополнительные действия для обработки ошибки (если необходимо)
-        } else {
-          // Обработка нормального сообщения
+        if (receivedData.chat === "information") {
           setMessages((prevMessages) => [...prevMessages, receivedData]);
         }
       };
     }
-  
+
     // Очистите обработчик при размонтировании компонента
     return () => {
       if (ws) {
@@ -88,9 +84,11 @@ export const MainPage = () => {
   };
 
   const sendMessage = () => {
+    const titleToSend = inputTitle.trim() === "" ? "Новина" : inputTitle;
     if (ws && ws.readyState === WebSocket.OPEN) {
       const messagePayload = {
         method: "create",
+        title: titleToSend,
         chat: "information",
         text: inputMessage,
       };
@@ -103,18 +101,45 @@ export const MainPage = () => {
 
   const editMessage = () => {
     console.log("Текст:", inputMessage);
+    console.log("Title1:", inputTitle);
+
     console.log("ID:", editingMessage.id);
     if (ws && ws.readyState === WebSocket.OPEN) {
       const messagePayload = {
         method: "update",
         chat: "information",
+        title: inputTitle,
         text: inputMessage, // это редактированный текст
         message_id: editingMessage.id, // здесь берем ID из editingMessage
       };
 
       ws.send(JSON.stringify(messagePayload));
+
+      const messageIndex = messages.findIndex(
+        (message) => message.message.id === editingMessage.id
+      );
+
+      if (messageIndex !== -1) {
+        // Создаем копию массива messages
+        const updatedMessages = [...messages];
+  
+        // Обновляем редактируемое сообщение
+        updatedMessages[messageIndex] = {
+          ...updatedMessages[messageIndex],
+          message: {
+            ...updatedMessages[messageIndex].message,
+            title: inputTitle,
+            text: inputMessage,
+          },
+        };
+  
+        // Устанавливаем обновленный массив messages
+        setMessages(updatedMessages);
+      }
+
       setInputMessage("");
-      setShowModalEdit(false); // Закрыть модальное окно после отправки сообщения
+      setShowModalEdit(false);
+      // Закрыть модальное окно после отправки сообщения
     } else {
       console.error("WebSocket не открыт. Невозможно отправить сообщение.");
     }
@@ -135,70 +160,82 @@ export const MainPage = () => {
         </div>
       )}
       <ul className="message-list-information">
-        {messages.map((message, index) => (
-          <li
-            key={message.message.id}
-            className="item-message-information"
-            ref={index === messages.length - 1 ? messagesEndRef : null}
-          >
-            <h2>Дуже важливо щоб ви це прочитали</h2>
+        {messages
+          .filter(
+            (message, index, self) =>
+              self.findIndex((m) => m.message.id === message.message.id) ===
+              index
+          )
+          .map((message, index) => (
+            <li
+              key={message.message.id}
+              className="item-message-information"
+              ref={index === messages.length - 1 ? messagesEndRef : null}
+            >
+              <h2>{message.message.title}</h2>
 
-            <p
-              className="message-information-text"
-              dangerouslySetInnerHTML={{
-                __html: formatText(message.message.text),
-              }}
-            />
-            <div className="message-information-text-up">
-              <p className="message-information-data">
-                {new Date(message.message.created_at).toLocaleDateString(
-                  "uk-UA",
-                  {
-                    year: "numeric",
-                    month: "2-digit",
-                    day: "2-digit",
-                  }
-                )}{" "}
-                (
-                {new Date(message.message.created_at).toLocaleTimeString(
-                  "uk-UA",
-                  {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  }
-                )}
-                )
-              </p>
-              <p className="message-information-user">
-                {message.user.full_name}
-              </p>
-            </div>
-            <div>
-              {/* <button
-                className="btn-create-news"
-                onClick={() => {
-                  setShowModalEdit(true);
-                  setEditingMessage({
-                    id: message.message.id,
-                    text: message.message.text,
-                  });
+              <p
+                className="message-information-text"
+                dangerouslySetInnerHTML={{
+                  __html: formatText(message.message.text),
                 }}
-              >
-                редагувати повідомлення
-              </button> */}
-            </div>
-          </li>
-        ))}
+              />
+              <div className="message-information-text-up">
+                <p className="message-information-data">
+                  {new Date(message.message.created_at).toLocaleDateString(
+                    "uk-UA",
+                    {
+                      year: "numeric",
+                      month: "2-digit",
+                      day: "2-digit",
+                    }
+                  )}{" "}
+                  (
+                  {new Date(message.message.created_at).toLocaleTimeString(
+                    "uk-UA",
+                    {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    }
+                  )}
+                  )
+                </p>
+                <p className="message-information-user">
+                  {message.user.full_name}
+                </p>
+              </div>
+              <div>
+                {message.user.id === myData.id && (
+                  <button
+                    className="btn-create-news"
+                    onClick={() => {
+                      setShowModalEdit(true);
+                      setEditingMessage({
+                        id: message.message.id,
+                        text: message.message.text,
+                        title: message.message.title, // Добавьте title в editingMessage
+                      });
+                      setInputTitle(message.message.title); // Установите inputTitle
+                    }}
+                  >
+                    редагувати повідомлення
+                  </button>
+                )}
+              </div>
+            </li>
+          ))}
       </ul>
       {showModalEdit && (
         <ModalEditNews
           onClose={() => {
             setShowModalEdit(false);
-            setEditingMessage(null); // сброс после закрытия модального окна
+            setEditingMessage(null);
           }}
           onEditMessage={editMessage}
           inputMessage={inputMessage}
           setInputMessage={setInputMessage}
+          inputTitle={inputTitle}
+          setInputTitle={setInputTitle}
           editingMessage={editingMessage}
         />
       )}
@@ -208,6 +245,8 @@ export const MainPage = () => {
           onSendMessage={sendMessage}
           inputMessage={inputMessage}
           setInputMessage={setInputMessage}
+          inputTitle={inputTitle}
+          setInputTitle={setInputTitle}
         />
       )}
     </div>

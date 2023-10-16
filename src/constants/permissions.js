@@ -43,7 +43,6 @@ export const PERMISSIONS = {
 export const SECTION_PERMISSIONS = {
   "main-page": [], 
   users: [
-    PERMISSIONS.VIEW_USER,
     PERMISSIONS.CREATE_USER,
     PERMISSIONS.EDIT_USER,
     PERMISSIONS.BAN_N_UNBAN_USER,

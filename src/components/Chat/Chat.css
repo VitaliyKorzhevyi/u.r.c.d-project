@@ -1,34 +1,80 @@
 .chat-container {
-  max-width: 1220px;
+  max-width: 1400px;
   padding: 0 10px;
-  margin: 40px auto 0;
+  margin: 20px auto 0;
+  display: flex;
+  flex-direction: column;
+  max-height: 100vw;
+}
+
+.chat-container-bg {
+  flex: 1;
+}
+
+.select-bg-chat {
+  display: flex;
+  margin-left: auto;
+  padding: 0 0 12px 0;
+}
+
+/* Стилизация основного скроллбара */
+.message-list::-webkit-scrollbar {
+  width: 10px;
+  padding-right: 8px; /* Ширина скроллбара */
+}
+
+/* Стилизация "ползунка" скроллбара (бара) */
+.message-list::-webkit-scrollbar-thumb {
+  background-color: #dadadadc; /* Цвет "ползунка" */
+  border-radius: 2px; /* Закругление углов "ползунка" */
+}
+
+/* Стилизация трека (фона) скроллбара */
+.message-list::-webkit-scrollbar-track {
+  background-color: #f1f1f123; /* Цвет трека */
 }
 
 .message-list {
-  max-height: 800px;
+  position: relative;
+  max-height: 70vh;
   overflow-y: auto;
   padding: 4px 10px;
   display: flex;
   flex-direction: column;
   gap: 8px;
+  border-radius: 8px;
 }
 
-.message-list {
-  background-image: url(../../../public/images/chat-bg.jpg);
+.background-chat {
+  background-image: url(../../image/chat-bg.jpg);
   background-size: cover;
-  background-repeat: no-repeat; 
-  background-position: center center; 
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+.background-select-chat {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.defoult-opt-bg-chat {
+  color: #000000;
 }
 
 .my-message {
   padding: 4px;
   text-align: right;
   border-radius: 6px;
+  cursor: default;
+  word-wrap: break-word;
 }
 
 .other-message {
+  cursor: default;
   padding: 4px;
   text-align: left;
+  word-wrap: break-word;
   border-radius: 6px;
 }
 
@@ -41,76 +87,111 @@
 }
 
 .cont-chat-info-sms {
-    width: 70%; 
-    max-width: 400px; 
-    padding: 10px; 
-    border-radius: 10px; 
-  }
-  
-  .my-message .cont-chat-info-sms {
-    margin-left: auto; 
-    background-color: #000e8b45; 
-  }
-  
-  .other-message .cont-chat-info-sms {
-    margin-right: auto; 
-    background-color: #ffffff65;
-  }
+  width: 70%;
+  max-width: 400px;
+  padding: 10px;
+  border-radius: 10px;
+}
 
-  .message-general-data {
-    font-family: "Montserrat", sans-serif;
-    color: #000000;
-    font-weight: 500;
-    font-size: 14px;
-  }
+.my-message .cont-chat-info-sms {
+  margin-left: auto;
+  background-color: #5490ffc5;
+}
+
+.other-message .cont-chat-info-sms {
+  margin-right: auto;
+  background-color: #ffffffc2;
+}
+
+.message-general-data {
+  font-family: "Montserrat", sans-serif;
+  color: #000000;
+  font-weight: 500;
+  font-size: 14px;
+}
 
 .cont-chat-info-name {
-    font-family: "Montserrat Alternates", sans-serif;
-    color: #020064;
-    font-weight: 500;
-    font-size: 14px;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.cont-chat-info-text {
+  color: #070707;
 }
 
 .date-header-group {
-    margin: 0 auto;
-    background-color: #ffffffa9;
-    padding: 4px 8px;
-    border-radius: 6px;
+  margin: 0 auto;
+  background-color: #ffffffa9;
+  padding: 4px 8px;
+  border-radius: 6px;
 
-    font-family: "Montserrat", sans-serif;
-    color: #000000;
-    font-weight: 500;
-    font-size: 14px;
+  font-family: "Montserrat", sans-serif;
+  color: #000000;
+  font-weight: 500;
+  font-size: 14px;
+
+  cursor: default;
 }
 
-.input-area {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-  
-  .input-message {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-    width: 100%;
-  }
-  
-  .send-button, .cls-button {
-    padding: 8px 15px;
-    border: none;
-    background-color: #007bff;
-    color: #fff;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  .send-button:hover, .cls-button:hover {
-    background-color: #0056b3;
-  }
-  
+.input-area-sms-general {
+  position: relative;
+  padding: 8px;
+}
 
+.input-message {
+  width: 100%;
+  height: 40px;
+  padding: 0 80px 0 10px;
+  border: 1px solid #dbdbdb;
+  border-radius: 5px;
+
+  font-size: 16px;
+  background-color: #ffffffc2;
+}
+
+.input-message:focus {
+  outline: 0;
+  outline-offset: 0;
+  border: 1px solid #646464;
+}
+
+.input-message::placeholder {
+  color: #3b3b3b;
+}
+
+.icons-emoji {
+  position: absolute;
+  right: 42px;
+  top: 16px;
+  cursor: pointer;
+  color: #181818;
+}
+
+.icons-send {
+  position: absolute;
+  right: 16px;
+  top: 16px;
+  cursor: pointer;
+  color: #181818;
+}
+
+.icons-send:hover,
+.icons-send:focus,
+.icons-emoji:hover,
+.icons-emoji:focus {
+  color: #ffffffcc;
+}
 /* Rubik Montserrat Comfortaa Open Sans  
 Raleway Ubuntu Roboto Mono */
+
+.gray-icon {
+  color: rgb(87, 87, 87);
+}
+
+.emoji-container-general {
+  position: absolute;
+  bottom: 100%; /* Располагаем над элементами */
+  right: 10px;
+  z-index: 1000; /* Устанавливаем высокий z-index, чтобы контейнер был поверх других элементов */
+}
