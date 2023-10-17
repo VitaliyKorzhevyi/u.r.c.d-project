@@ -18,7 +18,7 @@
 .create-news-content {
   min-width: 300px;
   position: relative;
-  padding: 48px 20px 24px;
+  padding: 20px 20px 24px;
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 
@@ -31,7 +31,7 @@
   padding: 10px;
 }
 
-.btn-close-modal-create-news{
+.btn-close-modal-create-news {
   position: absolute;
   right: 4px;
   top: 4px;
@@ -70,7 +70,7 @@
   padding: 6px;
   border-radius: 6px;
   border: 1px solid #949494;
-  margin-bottom: 8px
+  margin-bottom: 8px;
 }
 
 .news-container {
@@ -94,7 +94,6 @@
   border-bottom: 2px solid #597193;
 }
 
-
 .btn-form-create-news {
   margin: 0 auto;
   /* width: 120px; */
@@ -108,13 +107,22 @@
 
   font-family: "Montserrat", sans-serif;
   font-weight: 500;
-  font-size: 16px;
+  font-size: 14px;
 }
 
 .btn-form-create-news:hover {
   background-color: #ceefdf;
   border-color: #0aaf60;
   color: #0aaf60;
+}
+
+.name-modal-create-news {
+
+  margin: 4px 0 16px;
+  text-align: center;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+  font-size: 18px;
 }
 
 .btn-create-news {
@@ -148,7 +156,6 @@
   flex-direction: column;
   gap: 28px;
 
-
   flex-direction: column-reverse;
   overflow-y: auto;
 }
@@ -179,16 +186,16 @@
 }
 
 .message-information-text-up {
-    padding: 12px 0 0 0;
-    display: flex;
-   width: 100%;
+  padding: 12px 0 0 0;
+  display: flex;
+  width: 100%;
 }
 
 .message-information-data {
-    color: #002355da;
-    font-family: "Montserrat", sans-serif;
-    font-weight: 600;
-    font-size: 16px;
+  color: #002355da;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+  font-size: 16px;
 }
 
 .message-information-user {
@@ -201,9 +208,6 @@
 }
 
 /* Rubik Montserrat Comfortaa Open Sans  Raleway Ubuntu Roboto Mono */
-
-
-
 
 .modal-edit-news {
   position: fixed;
@@ -227,3 +231,94 @@
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
 
+.delete-confirmation-modal {
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+
+  flex-direction: column;
+  align-items: center;
+  border-radius: 6px;
+}
+
+.delete-confirmation-modal p {
+  font-size: 18px;
+  margin-bottom: 12px;
+}
+
+.delete-confirmation-modal button {
+  width: 120px;
+  padding: 6px 20px;
+  margin-top: 8px;
+  background-color: #e0e0e0;
+  border: 2px solid #afafaf;
+
+  cursor: pointer;
+  border-radius: 6px;
+
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+}
+
+.delete-confirmation-modal button:nth-child(1):hover {
+  background-color: #ceefdf;
+  border-color: #0aaf60;
+  color: #0aaf60;
+}
+
+.delete-confirmation-modal button:nth-child(2):hover {
+    background-color: #ffc3c3;
+    border-color: #f73939;
+    color: #f81a1a;
+}
+
+.btn-modal-dlt-news {
+  display: flex;
+  gap: 12px;
+}
+
+.btns-management-news-cont {
+  margin-left: auto;
+  padding: 40px 0 10px 0;
+  display: flex;
+  gap: 8px;
+  border-bottom: 1px solid #000b2ea9;
+}
+
+
+.btn-management-news {
+  margin: 0 auto;
+  height: 32px;
+  width: 120px;
+
+  color: #fdfdfd;
+  background-color: #59719386;
+  border: none;
+  box-shadow: 2px 2px 4px #d4d4d4ad;
+
+  cursor: pointer;
+  border-radius: 6px;
+
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  font-size: 12px;
+}
+
+.btns-management-news-cont button:nth-child(1):hover {
+  background-color: #599393b9;
+  color: #fdfdfd;
+}
+
+.btns-management-news-cont button:nth-child(2):hover {
+  background-color: #935959b9;
+  color: #fdfdfd;
+}

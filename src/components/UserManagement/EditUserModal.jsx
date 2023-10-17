@@ -87,6 +87,7 @@ export const EditUserModal = ({ isOpen, onClose, afterCreate, userData }) => {
         });
         onClose();
         if (afterCreate) afterCreate();
+        window.location.reload()
       })
       .catch((error) => {
         console.log("Error updating roles:", error);
@@ -97,22 +98,24 @@ export const EditUserModal = ({ isOpen, onClose, afterCreate, userData }) => {
 
   const ROLES = [
     "head_doctor",
-    "accounting",
-    "pharmacy",
     "anesthesiology",
     "surgery",
     "operating",
     "resuscitation",
+    "consultation",
+    "accounting",
+    "pharmacy",
   ];
 
   const ROLES_TRANSLATIONS = {
     head_doctor: "Головний лікар",
-    accounting: "Бухгалтерія",
-    pharmacy: "Аптека",
     anesthesiology: "Анестезіологія",
     surgery: "Хірургія",
     operating: "Операційна",
     resuscitation: "Реанімація",
+    consultation: "Консультація",
+    accounting: "Бухгалтерія",
+    pharmacy: "Аптека",
   };
 
   const [selectedRoles, setSelectedRoles] = useState(

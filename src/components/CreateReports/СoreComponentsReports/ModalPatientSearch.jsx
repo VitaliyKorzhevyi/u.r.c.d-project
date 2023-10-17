@@ -264,15 +264,13 @@ export const ModalPatientSearch = ({
               <ul className="patient-list-info">
                 <li>
                   <p>
-                    <strong>Ім'я:</strong> {patient.full_name}
+                    <strong>П.І.Б.:</strong> {patient.full_name}
                   </p>
                 </li>
                 <li>
                   <p>
                     <strong>День народження:</strong> {patient.birthday}
                   </p>
-                </li>
-                <li>
                   <p>
                     <strong>Вік:</strong> {patient.age}
                   </p>
@@ -281,8 +279,6 @@ export const ModalPatientSearch = ({
                   <p>
                     <strong>Телефон:</strong> {patient.phone}
                   </p>
-                </li>
-                <li>
                   <p>
                     <strong>Пошта:</strong> {patient.email}
                   </p>

@@ -1,3 +1,5 @@
+import { toast } from "react-toastify";
+
 export const ModalCreateNews = ({
   onClose,
   onSendMessage,
@@ -6,6 +8,33 @@ export const ModalCreateNews = ({
   inputTitle,
   setInputTitle,
 }) => {
+
+  const isInputTitleValid = inputTitle.length <= 500;
+  const isInputMessageValid = inputMessage.length >= 1 && inputMessage.length <= 4000;
+
+  const handleCreateNews = () => {
+    if (isInputTitleValid && isInputMessageValid) {
+      onSendMessage();
+    } else {
+      // Вы можете добавить логику для отображения сообщений об ошибках
+      if (inputTitle.length > 500) {
+        toast.info(
+          "Заголовок не повинен перевищувати 500 символів."
+        );
+      }
+      if (inputMessage.length < 1) {
+        toast.info(
+          "Текст новини повинен містити принаймні 1 символ."
+        );
+      }
+      if (inputMessage.length > 4000) {
+        toast.info(
+          "Текст новини не повинен перевищувати 4000 символів."
+        );
+      }
+    }
+  };
+
   return (
     <div className="modal-create-news">
       <div className="create-news-content">
@@ -17,6 +46,7 @@ export const ModalCreateNews = ({
               className="logo-autorization"
             />
           </div>
+          <p className="name-modal-create-news">Створити новину</p>
           <input
             className="form-create-news-title"
             type="text"
@@ -33,8 +63,8 @@ export const ModalCreateNews = ({
             rows="5"
             cols="50"
           />
-          <button className="btn-form-create-news" onClick={onSendMessage}>
-            Відправити
+          <button className="btn-form-create-news" onClick={handleCreateNews}>
+            Створити
           </button>
         </div>
       </div>

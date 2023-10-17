@@ -15,7 +15,6 @@ const REPORT_TYPE_NAMES = {
 const formatReportUrl = (id, type) => `reports/${type}/${id}`;
 
 export const ItemFormset = ({ data, userData }) => {
-  console.log(userData);
   const [detailedData, setDetailedData] = useState({});
   const [activeItemId, setActiveItemId] = useState(null);
 
@@ -24,8 +23,6 @@ export const ItemFormset = ({ data, userData }) => {
 
   const [backendChecksPharmacy, setBackendChecksPharmacy] = useState({});
   const [backendChecksAccounting, setBackendChecksAccounting] = useState({});
-  console.log(pharmacyCheck);
-  console.log(accountingCheck);
 
   const onItemDetailsFetch = ({ id, type }) => {
     const currentItemId = `${id}-${type}`;
@@ -442,20 +439,20 @@ export const ItemFormset = ({ data, userData }) => {
                   {hasPharmacyPermission && (
                     <button
                       type="button"
-                      className="btn-save-table"
+                      className="btn-save-table-formset"
                       onClick={() => sendDataToBackendPharmacy()}
                     >
-                      Зберегти АПТЕКА
+                      Зберегти
                     </button>
                   )}
 
                   {hasAccountingPermission && (
                     <button
                       type="button"
-                      className="btn-save-table"
+                      className="btn-save-table-formset"
                       onClick={() => sendDataToBackendAccounting()}
                     >
-                      Зберегти БУХГАЛТЕРІЯ
+                      Зберегти
                     </button>
                   )}
                 </div>

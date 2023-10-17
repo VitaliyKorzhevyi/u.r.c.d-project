@@ -59,7 +59,6 @@ export const EditReports = ({ userData }) => {
 
   useEffect(() => {
     $api.get("/preoperative-days").then((response) => {
-      // console.log("Доба:", response.data);
       setDays(response.data);
     });
   }, []);
@@ -256,7 +255,7 @@ export const EditReports = ({ userData }) => {
 
   useEffect(() => {
     const currentDate = getCurrentDate();
-    const dateTenDaysAgo = getDateFromDaysAgo(10);
+    const dateTenDaysAgo = getDateFromDaysAgo(30);
 
     const url = `/reports`;
     const options = {

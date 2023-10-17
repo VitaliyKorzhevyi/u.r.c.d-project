@@ -25,6 +25,9 @@ export const PERMISSIONS = {
   EDIT_OPERATION: "edit_operation",
   CREATE_PATIENT: "create_patient",
 
+  CREATE_CONSULTATION: "create_consultation",
+
+
   EDIT_PATIENT: "edit_patient",
   SEARCH_MY_REPORTS: "search_my_reports",
   SEARCH_ALL_REPORTS: "search_all_reports",

@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect, useRef } from "react";
+import { useContext, useState, useEffect, useRef } from "react";
 import { UserDataContext } from "../../pages/HomePage";
 import $api from "../../api/api";
 
@@ -21,6 +21,9 @@ export const MainPage = () => {
   const [fetching, setFetching] = useState(true);
   const [editingMessage, setEditingMessage] = useState(null);
 
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+  const [messageToDelete, setMessageToDelete] = useState(null);
+
   const formatText = (text) => {
     return text.replace(/\*(.*?)\*/g, "<strong>$1</strong>");
   };
@@ -30,18 +33,39 @@ export const MainPage = () => {
       ws.onmessage = (event) => {
         const receivedData = JSON.parse(event.data);
         if (receivedData.chat === "information") {
-          setMessages((prevMessages) => [...prevMessages, receivedData]);
+          if (receivedData.type === "updated") {
+            console.log("оновлення", receivedData.type);
+             const updatedMessages = messages.map((message) =>
+               message.message.id === receivedData.message.id
+                 ? receivedData
+                 : message
+             );
+             setMessages(updatedMessages);
+           } 
+          if (receivedData.type === "new") {
+            console.log("створення", receivedData.type);
+            // Если тип сообщения "new", добавьте его в список сообщений
+            setMessages((prevMessages) => [...prevMessages, receivedData]);
+          } 
+          if (receivedData.type === "deleted") {
+            // Если тип сообщения "delete", удалите сообщение по ID
+            setMessages((prevMessages) =>
+              prevMessages.filter(
+                (message) => message.message.id !== receivedData.message.id
+              )
+            );
+          }
         }
       };
     }
-
+  
     // Очистите обработчик при размонтировании компонента
     return () => {
       if (ws) {
         ws.onmessage = null;
       }
     };
-  }, [ws]);
+  }, [ws, messages]);
 
   useEffect(() => {
     if (fetching) {
@@ -93,6 +117,7 @@ export const MainPage = () => {
         text: inputMessage,
       };
       ws.send(JSON.stringify(messagePayload));
+      setInputTitle("");
       setInputMessage("");
     } else {
       console.error("WebSocket не открыт. Невозможно отправить сообщение.");
@@ -115,33 +140,29 @@ export const MainPage = () => {
 
       ws.send(JSON.stringify(messagePayload));
 
-      const messageIndex = messages.findIndex(
-        (message) => message.message.id === editingMessage.id
-      );
-
-      if (messageIndex !== -1) {
-        // Создаем копию массива messages
-        const updatedMessages = [...messages];
-  
-        // Обновляем редактируемое сообщение
-        updatedMessages[messageIndex] = {
-          ...updatedMessages[messageIndex],
-          message: {
-            ...updatedMessages[messageIndex].message,
-            title: inputTitle,
-            text: inputMessage,
-          },
-        };
-  
-        // Устанавливаем обновленный массив messages
-        setMessages(updatedMessages);
-      }
-
+      setInputTitle("");
       setInputMessage("");
       setShowModalEdit(false);
       // Закрыть модальное окно после отправки сообщения
     } else {
       console.error("WebSocket не открыт. Невозможно отправить сообщение.");
+    }
+  };
+
+  const showDeleteModal = (message) => {
+    setShowDeleteConfirmation(true);
+    setMessageToDelete(message);
+  };
+
+  const deleteMessage = (messageId) => {
+    if (ws && ws.readyState === WebSocket.OPEN) {
+      const messagePayload = {
+        method: "delete",
+        chat: "information",
+        message_id: messageId, // Pass the message ID to delete
+      };
+      ws.send(JSON.stringify(messagePayload));
+      setShowDeleteConfirmation(false);
     }
   };
 
@@ -204,10 +225,10 @@ export const MainPage = () => {
                   {message.user.full_name}
                 </p>
               </div>
-              <div>
-                {message.user.id === myData.id && (
+              {message.user.id === myData.id && (
+                <div className="btns-management-news-cont">
                   <button
-                    className="btn-create-news"
+                    className="btn-management-news"
                     onClick={() => {
                       setShowModalEdit(true);
                       setEditingMessage({
@@ -218,13 +239,28 @@ export const MainPage = () => {
                       setInputTitle(message.message.title); // Установите inputTitle
                     }}
                   >
-                    редагувати повідомлення
+                    Редагувати
                   </button>
-                )}
-              </div>
+                  <button
+                    className="btn-management-news"
+                    onClick={() => showDeleteModal(message.message.id)}
+                  >
+                    Видалити
+                  </button>
+                </div>
+              )}
             </li>
           ))}
       </ul>
+      {showDeleteConfirmation && (
+        <div className="delete-confirmation-modal">
+          <p>Видалити цю новину?</p>
+          <div className="btn-modal-dlt-news">
+            <button onClick={() => setShowDeleteConfirmation(false)}>Ні</button>
+            <button onClick={() => deleteMessage(messageToDelete)}>Так</button>
+          </div>
+        </div>
+      )}
       {showModalEdit && (
         <ModalEditNews
           onClose={() => {

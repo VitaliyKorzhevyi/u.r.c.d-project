@@ -32,6 +32,7 @@ export const Marks = ({ userData }) => {
   const [selectedStartDate, setSelectedStartDate] = useState(
     formattedThirtyDaysAgo
   );
+  
   const [selectedEndDate, setSelectedEndDate] = useState(formattedCurrentDate);
 
   const onDateChange = (start, end) => {
@@ -65,7 +66,7 @@ export const Marks = ({ userData }) => {
 
   useEffect(() => {
     const currentDate = getCurrentDate();
-    const dateTenDaysAgo = getDateFromDaysAgo(10);
+    const dateTenDaysAgo = getDateFromDaysAgo(30);
 
     const url = `/reports`;
     const options = {
@@ -173,8 +174,8 @@ export const Marks = ({ userData }) => {
           </div>
 
           <ReportsManagement
-            userData={userData}
             onFormDataChange={onFormDataChange}
+            showUserSearchButton={true}
           />
           <button
             type="button"

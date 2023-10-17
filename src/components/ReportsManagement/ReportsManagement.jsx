@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-
+import { useState, useEffect, useContext } from "react";
+import { UserDataContext } from "../../pages/HomePage";
 import $api from "../../api/api";
 
 import { DayInputFilter } from "./CoreComponentsFilter/DayInputFilter";
@@ -8,9 +8,12 @@ import { OperatingInputFilter } from "./CoreComponentsFilter/OperatingInputFilte
 import { ModalPatientSearch } from "../CreateReports/СoreComponentsReports/ModalPatientSearch";
 import { ModalUserSearch } from "./CoreComponentsFilter/ModalUserSearch";
 
+import { PERMISSIONS } from "../../constants/permissions";
+
 import "./ReportsManagement.css";
 
-export const ReportsManagement = ({ userData, onFormDataChange }) => {
+export const ReportsManagement = ({ onFormDataChange, showUserSearchButton }) => {
+  const { myData } = useContext(UserDataContext);
   const [formData, setFormData] = useState({
     preoperative_day_id: "",
     diagnosis_id: "",
@@ -148,6 +151,10 @@ export const ReportsManagement = ({ userData, onFormDataChange }) => {
     }));
   };
 
+  const hasPermissionToSearchUser =
+    myData.permissions.includes(PERMISSIONS.UPDATING_PHARMACY_MARKS) ||
+    myData.permissions.includes(PERMISSIONS.UPDATING_ACCOUNTING_MARKS);
+
   return (
     <div className="management-container">
       <ul className="list-management-report">
@@ -262,24 +269,26 @@ export const ReportsManagement = ({ userData, onFormDataChange }) => {
 
           <p className="input-patient-fullname-filter">{patientFullName}</p>
         </li>
-        <li className="item-management-report">
-          <div className="item-management-search-patient">
-            <p>
-              <strong>Пошук по користувачу</strong>
-            </p>
-            <button
-              type="button"
-              className="btn-search-patient-filter"
-              onClick={() => {
-                toggleModalSearchUser();
-              }}
-            >
-              <i className="bx bx-search bx-sm"></i>
-            </button>
-          </div>
+        {showUserSearchButton && hasPermissionToSearchUser && (
+          <li className="item-management-report">
+            <div className="item-management-search-user">
+              <p>
+                <strong>Пошук по користувачу</strong>
+              </p>
+              <button
+                type="button"
+                className="btn-search-patient-filter"
+                onClick={() => {
+                  toggleModalSearchUser();
+                }}
+              >
+                <i className="bx bx-search bx-sm"></i>
+              </button>
+            </div>
 
-          <p className="input-patient-fullname-filter">{userFullName}</p>
-        </li>
+            <p className="input-patient-fullname-filter">{userFullName}</p>
+          </li>
+        )}
       </ul>
       <ModalUserSearch
         isOpen={isModalOpenSearchUser}

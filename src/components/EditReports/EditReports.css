@@ -293,13 +293,17 @@
   padding: 8px 16px;
   cursor: pointer;
   border-radius: 6px;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  font-size: 14px;
 }
 
 .btn-save-table.blue {
   background-color: #c6dfff;
   border: 2px solid #76b0fc;
-  font-family: "Montserrat", sans-serif;
+ 
   font-weight: 500;
+ 
 }
 
 .btn-save-table.blue:hover {
@@ -309,22 +313,20 @@
 }
 
 .btn-save-table.green {
-  font-family: "Montserrat", sans-serif;
-  font-weight: 500;
-  background-color: #bcf0d7;
-  border: 2px solid #3adb8d;
+  background-color: #7cd1a8a8;
+  border: 2px solid #4fb483;
 }
 .btn-save-table.green:hover {
-  color: #fff;
-  background-color: #86e0ab;
-  border-color: #32c27c;
+  background-color: #55b183;
+  color: #fdfdfd;
+  border-color: #49695a;
 }
 
 .custom-tooltip {
   font-size: 16px; /* или любой другой размер, который вам нужен */
 }
 
-.btn-save-table[disabled] {
+.btn-save-table.green[disabled] {
   cursor: default;
 }
 

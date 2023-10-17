@@ -9,10 +9,55 @@
 }
 
 .consultation-table-title {
-    /* background-color: var(--anest-title-bg-color);
-    color: var(--anest-title-color); */
-  
-    font-family: "Montserrat", sans-serif;
-    font-weight: 700;
-    font-size: 30px;
-  }
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  font-size: 30px;
+  background-color: rgb(211, 211, 211);
+}
+
+.consultation-table-size {
+  width: 10%;
+}
+
+.consultation-table-size1 {
+  width: 2%;
+}
+
+.consultation-table-size2 {
+  width: 6%;
+}
+
+.consultation-table-size3 {
+  width: 26%;
+}
+
+.consultation-table-size4 {
+  width: 6%;
+}
+
+.consultation-table-size5 {
+  width: 4%;
+}
+
+.consultation-table-semi-title {
+  background-color: rgb(236, 236, 236);
+}
+
+.consultation-table-text {
+  text-align: center;
+}
+
+.table-cons-discount {
+  width: 100%;
+  height: 36px;
+}
+
+.table-cons-receipt-number {
+  width: 100%;
+  height: 36px;
+}
+
+.table-cons-notation {
+  width: 100%;
+  height: 36px;
+}

@@ -66,11 +66,7 @@ export const HomePage = () => {
     if (ws) {
       ws.close();
     }
-
-    // Удалить токены из локального хранилища
-    localStorage.removeItem("access_token");
-    localStorage.removeItem("refresh_token");
-    // $api.post("/auth/logout").then((response) => console.log(response));
+    $api.post("/auth/logout").then((response) => console.log(response));
     localStorage.clear();
 
     window.location.replace("/");

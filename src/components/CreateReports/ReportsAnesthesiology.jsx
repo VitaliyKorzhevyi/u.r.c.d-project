@@ -1,5 +1,3 @@
-//Todo додати модалку для збереження ВСІХ!!!!!! форм
-
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import $api from "../../api/api";
@@ -208,7 +206,7 @@ export const ReportsAnesthesiology = () => {
   // копіювання форми
   const onCopyForm = (formIndex) => {
     const formToCopy = forms[formIndex];
-    const copiedForm = { ...formToCopy, id: nextFormId + 1};
+    const copiedForm = { ...formToCopy, id: nextFormId + 1 };
     setNextFormId(nextFormId + 1);
     const updatedForms = [...forms, copiedForm];
     setFormsWithStorage(updatedForms);
@@ -254,7 +252,7 @@ export const ReportsAnesthesiology = () => {
       return value;
     };
     return {
-      history_number: form.history_number ,
+      history_number: form.history_number,
       patient_id: form.patient_id,
       diagnosis_id: form.diagnosis_id,
       operation_id: form.operation_id,
@@ -742,15 +740,17 @@ export const ReportsAnesthesiology = () => {
       {showSaveModal && (
         <div className="confirm-modal">
           <p>Зберегти форму?</p>
-          <button
-            onClick={() => {
-              onSaveForm(currentFormIndex);
-              setShowSaveModal(false);
-            }}
-          >
-            Так
-          </button>
-          <button onClick={() => setShowSaveModal(false)}>Відмінити</button>
+          <div className="confirm-modal-btn-save">
+          <button onClick={() => setShowSaveModal(false)}>Ні</button>
+            <button
+              onClick={() => {
+                onSaveForm(currentFormIndex);
+                setShowSaveModal(false);
+              }}
+            >
+              Так
+            </button>
+          </div>
         </div>
       )}
       <ModalPatientSearch

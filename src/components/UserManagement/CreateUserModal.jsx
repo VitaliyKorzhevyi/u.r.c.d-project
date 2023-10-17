@@ -65,22 +65,24 @@ export const CreateUserModal = ({ isOpen, onClose, afterCreate }) => {
 
   const ROLES = [
     "head_doctor",
-    "accounting",
-    "pharmacy",
     "anesthesiology",
     "surgery",
     "operating",
     "resuscitation",
+    "consultation",
+    "accounting",
+    "pharmacy",
   ];
 
   const ROLES_TRANSLATIONS = {
     head_doctor: "Головний лікар",
-    accounting: "Бухгалтерія",
-    pharmacy: "Аптека",
     anesthesiology: "Анестезіологія",
     surgery: "Хірургія",
     operating: "Операційна",
     resuscitation: "Реанімація",
+    consultation: "Консультація",
+    accounting: "Бухгалтерія",
+    pharmacy: "Аптека",
   };
 
   const [selectedRoles, setSelectedRoles] = useState([]);
