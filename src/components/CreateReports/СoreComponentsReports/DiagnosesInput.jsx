@@ -30,13 +30,11 @@ export const DiagnosesInput = ({
     let inputVal = e.target.value;
     inputVal = capitalizeFirstLetter(inputVal);
     setInputValue(inputVal);
-  
+
     if (inputVal.length >= 1) {
-      const regex = new RegExp(inputVal.split('').join('.*'), 'i'); 
+      const regex = new RegExp(inputVal.split("").join(".*"), "i");
       setFilteredDiagnoses(
-        diagnoses.filter((diagnos) =>
-          regex.test(diagnos.title)
-        )
+        diagnoses.filter((diagnos) => regex.test(diagnos.title))
       );
     } else {
       setFilteredDiagnoses([]);
@@ -88,18 +86,18 @@ export const DiagnosesInput = ({
   };
 
   //* ПРИ НАТИСКАННІ НА КНОПКУ ENTER
-  
+
   const onInputKeyDown = (e) => {
     const inputValueLength = e.target.value.length;
-  
+
     const errorMessages = {
       [inputValueLength < 3]: "Рядок повинен містити не менше 3 символів",
-      [inputValueLength > 100]: "Рядок повинен містити не більше 100 символів"
+      [inputValueLength > 100]: "Рядок повинен містити не більше 100 символів",
     };
-  
+
     if (e.key === "Enter") {
       const errorMessage = errorMessages[true];
-      
+
       if (errorMessage) {
         toast.error(errorMessage);
       } else if (!isValueInDiagnoses(e.target.value)) {
@@ -108,31 +106,31 @@ export const DiagnosesInput = ({
     }
   };
 
-    //* ПОМИЛКИ
-    function onAxiosError(error) {
-      const errorMessages = {
-        "String should have at least 3 characters":
-          "Рядок повинен містити не менше 3 символів",
-        "String should have at most 100 characters":
-          "Рядок повинен містити не більше 100 символів",
-      };
-  
-      if (error.response) {
-        const detail = error.response.data.detail;
-  
-        if (detail[0].msg && errorMessages[detail[0].msg]) {
-          toast.error(errorMessages[detail[0].msg]);
-        } else {
-          toast.error(
-            detail[0].msg ? detail[0].msg : "Сталася невідома помилка сервера."
-          );
-        }
-      } else if (error.request) {
-        toast.error("Сервер не відповідає. Перевірте ваше підключення.");
+  //* ПОМИЛКИ
+  function onAxiosError(error) {
+    const errorMessages = {
+      "String should have at least 3 characters":
+        "Рядок повинен містити не менше 3 символів",
+      "String should have at most 100 characters":
+        "Рядок повинен містити не більше 100 символів",
+    };
+
+    if (error.response) {
+      const detail = error.response.data.detail;
+
+      if (detail[0].msg && errorMessages[detail[0].msg]) {
+        toast.error(errorMessages[detail[0].msg]);
       } else {
-        toast.error(`Помилка: ${error.message}`);
+        toast.error(
+          detail[0].msg ? detail[0].msg : "Сталася невідома помилка сервера."
+        );
       }
+    } else if (error.request) {
+      toast.error("Сервер не відповідає. Перевірте ваше підключення.");
+    } else {
+      toast.error(`Помилка: ${error.message}`);
     }
+  }
 
   //* ДОДАЄМО НОВИЙ ДІАГНОЗ НА БЕК
   const onAddNewDiagnoses = async () => {
@@ -177,17 +175,19 @@ export const DiagnosesInput = ({
       </ul>
       {showModal && (
         <div className="confirm-modal">
-          <p>Додати новий діагноз {inputValue}?</p>
-          <button onClick={onAddNewDiagnoses}>Так</button>
+          <p>Додати новий діагноз "{inputValue}"?</p>
+          <div className="confirm-modal-btn-save">
           <button
-            onClick={() => {
-              setShowModal(false);
-              setInputValue("");
-              setFilteredDiagnoses([]);
-            }}
-          >
-            Відмінити
-          </button>
+              onClick={() => {
+                setShowModal(false);
+                setInputValue("");
+                setFilteredDiagnoses([]);
+              }}
+            >
+              Ні
+            </button>
+            <button onClick={onAddNewDiagnoses}>Так</button>
+          </div>
         </div>
       )}
     </>

@@ -2,6 +2,7 @@ import { useState, useContext} from "react";
 
 import { CreateReports } from "../CreateReports/CreateReports";
 import { EditReports } from "../EditReports/EditReports";
+import { EditConsultation } from "../EditConsultation/EditConsultation";
 import { Marks } from "../Marks/Marks";
 // import { FullInfoReports } from "../FullInfoReports/FullInfoReports";
 import { DataEditing } from "../DataEditing/DataEditing";
@@ -46,6 +47,7 @@ export const Reports = () => {
     setOpenModal("create");
   ;
   const openEditModal = () => setOpenModal("edit");
+  const openEditConsModal = () => setOpenModal("editCons");
   const openMarksModal = () => setOpenModal("marks");
   const openDataEditModal = () => setOpenModal("dataEdit");
   // const openFullInfoModal = () => setOpenModal("fullInfo");
@@ -74,7 +76,15 @@ export const Reports = () => {
         >
           Керування звітами
         </AccessibleButton>
-
+        <AccessibleButton
+          id="editCons"
+          section="edit-consultation"
+          onClick={openEditConsModal}
+          userData={myData}
+          activeModal={openModal}
+        >
+          Керування консультаціями
+        </AccessibleButton>
         <AccessibleButton
           id="marks"
           section="marks-report"
@@ -110,6 +120,7 @@ export const Reports = () => {
         <CreateReports userData={myData} onClose={closeModal} />
       )}
       {openModal === "edit" && <EditReports onClose={closeModal} userData={myData}/>}
+      {openModal === "editCons" && <EditConsultation onClose={closeModal}/>}
       {openModal === "marks" && <Marks userData={myData} onClose={closeModal} />}
       {openModal === "dataEdit" && <DataEditing onClose={closeModal} />}
       {/* {openModal === "fullInfo" && <FullInfoReports onClose={closeModal} />} */}

@@ -39,7 +39,7 @@
 
 .confirm-modal-btn-save button {
   width: 60px;
-  padding: 4px;
+  padding: 6px 6px;
   cursor: pointer;
   font-family: "Montserrat", sans-serif;
 
@@ -50,7 +50,7 @@
 }
 
 .confirm-modal button:nth-child(2):hover {
-  background-color: #00dd72;
+  background-color: #52db99;
   color: #fdfdfd;
 }
 

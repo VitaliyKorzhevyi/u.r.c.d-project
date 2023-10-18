@@ -1,0 +1,106 @@
+.cons-big-container {
+  max-width: 1700px;
+  padding: 40px 0;
+  display: flex;
+  gap: 4px;
+}
+
+.cons-sort-container {
+  padding: 27px 0 0 0;
+  min-width: 230px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.select-sort-new-cons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  height: 30px;
+  width: 200px;
+}
+
+.cons-sort-container-title {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.cons-sort-container-search {
+  padding-bottom: 8px;
+}
+
+.cons-big-container-data {
+  max-width: 1200px;
+  flex: 1;
+}
+
+.cons-big-container-data-size1 {
+  width: 10%;
+}
+
+.cons-big-container-data-size3 {
+  width: 6%;
+  text-align: center;
+}
+
+.cons-big-container-data-size4 {
+  width: 28%;
+}
+
+.cons-big-container-data-size5 {
+  width: 8.4%;
+}
+
+.btns-maneg-patient-filter {
+  display: flex;
+  gap: 8px;
+}
+
+.cons-big-container-data-btns {
+  display: flex;
+  gap: 4px;
+}
+
+.cons-big-container-data-btns button {
+  cursor: pointer;
+  height: 36px;
+}
+
+.cons-table-edit-rec-n,
+.cons-table-edit-notation {
+  width: 100%;
+  height: 36px;
+}
+
+.cons-table-edit-rec-n {
+  text-align: center;
+}
+
+.cons-big-container-data-patient {
+  display: flex;
+  flex-direction: column;
+}
+
+.cons-big-table-title {
+  margin-bottom: 30px;
+}
+
+
+
+.cons-big-container-title-date {
+  margin-bottom: 10px;
+  padding: 10px 0;
+
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  font-size: 24px;
+
+  background-color: rgb(202, 219, 233);
+  border-radius: 6px;
+}

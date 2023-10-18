@@ -3,7 +3,6 @@ import { toast } from "react-toastify";
 import $api from "../../api/api";
 import { useSpring, animated } from "react-spring";
 
-
 //* Core components
 import { DayInput } from "./СoreComponentsReports/DayInput";
 import { DiagnosesInput } from "./СoreComponentsReports/DiagnosesInput";
@@ -291,7 +290,6 @@ export const ReportsSurgical = () => {
   //* ПОМИЛКИ ДЛЯ ІНПУТІВ
   // Основні поля для перевірки в формі
   const MAIN_FIELDS = {
-
     patientName: '"Ім\'я пацієнта"',
     operations: '"Операція"',
     day: '"К-сть. діб"',
@@ -341,7 +339,7 @@ export const ReportsSurgical = () => {
 
     // Перевірка на 1 обовязковий рядок
     if (form.rows.length === 0) {
-      toast.warn("Форма не може бути порожньою. Додайте хоча б один рядок!", {
+      toast.warn("Звіт не може бути порожнім. Додайте хоча б один рядок!", {
         autoClose: 2500,
       });
       return;
@@ -470,7 +468,7 @@ export const ReportsSurgical = () => {
 
                   <td className="form2-table-size">
                     <input
-                      type="number"
+                      type="text"
                       name="history_number"
                       className="form1-table-number"
                       value={form.history_number}
@@ -517,7 +515,7 @@ export const ReportsSurgical = () => {
                         }}
                         disabled={form.locked}
                       >
-                        <i className="bx bx-plus bx-sm"></i>
+                        <i className="bx bx-user-plus bx-sm"></i>
                       </button>
                     </div>
                   </td>
@@ -618,7 +616,7 @@ export const ReportsSurgical = () => {
                     </p>
                   </td>
                   <td>Примітки</td>
-                  <td>Управління</td>
+                  <td>Дії</td>
                 </tr>
                 {form.rows.map((row, rowIndex) => (
                   <tr
@@ -706,7 +704,7 @@ export const ReportsSurgical = () => {
                 disabled={form.locked}
                 onClick={() => openSaveModalWithIndex(formIndex)}
               >
-                Зберегти форму
+                Зберегти
               </button>
               <button
                 type="button"
@@ -730,16 +728,18 @@ export const ReportsSurgical = () => {
       </button>
       {showSaveModal && (
         <div className="confirm-modal">
-          <p>Зберегти форму?</p>
-          <button
-            onClick={() => {
-              onSaveForm(currentFormIndex);
-              setShowSaveModal(false);
-            }}
-          >
-            Так
-          </button>
-          <button onClick={() => setShowSaveModal(false)}>Відмінити</button>
+          <p>Зберегти?</p>
+          <div className="confirm-modal-btn-save">
+            <button onClick={() => setShowSaveModal(false)}>Ні</button>
+            <button
+              onClick={() => {
+                onSaveForm(currentFormIndex);
+                setShowSaveModal(false);
+              }}
+            >
+              Так
+            </button>
+          </div>
         </div>
       )}
       <ModalPatientSearch

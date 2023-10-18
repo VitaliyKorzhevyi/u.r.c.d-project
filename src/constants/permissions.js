@@ -26,7 +26,8 @@ export const PERMISSIONS = {
   CREATE_PATIENT: "create_patient",
 
   CREATE_CONSULTATION: "create_consultation",
-
+  SEARCH_MY_CONSULTATION: "search_my_consultations",
+  EDIT_CONSULTATION: "edit_consultation",
 
   EDIT_PATIENT: "edit_patient",
   SEARCH_MY_REPORTS: "search_my_reports",
@@ -67,6 +68,12 @@ export const SECTION_PERMISSIONS = {
     PERMISSIONS.EDIT_OPERATING_REPORT,
     PERMISSIONS.EDIT_RESUSCITATION_REPORT,
     PERMISSIONS.EDIT_SURGERY_REPORT,
+  ],
+
+  "edit-consultation": [
+    PERMISSIONS.CREATE_CONSULTATION,
+    PERMISSIONS.SEARCH_MY_CONSULTATION,
+    PERMISSIONS.EDIT_CONSULTATION,
   ],
 
   "marks-report": [

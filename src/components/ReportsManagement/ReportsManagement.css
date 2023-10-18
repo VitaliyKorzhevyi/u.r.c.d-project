@@ -31,21 +31,46 @@
 .select-value-page {
   height: 30px;
   width: 60px;
+  padding-left: 4px;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+}
+.select-value-page option {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  font-size: 14px;
 }
 
 .select-value-type {
   height: 30px;
   width: 200px;
+  padding-left: 4px;
+
+}
+
+.select-value-type option{
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  font-size: 14px;
 }
 
 .select-sort-reports {
   height: 30px;
   width: 200px;
+  padding-left: 4px;
+}
+
+.select-sort-reports option{
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  font-size: 14px;
 }
 
 .input-size-filter {
   width: 200px;
   height: 30px;
+  padding-left: 4px;
 }
 
 .container-dropdown-filter {
@@ -75,7 +100,7 @@
 }
 
 .input-size-filter {
-  padding-left: 4px;
+  padding-left: 6px;
 }
 
 .item-management-search-patient {
@@ -91,9 +116,9 @@
 }
 
 .btn-search-patient-filter {
-  width: 80px;
+  width: 96px;
   cursor: pointer;
-  padding: 4px 0 0 0;
+  padding: 2px 0 0 0;
   color: var(--blue-btns-color);
   background-color: var(--search-patients-btn-bg-color);
   border: 2px solid #72aefd;
@@ -105,6 +130,24 @@
   color: #fff;
   background-color: #72aefd;
   border-color: #1b7eff;
+}
+
+
+.btn-clear-patient-filter {
+  width: 96px;
+  cursor: pointer;
+  padding: 2px 0 0 0;
+  color: #464545;
+  background-color: #e6e6e6;
+  border: 2px solid #616161;
+  border-radius: 6px;
+}
+
+.btn-clear-patient-filter:hover,
+.btn-clear-patient-filter:focus {
+  color: #fff;
+  background-color: #fdb6b6;
+  border-color:#f73939;
 }
 
 .input-patient-fullname-filter {

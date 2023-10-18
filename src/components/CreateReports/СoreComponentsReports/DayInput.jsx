@@ -23,14 +23,10 @@ export const DayInput = ({
   const onInputChange = (e) => {
     const inputValue = e.target.value;
     setInputValue(inputValue);
-  
+
     if (inputValue.length >= 1) {
-      const regex = new RegExp(inputValue.split('').join('.*'), 'i'); 
-      setFilteredDays(
-        days.filter((day) =>
-          regex.test(day.title)
-        )
-      );
+      const regex = new RegExp(inputValue.split("").join(".*"), "i");
+      setFilteredDays(days.filter((day) => regex.test(day.title)));
     } else {
       setFilteredDays([]);
     }
@@ -44,7 +40,11 @@ export const DayInput = ({
   };
 
   //* ПЕРЕДАЧА АРГУМЕНТІВ ДЛЯ ЗБЕРІГАННЯ У ЛОКАЛЬНЕ СХОВИЩЕ
-  const saveValueLocalStorage = (inputValue, dayId, saveToLocalStorage = true) => {
+  const saveValueLocalStorage = (
+    inputValue,
+    dayId,
+    saveToLocalStorage = true
+  ) => {
     const updatedForms = [...forms];
     updatedForms[formIndex].day = inputValue;
     if (dayId) {
@@ -76,15 +76,15 @@ export const DayInput = ({
   //* ПРИ НАТИСКАННІ НА КНОПКУ ENTER
   const onInputKeyDown = (e) => {
     const inputValueLength = e.target.value.length;
-  
+
     const errorMessages = {
       [inputValueLength < 1]: "Рядок повинен містити не менше 2 символів",
-      [inputValueLength > 100]: "Рядок повинен містити не більше 100 символів"
+      [inputValueLength > 100]: "Рядок повинен містити не більше 100 символів",
     };
-  
+
     if (e.key === "Enter") {
       const errorMessage = errorMessages[true];
-      
+
       if (errorMessage) {
         toast.error(errorMessage);
       } else if (!isValueInDays(e.target.value)) {
@@ -99,7 +99,7 @@ export const DayInput = ({
       "String should have at least 2 characters":
         "Рядок повинен містити не менше 2 символів",
       "String should have at most 100 characters":
-        "Рядок повинен містити не більше 100 сим",//!зміни
+        "Рядок повинен містити не більше 100 сим", //!зміни
     };
 
     if (error.response) {
@@ -161,17 +161,19 @@ export const DayInput = ({
       </ul>
       {showModal && (
         <div className="confirm-modal">
-          <p>Додати новий день {inputValue}?</p>
-          <button onClick={onAddNewDay}>Так</button>
+          <p>Додати "{inputValue}"?</p>
+          <div className="confirm-modal-btn-save">
           <button
-            onClick={() => {
-              setShowModal(false);
-              setInputValue("");
-              setFilteredDays([]);
-            }}
-          >
-            Відмінити
-          </button>
+              onClick={() => {
+                setShowModal(false);
+                setInputValue("");
+                setFilteredDays([]);
+              }}
+            >
+              Ні
+            </button>
+            <button onClick={onAddNewDay}>Так</button>
+          </div>
         </div>
       )}
     </>

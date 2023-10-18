@@ -340,7 +340,7 @@ export const ReportsOperating = () => {
 
     // Перевірка на 1 обовязковий рядок
     if (form.rows.length === 0) {
-      toast.warn("Форма не може бути порожньою. Додайте хоча б один рядок!", {
+      toast.warn("Звіт не може бути порожнім. Додайте хоча б один рядок!", {
         autoClose: 2500,
       });
       return;
@@ -470,7 +470,7 @@ export const ReportsOperating = () => {
 
                   <td className="form2-table-size">
                     <input
-                      type="number"
+                      type="text"
                       name="history_number"
                       className="form1-table-number"
                       value={form.history_number}
@@ -517,7 +517,7 @@ export const ReportsOperating = () => {
                         }}
                         disabled={form.locked}
                       >
-                        <i className="bx bx-plus bx-sm"></i>
+                        <i className="bx bx-user-plus bx-sm"></i>
                       </button>
                     </div>
                   </td>
@@ -620,7 +620,7 @@ export const ReportsOperating = () => {
                     </p>
                   </td>
                   <td>Примітки</td>
-                  <td>Управління</td>
+                  <td>Дії</td>
                 </tr>
                 {form.rows.map((row, rowIndex) => (
                   <tr
@@ -708,7 +708,7 @@ export const ReportsOperating = () => {
                 disabled={form.locked}
                 onClick={() => openSaveModalWithIndex(formIndex)}
               >
-                Зберегти форму
+                Зберегти
               </button>
               <button
                 type="button"
@@ -732,7 +732,7 @@ export const ReportsOperating = () => {
       </button>
       {showSaveModal && (
         <div className="confirm-modal">
-          <p>Зберегти форму?</p>
+          <p>Зберегти?</p>
           <div className="confirm-modal-btn-save">
             <button onClick={() => setShowSaveModal(false)}>Ні</button>
             <button

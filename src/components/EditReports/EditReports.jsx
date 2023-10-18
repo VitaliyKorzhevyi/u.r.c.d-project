@@ -477,16 +477,22 @@ export const EditReports = ({ userData }) => {
                             }`}
                           >
                             <p>
-                              <strong>Форма:</strong>{" "}
+                              <strong>Звіт:</strong>{" "}
                               {REPORT_TYPE_NAMES[type] || type}
                             </p>
                           </td>
-                          <td>
-                            <strong>Пацієнт:</strong> {patient_full_name}
+                          <td className="semititle-size5">
+                            <p className="semititle-size5">
+                              <strong>Пацієнт:</strong> {patient_full_name}
+                            </p>
                           </td>
-                          <td className="semititle-size3 ">
+                          <td className="semititle-size3">
                             <div
-                              style={{ display: "flex", alignItems: "center" }}
+                              style={{
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                              }}
                             >
                               <label
                                 htmlFor="historyInput"

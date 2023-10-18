@@ -11,6 +11,7 @@ export const ModalPatientCreate = ({
   onClose,
   onGetAge,
   onGetFullName,
+  onGetPhone,
   onGetBirthday,
   onGetId,
 }) => {
@@ -114,14 +115,15 @@ export const ModalPatientCreate = ({
       console.log(data);
       const response = await $api.post("/patients", data);
 
-      onGetAge(response.data.age);
-      onGetFullName(response.data.full_name);
-      onGetBirthday(response.data.birthday);
-      onGetId(response.data.id);
+      onGetAge?.(response.data.age);
+      onGetFullName?.(response.data.full_name);
+      onGetBirthday?.(response.data.birthday);
+      onGetId?.(response.data.id);
+      onGetPhone?.(response.data.phone);
+
       console.log(response.data);
 
-      // Очистити всі поля
-      // resetFields();
+      resetFields();
 
       setTimeout(() => {
         onClose();

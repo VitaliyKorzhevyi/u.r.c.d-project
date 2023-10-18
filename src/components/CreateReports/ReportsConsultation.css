@@ -15,6 +15,18 @@
   background-color: rgb(211, 211, 211);
 }
 
+.consultation-table-my-fullname,
+.consultation-table-my-date {
+  padding: 4px;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  font-size: 20px;
+}
+
+.consultation-table-my-date {
+  text-align: center;
+}
+
 .consultation-table-size {
   width: 10%;
 }
@@ -25,10 +37,12 @@
 
 .consultation-table-size2 {
   width: 6%;
+  text-align: center;
 }
 
 .consultation-table-size3 {
   width: 26%;
+  text-align: center;
 }
 
 .consultation-table-size4 {
@@ -39,7 +53,24 @@
   width: 4%;
 }
 
+.consultation-table-size6 {
+  width: 5%;
+  text-align: center;
+}
+
+.consultation-table-patient-st {
+  text-align: center;
+}
+
+.consultation-table-receipt-number {
+  text-align: center;
+}
+
 .consultation-table-semi-title {
+  padding: 4px;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+  font-size: 16px;
   background-color: rgb(236, 236, 236);
 }
 
@@ -50,6 +81,7 @@
 .table-cons-discount {
   width: 100%;
   height: 36px;
+  text-align: center;
 }
 
 .table-cons-receipt-number {
@@ -61,3 +93,69 @@
   width: 100%;
   height: 36px;
 }
+
+.table-cons-btns-manag-rows {
+  display: flex;
+  gap: 2px;
+}
+
+.table-cons-btn {
+  padding: 4px 6px;
+  background-color: var(--control-btns-bg-color);
+  cursor: pointer;
+  border: 2px solid var(--btns-brdr-color);
+}
+
+.table-cons-btn.blue:hover,
+.table-cons-btn.blue:focus {
+  color: #fff;
+  background-color: #72aefd;
+  border-color: #1b7eff;
+}
+
+.table-cons-btn.red:hover,
+.table-cons-btn.red:focus {
+  color: var(--white-btns-color);
+  background-color: var(--del-btn-hover-bg-color);
+  border: 2px solid #971212;
+}
+
+.checkbox-isfree {
+  margin: 0 auto;
+  border: 2px solid #aaaaaa;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 4px;
+}
+
+.btn-patient.disabled,
+.table-cons-btn.disabled,
+.form1-btn-add.disabled,
+.form1-btn-save.disabled {
+  color: #f5f5f5;
+  background-color: #d4d4d4;
+  border-color: #afafaf;
+  cursor: default;
+}
+
+.btn-patient.disabled:hover,
+.table-cons-btn.disabled:hover,
+.form1-btn-add.disabled:hover,
+.form1-btn-save.disabled:hover  {
+  color: #f5f5f5;
+  background-color: #d4d4d4;
+  border-color: #afafaf;
+}
+
+.checkbox-isfree.disabled i {
+  color: #c5c5c5;
+
+}
+
+.form1-icon.disabled {
+  color: #ff2222;
+}
+

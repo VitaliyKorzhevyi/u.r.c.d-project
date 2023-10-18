@@ -32,11 +32,9 @@ export const OperationsInput = ({
     setInputValue(inputValue);
 
     if (inputValue.length >= 1) {
-      const regex = new RegExp(inputValue.split('').join('.*'), 'i');
+      const regex = new RegExp(inputValue.split("").join(".*"), "i");
       setFilteredOperations(
-        operations.filter((operations) =>
-        regex.test(operations.title)
-        )
+        operations.filter((operations) => regex.test(operations.title))
       );
     } else {
       setFilteredOperations([]);
@@ -90,15 +88,15 @@ export const OperationsInput = ({
   //* ПРИ НАТИСКАННІ НА КНОПКУ ENTER
   const onInputKeyDown = (e) => {
     const inputValueLength = e.target.value.length;
-  
+
     const errorMessages = {
       [inputValueLength < 3]: "Рядок повинен містити не менше 3 символів",
-      [inputValueLength > 100]: "Рядок повинен містити не більше 100 символів"
+      [inputValueLength > 100]: "Рядок повинен містити не більше 100 символів",
     };
-  
+
     if (e.key === "Enter") {
       const errorMessage = errorMessages[true];
-      
+
       if (errorMessage) {
         toast.error(errorMessage);
       } else if (!isValueInOperations(e.target.value)) {
@@ -169,27 +167,26 @@ export const OperationsInput = ({
         style={{ display: filteredOperations.length === 0 ? "none" : "block" }}
       >
         {filteredOperations.map((operations, index) => (
-          <li
-            key={index}
-            onMouseDown={() => onSelectOperations(operations)}
-          >
+          <li key={index} onMouseDown={() => onSelectOperations(operations)}>
             {operations.title}
           </li>
         ))}
       </ul>
       {showModal && (
         <div className="confirm-modal">
-          <p>Додати нову операцію {inputValue}?</p>
-          <button onClick={onAddNewOperations}>Так</button>
-          <button
-            onClick={() => {
-              setShowModal(false);
-              setInputValue("");
-              setFilteredOperations([]);
-            }}
-          >
-            Відмінити
-          </button>
+          <p>Додати нову операцію "{inputValue}"?</p>
+          <div className="confirm-modal-btn-save">
+            <button
+              onClick={() => {
+                setShowModal(false);
+                setInputValue("");
+                setFilteredOperations([]);
+              }}
+            >
+              Ні
+            </button>
+            <button onClick={onAddNewOperations}>Так</button>
+          </div>
         </div>
       )}
     </>

@@ -33,11 +33,9 @@ export const MedicamentInput = ({
     setInputValue(inputValue);
 
     if (inputValue.length >= 1) {
-      const regex = new RegExp(inputValue.split('').join('.*'), 'i'); 
+      const regex = new RegExp(inputValue.split("").join(".*"), "i");
       setFilteredMedicaments(
-        medicaments.filter((medicaments) =>
-        regex.test(medicaments.title)
-        )
+        medicaments.filter((medicaments) => regex.test(medicaments.title))
       );
     } else {
       setFilteredMedicaments([]);
@@ -48,7 +46,11 @@ export const MedicamentInput = ({
   const onSelectMedicament = (selectedMedicament) => {
     setInputValue(selectedMedicament.title);
     setFilteredMedicaments([]);
-    saveValueLocalStorage(selectedMedicament.title, selectedMedicament.id, true);
+    saveValueLocalStorage(
+      selectedMedicament.title,
+      selectedMedicament.id,
+      true
+    );
   };
 
   //* ПЕРЕДАЧА АРГУМЕНТІВ ДЛЯ ЗБЕРІГАННЯ У ЛОКАЛЬНЕ СХОВИЩЕ 333
@@ -93,15 +95,15 @@ export const MedicamentInput = ({
   //* ПРИ НАТИСКАННІ НА КНОПКУ ENTER
   const onInputKeyDown = (e) => {
     const inputValueLength = e.target.value.length;
-  
+
     const errorMessages = {
       [inputValueLength < 3]: "Рядок повинен містити не менше 3 символів",
-      [inputValueLength > 100]: "Рядок повинен містити не більше 100 символів"
+      [inputValueLength > 100]: "Рядок повинен містити не більше 100 символів",
     };
-  
+
     if (e.key === "Enter") {
       const errorMessage = errorMessages[true];
-      
+
       if (errorMessage) {
         toast.error(errorMessage);
       } else if (!isValueInMedicaments(e.target.value)) {
@@ -145,7 +147,7 @@ export const MedicamentInput = ({
       updateMedicaments(response.data);
       onMedicamentId(response.data.id);
       setShowModal(false);
-      saveValueLocalStorage(inputValue, response.data.id, true)
+      saveValueLocalStorage(inputValue, response.data.id, true);
     } catch (error) {
       onAxiosError(error);
       setShowModal(false);
@@ -179,17 +181,19 @@ export const MedicamentInput = ({
       </ul>
       {showModal && (
         <div className="confirm-modal">
-          <p>Додати новий медикамент {inputValue}?</p>
-          <button onClick={onAddNewMedicament}>Так</button>
-          <button
-            onClick={() => {
-              setShowModal(false);
-              setInputValue("");
-              setFilteredMedicaments([]);
-            }}
-          >
-            Відмінити
-          </button>
+          <p>Додати новий медикамент "{inputValue}"?</p>
+          <div className="confirm-modal-btn-save">
+            <button
+              onClick={() => {
+                setShowModal(false);
+                setInputValue("");
+                setFilteredMedicaments([]);
+              }}
+            >
+              Ні
+            </button>
+            <button onClick={onAddNewMedicament}>Так</button>
+          </div>
         </div>
       )}
     </>

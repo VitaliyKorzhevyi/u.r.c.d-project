@@ -3,11 +3,10 @@
   max-width: 1700px;
   display: flex;
   gap: 8px;
-  
 }
 
 .container-saved-forms td {
-  padding: 4px 8px;
+  padding: 4px 4px;
 }
 
 .calendar-saved-forms {
@@ -66,7 +65,7 @@
 .item-saved-forms {
   display: flex;
   flex-direction: column;
-  padding: 8px 8px ;
+  padding: 8px 8px;
 
   background-color: #f1f1f193;
 
@@ -121,26 +120,30 @@
   width: 35%;
 }
 
-.text-semititle {
-  text-align: right;
-}
-
 .semititle-size1 {
-  width: 20.9%;
+  width: 17.6%;
+  text-align: center;
 }
 
 .semititle-size2 {
-  width: 24.6%;
+  width: 23.4%;
+  text-align: center;
 }
 
 .semititle-size3 {
   width: 10.2%;
+  text-align: center;
 }
 
 .semititle-size4 {
   width: 4%;
   cursor: pointer;
 }
+
+.semititle-size5 {
+  padding-left: 4px;
+}
+
 .semititle-size4:hover {
   background-color: #ccc;
 }
@@ -301,9 +304,8 @@
 .btn-save-table.blue {
   background-color: #c6dfff;
   border: 2px solid #76b0fc;
- 
+
   font-weight: 500;
- 
 }
 
 .btn-save-table.blue:hover {
@@ -343,7 +345,6 @@
   background-color: #f0f0f0;
 }
 
-
 .pagination-edit-reports .page-item {
   padding: 4px;
   cursor: pointer;
@@ -354,6 +355,7 @@
   
 } */
 
-.pagination-edit-reports .previous, .pagination-edit-reports .next {
+.pagination-edit-reports .previous,
+.pagination-edit-reports .next {
   cursor: pointer;
 }

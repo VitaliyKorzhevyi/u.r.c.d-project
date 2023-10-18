@@ -196,7 +196,7 @@ export const ItemFormset = ({ data, userData }) => {
                   <tr>
                     <td className={`size-table-formset ${type}-background`}>
                       <p>
-                        <strong>Форма:</strong>{" "}
+                        <strong>Звіт:</strong>{" "}
                         {REPORT_TYPE_NAMES[type] || type}
                       </p>
                     </td>

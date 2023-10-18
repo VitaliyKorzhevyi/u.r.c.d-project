@@ -17,6 +17,7 @@ export const ModalPatientSearch = ({
   onGetFirstName,
   onGetMiddleName,
   onGetEmail,
+  onGetData,
 }) => {
   const [patients, setPatients] = useState([]);
   const [lastName, setLastName] = useState("");
@@ -172,6 +173,7 @@ export const ModalPatientSearch = ({
     onGetFirstName?.(patient.first_name);
     onGetMiddleName?.(patient.middle_name);
     onGetEmail?.(patient.email);
+    onGetData?.(patient);
 
     resetFields();
     onClose();

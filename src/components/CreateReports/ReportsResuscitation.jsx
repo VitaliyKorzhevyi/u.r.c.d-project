@@ -343,7 +343,7 @@ export const ReportsResuscitation = () => {
 
     // Перевірка на 1 обовязковий рядок
     if (form.rows.length === 0) {
-      toast.warn("Форма не може бути порожньою. Додайте хоча б один рядок!", {
+      toast.warn("Звіт не може бути порожнім. Додайте хоча б один рядок!", {
         autoClose: 2500,
       });
       return;
@@ -474,7 +474,7 @@ export const ReportsResuscitation = () => {
 
                   <td className="form2-table-size">
                     <input
-                      type="number"
+                      type="text"
                       name="history_number"
                       className="form1-table-number"
                       value={form.history_number}
@@ -521,7 +521,7 @@ export const ReportsResuscitation = () => {
                         }}
                         disabled={form.locked}
                       >
-                        <i className="bx bx-plus bx-sm"></i>
+                        <i className="bx bx-user-plus bx-sm"></i>
                       </button>
                     </div>
                   </td>
@@ -624,7 +624,7 @@ export const ReportsResuscitation = () => {
                     </p>
                   </td>
                   <td>Примітки</td>
-                  <td>Управління</td>
+                  <td>Дії</td>
                 </tr>
                 {form.rows.map((row, rowIndex) => (
                   <tr
@@ -712,7 +712,7 @@ export const ReportsResuscitation = () => {
                 disabled={form.locked}
                 onClick={() => openSaveModalWithIndex(formIndex)}
               >
-                Зберегти форму
+                Зберегти
               </button>
               <button
                 type="button"
@@ -736,19 +736,17 @@ export const ReportsResuscitation = () => {
       </button>
       {showSaveModal && (
         <div className="confirm-modal">
-          <p>Зберегти форму?</p>
+          <p>Зберегти?</p>
           <div className="confirm-modal-btn-save">
             <button onClick={() => setShowSaveModal(false)}>Ні</button>
-            <div className="confirm-modal-btn-save">
-              <button
-                onClick={() => {
-                  onSaveForm(currentFormIndex);
-                  setShowSaveModal(false);
-                }}
-              >
-                Так
-              </button>
-            </div>
+            <button
+              onClick={() => {
+                onSaveForm(currentFormIndex);
+                setShowSaveModal(false);
+              }}
+            >
+              Так
+            </button>
           </div>
         </div>
       )}

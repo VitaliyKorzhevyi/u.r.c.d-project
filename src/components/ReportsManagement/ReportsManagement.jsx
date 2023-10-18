@@ -12,7 +12,10 @@ import { PERMISSIONS } from "../../constants/permissions";
 
 import "./ReportsManagement.css";
 
-export const ReportsManagement = ({ onFormDataChange, showUserSearchButton }) => {
+export const ReportsManagement = ({
+  onFormDataChange,
+  showUserSearchButton,
+}) => {
   const { myData } = useContext(UserDataContext);
   const [formData, setFormData] = useState({
     preoperative_day_id: "",
@@ -94,6 +97,14 @@ export const ReportsManagement = ({ onFormDataChange, showUserSearchButton }) =>
     }));
   };
 
+  const onClearPatient = () => {
+    setFormData((prevData) => ({
+      ...prevData,
+      patient_id: "",
+    }));
+    setPatientFullName(""); // Очистка имени пациента
+  };
+
   const onSetPatientFullName = (fullName) => {
     setPatientFullName(fullName);
   };
@@ -111,6 +122,14 @@ export const ReportsManagement = ({ onFormDataChange, showUserSearchButton }) =>
       ...prevData,
       user_id: selectedUserId,
     }));
+  };
+
+  const onClearUser = () => {
+    setFormData((prevData) => ({
+      ...prevData,
+      user_id: "",
+    }));
+    setUserFullName(""); // Очистка имени пациента
   };
 
   const onSetUserFullName = (fullName) => {
@@ -256,15 +275,24 @@ export const ReportsManagement = ({ onFormDataChange, showUserSearchButton }) =>
             <p>
               <strong>Пошук по пацієнту</strong>
             </p>
-            <button
-              type="button"
-              className="btn-search-patient-filter"
-              onClick={() => {
-                toggleModalSearch();
-              }}
-            >
-              <i className="bx bx-search bx-sm"></i>
-            </button>
+            <div className="btns-maneg-patient-filter">
+              <button
+                type="button"
+                className="btn-search-patient-filter"
+                onClick={() => {
+                  toggleModalSearch();
+                }}
+              >
+                <i className="bx bx-search bx-sm"></i>
+              </button>
+              <button
+                type="button"
+                className="btn-clear-patient-filter"
+                onClick={onClearPatient}
+              >
+                <i className="bx bx-trash bx-sm"></i>
+              </button>
+            </div>
           </div>
 
           <p className="input-patient-fullname-filter">{patientFullName}</p>
@@ -275,15 +303,24 @@ export const ReportsManagement = ({ onFormDataChange, showUserSearchButton }) =>
               <p>
                 <strong>Пошук по користувачу</strong>
               </p>
-              <button
-                type="button"
-                className="btn-search-patient-filter"
-                onClick={() => {
-                  toggleModalSearchUser();
-                }}
-              >
-                <i className="bx bx-search bx-sm"></i>
-              </button>
+              <div className="btns-maneg-patient-filter">
+                <button
+                  type="button"
+                  className="btn-search-patient-filter"
+                  onClick={() => {
+                    toggleModalSearchUser();
+                  }}
+                >
+                  <i className="bx bx-search bx-sm"></i>
+                </button>
+                <button
+                  type="button"
+                  className="btn-clear-patient-filter"
+                  onClick={onClearUser}
+                >
+                  <i class="bx bx-trash-alt bx-sm"></i>
+                </button>
+              </div>
             </div>
 
             <p className="input-patient-fullname-filter">{userFullName}</p>
