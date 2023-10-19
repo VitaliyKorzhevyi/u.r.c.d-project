@@ -301,7 +301,7 @@ export const ReportsManagement = ({
           <li className="item-management-report">
             <div className="item-management-search-user">
               <p>
-                <strong>Пошук по користувачу</strong>
+                <strong>Пошук по лікарю</strong>
               </p>
               <div className="btns-maneg-patient-filter">
                 <button
@@ -318,7 +318,7 @@ export const ReportsManagement = ({
                   className="btn-clear-patient-filter"
                   onClick={onClearUser}
                 >
-                  <i class="bx bx-trash-alt bx-sm"></i>
+                  <i className="bx bx-trash bx-sm"></i>
                 </button>
               </div>
             </div>

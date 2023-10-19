@@ -27,7 +27,7 @@ export const DayInputEditing = ({
     <div className="autocomplete-container">
       <div style={{ display: "flex", alignItems: "center" }}>
         <label htmlFor="dayInput" style={{ marginRight: "10px" }}>
-        К-сть. діб:
+       <strong>К-сть. діб:</strong> 
         </label>
         <input
           id="dayInput"

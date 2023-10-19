@@ -2,7 +2,7 @@
   max-width: 1700px;
   padding: 40px 0;
   display: flex;
-  gap: 6px;
+  gap: 4px;
 }
 
 .st-med-sort-container {
@@ -34,7 +34,6 @@
 
 .create-report-st-med-btn {
   width: 200px;
-  margin-top: 12px;
   height: 40px;
 
   cursor: pointer;
@@ -86,9 +85,73 @@
   text-align: center;
 }
 
-.table-st-med-head th{
+.table-st-med-head th,
+.table-st-cons-head th {
   padding: 8px;
   font-family: "Montserrat", sans-serif;
   font-weight: 700;
-  font-size: 18px;
+  font-size: 16px;
+}
+
+.size-table-st-cons {
+  width: 7%;
+}
+
+.size-table-st-cons2 {
+  width: 12%;
+}
+
+.table-st-cons-total {
+  background-color: #c2c2c2;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.table-st-cons-total td {
+  padding: 8px 6px;
+  text-align: center;
+}
+
+.table-st-cons-data {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.table-st-cons-data td {
+  text-align: center;
+}
+
+.data-receipt_number {
+  text-align: center;
+}
+
+.cons-big-container-data-full {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+}
+
+.cons-full-data-size2 {
+  width: 20%;
+}
+
+.cons-full-data-size1 {
+  width: 26%;
+  text-align: center;
+}
+
+.cons-full-data-size {
+  width: 26%;
+  text-align: center;
+}
+
+.cons-full-data-size3 {
+  width: 5.8%;
+  text-align: center;
+}
+
+.cons-full-data-size4 {
+text-align: center;
 }

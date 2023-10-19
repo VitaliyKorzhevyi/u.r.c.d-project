@@ -1,9 +1,13 @@
 .user-info-container {
   padding: 6px;
 
-  background-color: #e4e4e4;
-  border: 3px solid #818181;
+  background-color: #ececec;
+  border: 2px solid #818181;
   border-radius: 6px;
+}
+
+.user-info-container td {
+  padding:4px;
 }
 
 .user-info-table-size2 {
@@ -17,8 +21,13 @@
 
 .user-info-table-size4 {
   width: 4%;
-  text-align: center;
   cursor: pointer;
+}
+
+.user-info-table-size4 div{
+  display: flex;
+  justify-content: center;
+
 }
 
 .checkbox-ban:hover {
@@ -30,7 +39,7 @@
 }
 
 .user-info-table-size6 {
-  width: 4.2%;
+  width: 3.7%;
   cursor: pointer;
 }
 
@@ -38,9 +47,14 @@
   background-color: #dddddd;
 }
 
+.user-info-table-size6 div {
+  display: flex;
+  justify-content: center;
+}
+
 .btn-user-edit {
   width: 150px;
-  padding: 8px 12px;
+  padding: 6px;
   background-color: #e0e0e0;
   border: 2px solid #afafaf;
 
@@ -49,7 +63,7 @@
 
   font-family: "Montserrat", sans-serif;
   font-weight: 500;
-  font-size: 16px;
+  font-size: 14px;
 }
 
 .btn-user-edit:hover {
@@ -82,8 +96,10 @@
 .user-info-table {
   font-family: "Montserrat", sans-serif;
   font-weight: 500;
-  font-size: 18px;
+  font-size: 16px;
 }
+
+/* background-color: #f7fafd; */
 
 .title-users {
   margin: 0 auto;
@@ -166,7 +182,7 @@
   background-color: #ddd;
 }
 
-.bx-md {
+.bx-sm {
   transition: transform 0.3s ease-in-out;
 }
 
@@ -231,7 +247,7 @@
   padding-left: 4px;
 }
 
-.select-value-sort option{
+.select-value-sort option {
   font-family: "Montserrat", sans-serif;
   font-weight: 500;
   font-size: 14px;

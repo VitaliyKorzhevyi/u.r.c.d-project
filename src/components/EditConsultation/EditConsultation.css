@@ -6,7 +6,6 @@
 }
 
 .cons-sort-container {
-  padding: 27px 0 0 0;
   min-width: 230px;
   display: flex;
   flex-direction: column;
@@ -44,6 +43,7 @@
   width: 10%;
 }
 
+
 .cons-big-container-data-size3 {
   width: 6%;
   text-align: center;
@@ -73,24 +73,56 @@
 }
 
 .cons-table-edit-rec-n,
-.cons-table-edit-notation {
+.cons-table-edit-notation,
+.cons-table-edit-discount {
   width: 100%;
   height: 36px;
 }
 
+.cons-table-edit-discount {
+  text-align: center;
+}
+
 .cons-table-edit-rec-n {
   text-align: center;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+  font-size: 16px;
 }
 
 .cons-big-container-data-patient {
   display: flex;
   flex-direction: column;
+  /* padding: 0 4px; */
+
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+}
+
+.cons-big-container-data-patient div {
+  display: flex;
+  gap: 6px;
+  align-items: baseline;
+  justify-content: center;
+}
+
+.cons-big-container-data-patient div:nth-child(1) {
+  padding-bottom: 1px;
+  border-bottom: 1px solid #000
+}
+
+.cons-big-container-data-patient div:nth-child(2) {
+  padding-top: 2px;
 }
 
 .cons-big-table-title {
   margin-bottom: 30px;
 }
 
+.cons-big-table-title td{
+  padding: 2 6px;
+}
 
 
 .cons-big-container-title-date {
@@ -103,4 +135,19 @@
 
   background-color: rgb(202, 219, 233);
   border-radius: 6px;
+}
+
+.cons-big-container-data-isfree {
+  margin: 0 auto;
+  border: 1px solid #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.cons-big-container-data-isfree {
+  height: 36px;
+  width: 36px;
 }

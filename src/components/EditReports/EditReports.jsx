@@ -530,13 +530,16 @@ export const EditReports = ({ userData }) => {
                             className="semititle-size4"
                             onClick={() => onFormDataById({ id, type })}
                           >
-                            <i
-                              className={`bx ${
-                                itemKey === activeKey
-                                  ? "bx-refresh bx-md"
-                                  : "bx-chevron-down bx-md"
-                              }`}
-                            ></i>
+                            <div>
+                              {" "}
+                              <i
+                                className={`bx ${
+                                  itemKey === activeKey
+                                    ? "bx-refresh bx-sm"
+                                    : "bxs-chevron-down bx-sm"
+                                }`}
+                              ></i>
+                            </div>
                           </td>
                         </tr>
                       </tbody>
@@ -550,29 +553,29 @@ export const EditReports = ({ userData }) => {
                     selectedItemDetails && (
                       <>
                         <table border="1" className="table-save">
-                          <thead>
-                            <tr>
-                              <th colSpan="2" className="semi-title-color">
-                                Телефон:{" "}
+                          <tbody>
+                          <tr>
+                              <td colSpan="2">
+                               <strong>Телефон:{" "}</strong> 
                                 <span className="text-head-saved-forms">
                                   {selectedItemDetails.patient.phone}
                                 </span>
-                              </th>
-                              <th colSpan="4" className="semi-title-color">
-                                Дата народження:{" "}
+                              </td>
+                              <td colSpan="4">
+                               <strong>Дата народження:{" "}</strong> 
                                 <span className="text-head-saved-forms">
                                   {selectedItemDetails.patient.birthday}
                                 </span>
-                              </th>
+                              </td>
                             </tr>
                             <tr>
-                              <th colSpan="2" className="semi-title-color">
-                                Вік:{" "}
+                              <td colSpan="2">
+                                <strong>Вік:{" "}</strong>
                                 <span className="text-head-saved-forms">
                                   {selectedItemDetails.patient.age}
                                 </span>
-                              </th>
-                              <th colSpan="4" className="semi-title-color">
+                              </td>
+                              <td colSpan="4">
                                 {isThreeDaysOld(created_at) ? (
                                   <span className="text-head-saved-forms">
                                     <strong>К-сть. діб:</strong>{" "}
@@ -588,10 +591,8 @@ export const EditReports = ({ userData }) => {
                                     createdAt={created_at}
                                   />
                                 )}
-                              </th>
+                              </td>
                             </tr>
-                          </thead>
-                          <tbody>
                             <tr>
                               {isThreeDaysOld(created_at) ? (
                                 <td

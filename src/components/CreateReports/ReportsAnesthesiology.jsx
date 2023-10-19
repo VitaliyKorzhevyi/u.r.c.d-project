@@ -484,7 +484,6 @@ export const ReportsAnesthesiology = () => {
                           e.target.value
                         )
                       }
-   
                       disabled={form.locked}
                     />
                   </td>
@@ -685,20 +684,22 @@ export const ReportsAnesthesiology = () => {
                       />
                     </td>
                     <td className="btn-row">
-                      <CopyRowButton
-                        formIndex={formIndex}
-                        rowIndex={rowIndex}
-                        formLocked={form.locked}
-                        forms={forms}
-                        setFormsWithStorage={setFormsWithStorage}
-                      />
-                      <DeleteRowButton
-                        formIndex={formIndex}
-                        rowIndex={rowIndex}
-                        formLocked={form.locked}
-                        forms={forms}
-                        setFormsWithStorage={setFormsWithStorage}
-                      />
+                      <div>
+                        <CopyRowButton
+                          formIndex={formIndex}
+                          rowIndex={rowIndex}
+                          formLocked={form.locked}
+                          forms={forms}
+                          setFormsWithStorage={setFormsWithStorage}
+                        />
+                        <DeleteRowButton
+                          formIndex={formIndex}
+                          rowIndex={rowIndex}
+                          formLocked={form.locked}
+                          forms={forms}
+                          setFormsWithStorage={setFormsWithStorage}
+                        />
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -737,7 +738,7 @@ export const ReportsAnesthesiology = () => {
         <div className="confirm-modal">
           <p>Зберегти?</p>
           <div className="confirm-modal-btn-save">
-          <button onClick={() => setShowSaveModal(false)}>Ні</button>
+            <button onClick={() => setShowSaveModal(false)}>Ні</button>
             <button
               onClick={() => {
                 onSaveForm(currentFormIndex);

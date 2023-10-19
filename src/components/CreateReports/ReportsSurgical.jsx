@@ -678,20 +678,22 @@ export const ReportsSurgical = () => {
                       />
                     </td>
                     <td className="btn-row">
-                      <CopyRowButton
-                        formIndex={formIndex}
-                        rowIndex={rowIndex}
-                        formLocked={form.locked}
-                        forms={forms}
-                        setFormsWithStorage={setFormsWithStorage}
-                      />
-                      <DeleteRowButton
-                        formIndex={formIndex}
-                        rowIndex={rowIndex}
-                        formLocked={form.locked}
-                        forms={forms}
-                        setFormsWithStorage={setFormsWithStorage}
-                      />
+                      <div>
+                        <CopyRowButton
+                          formIndex={formIndex}
+                          rowIndex={rowIndex}
+                          formLocked={form.locked}
+                          forms={forms}
+                          setFormsWithStorage={setFormsWithStorage}
+                        />
+                        <DeleteRowButton
+                          formIndex={formIndex}
+                          rowIndex={rowIndex}
+                          formLocked={form.locked}
+                          forms={forms}
+                          setFormsWithStorage={setFormsWithStorage}
+                        />
+                      </div>
                     </td>
                   </tr>
                 ))}

@@ -8,6 +8,10 @@ import { DataEditingInputs } from "./DataEditingInputs";
 
 import "./DataEditing.css";
 
+
+
+
+
 export const DataEditing = () => {
   //* ВИБІР ПАЦІЄНТА
   const [isModalOpenSearch, setModalOpenSearch] = useState(false);
@@ -41,10 +45,38 @@ export const DataEditing = () => {
         setTimeout(() => {
           setStateCallback("");
         }, 2000);
+        if (updatedItem === medicamentItem) {
+          refreshMedicaments();
+        }
+        if (updatedItem === diagnosesItem) {
+          refreshDiagnoses();
+        }
+        if (updatedItem === operationsItem) {
+          refreshOperations();
+        }
+        if (updatedItem === daysItem) {
+          refreshDays();
+        }
       })
       .catch((error) => {
         console.log(error);
       });
+  };
+
+  const refreshMedicaments = () => {
+    $api.get("/medicaments").then((response) => setMedicaments(response.data));
+  };
+
+  const refreshDiagnoses = () => {
+    $api.get("/diagnoses").then((response) => setDiagnoses(response.data));
+  };
+
+  const refreshOperations = () => {
+    $api.get("/operations").then((response) => setOperations(response.data));
+  };
+
+  const refreshDays = () => {
+    $api.get("/preoperative-days").then((response) => setDays(response.data));
   };
 
   //* ПОШУК ТА РЕДАГУВННЯ МЕДИКАМЕНТІВ
@@ -75,7 +107,7 @@ export const DataEditing = () => {
     );
   };
 
-  //* ПОШУК ТА РЕДАГУВННЯ ДІАГНОЗІВ
+  //* ПОШУК ТА РЕДАГУВАННЯ ДІАГНОЗІВ
   const [diagnoses, setDiagnoses] = useState([]);
 
   useEffect(() => {

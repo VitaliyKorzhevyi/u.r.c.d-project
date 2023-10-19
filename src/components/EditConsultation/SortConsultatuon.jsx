@@ -1,23 +1,18 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext, useCallback } from "react";
+import { UserDataContext } from "../../pages/HomePage";
 import $api from "../../api/api";
 import DatepickerComponent from "../EditReports/Сalendar";
 import { ModalPatientSearch } from "../CreateReports/СoreComponentsReports/ModalPatientSearch";
+import { ModalUserSearch } from "../ReportsManagement/CoreComponentsFilter/ModalUserSearch";
 
-export const SortConsultatuon = ({ data }) => {
+export const SortConsultatuon = ({ data, showUserSearchButton }) => {
+  const { myData } = useContext(UserDataContext);
   const [currentFormData, setCurrentFormData] = useState({});
   const [formData, setFormData] = useState({
     receipt_number: "",
     patient_id: "",
     sort: "",
   });
-
-  const onClearPatient = () => {
-    setFormData((prevData) => ({
-      ...prevData,
-      patient_id: "",
-    }));
-    setPatientFullName(""); // Очистка имени пациента
-  };
 
   //* ДЛЯ ВИБОРУ ДАТИ
   const formatDateDefoult = (date) => {
@@ -46,6 +41,42 @@ export const SortConsultatuon = ({ data }) => {
     setPatientFullName(fullName);
   };
 
+  const onClearPatient = () => {
+    setFormData((prevData) => ({
+      ...prevData,
+      patient_id: "",
+    }));
+    setPatientFullName(""); // Очистка имени пациента
+  };
+
+
+  //* ВИБІР ЮЗЕРА
+  const [isModalOpenSearchUser, setModalOpenSearchUser] = useState(false);
+  const [userFullName, setUserFullName] = useState("");
+
+  const toggleModalSearchUser = () => {
+    setModalOpenSearchUser(!isModalOpenSearchUser);
+  };
+
+  const onUserSelect = (selectedUserId) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      user_id: selectedUserId,
+    }));
+  };
+
+  const onClearUser = () => {
+    setFormData((prevData) => ({
+      ...prevData,
+      user_id: "",
+    }));
+    setUserFullName(""); // Очистка имени пациента
+  };
+
+  const onSetUserFullName = (fullName) => {
+    setUserFullName(fullName);
+  };
+
   //* СОРТ ЗВІТУ
   const onReportSortChange = (e) => {
     setFormData((prevData) => ({
@@ -61,6 +92,55 @@ export const SortConsultatuon = ({ data }) => {
     }));
   };
 
+  //* ДЛЯ ВІДОБРАЖЕННЯ СПИСКУ ТАБЛИЦІ
+  //* по дефолту
+
+  const formatDate = (date) => {
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0"); // Месяцы начинаются с 0, поэтому добавляем 1
+    const year = date.getFullYear();
+    return `${year}-${month}-${day}`;
+  };
+
+  const getCurrentDate = useCallback(() => {
+    return formatDate(new Date());
+  }, []);
+
+  const getDateFromDaysAgo = useCallback((daysAgo) => {
+    const date = new Date();
+    date.setDate(date.getDate() - daysAgo);
+    return formatDate(date);
+  }, []);
+
+  useEffect(() => {
+    const currentDate = getCurrentDate();
+    const dateTenDaysAgo = getDateFromDaysAgo(30);
+    const url = `/consultations`;
+    const options = {
+      params: {
+        from_created_at: dateTenDaysAgo,
+        to_created_at: currentDate,
+      },
+    };
+
+    if (!showUserSearchButton) {
+      options.params.user_id = myData.id;
+    }
+  
+    $api
+      .get(url, options)
+      .then((response) => {
+        data(response.data.consultations);
+      })
+      .catch((error) => {
+        console.error(
+          "Error fetching data:",
+          error.response ? error.response.data : error
+        );
+      });
+  }, [getCurrentDate, getDateFromDaysAgo, myData.id, data, showUserSearchButton]);
+
+  //* при натисканні на кнопку
   const currentDate = new Date();
   const thirtyDaysAgo = new Date(currentDate);
   thirtyDaysAgo.setDate(currentDate.getDate() - 30);
@@ -95,6 +175,10 @@ export const SortConsultatuon = ({ data }) => {
         to_created_at: selectedEndDate,
         ...currentFormData,
       };
+
+      if (!showUserSearchButton) {
+        initialParams.user_id = myData.id;
+      }
 
       const params = Object.keys(initialParams)
         .filter((key) => initialParams[key]) // Отбираем только те ключи, значения которых заданы
@@ -175,11 +259,43 @@ export const SortConsultatuon = ({ data }) => {
         </div>
         <p className="input-patient-fullname-filter">{patientFullName}</p>
       </li>
+      {showUserSearchButton && (
+        <li>
+          <div className="cons-sort-container-search">
+            <p className="cons-sort-container-title">Пошук по лікарю</p>
+            <div className="btns-maneg-patient-filter">
+              <button
+                type="button"
+                className="btn-search-patient-filter"
+                onClick={() => {
+                  toggleModalSearchUser();
+                }}
+              >
+                <i className="bx bx-search bx-sm"></i>
+              </button>
+              <button
+                type="button"
+                className="btn-clear-patient-filter"
+                onClick={onClearUser}
+              >
+                <i className="bx bx-trash bx-sm"></i>
+              </button>
+            </div>
+          </div>
+          <p className="input-patient-fullname-filter">{userFullName}</p>
+        </li>
+      )}
       <li>
         <button type="button" className="btn-calendar" onClick={onButtonClick}>
           Знайти
         </button>
       </li>
+      <ModalUserSearch
+        isOpen={isModalOpenSearchUser}
+        onClose={toggleModalSearchUser}
+        onGetId={onUserSelect}
+        onGetFullName={onSetUserFullName}
+      />
       <ModalPatientSearch
         isOpen={isModalOpenSearch}
         onClose={toggleModalSearch}

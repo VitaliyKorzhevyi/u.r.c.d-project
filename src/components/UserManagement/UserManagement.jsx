@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useContext } from "react";
-import {UserDataContext} from "../../pages/HomePage";
+import { UserDataContext } from "../../pages/HomePage";
 import $api from "../../api/api";
 
 import ReactPaginate from "react-paginate";
@@ -105,11 +105,13 @@ const User = ({ user, afterCreate }) => {
               <p>{user.phone}</p>
             </td>
             <td className="user-info-table-size4">
-              <UserBanCheckbox
-                user_id={user.id}
-                is_active={!user.is_active}
-                onClick={(banned) => setIsUserBanned(banned)}
-              />
+              <div>
+                <UserBanCheckbox
+                  user_id={user.id}
+                  is_active={!user.is_active}
+                  onClick={(banned) => setIsUserBanned(banned)}
+                />
+              </div>
             </td>
             <td className="user-info-table-size5">
               <button
@@ -125,11 +127,13 @@ const User = ({ user, afterCreate }) => {
               className="user-info-table-size6"
               onClick={() => setShowDetails(!showDetails)}
             >
-              <i
-                className={`bx bx-chevron-down bx-md ${
-                  showDetails ? "rotated-full-info-user" : ""
-                }`}
-              ></i>
+              <div>
+                <i
+                  className={`bx bxs-chevron-down bx-sm ${
+                    showDetails ? "rotated-full-info-user" : ""
+                  }`}
+                ></i>
+              </div>
             </td>
           </tr>
         </tbody>
@@ -256,10 +260,12 @@ export const UserManagement = () => {
             >
               Додати користувача
             </button>
-            <div className="admin-settings-icons" onClick={() => setModalOpenEdit(true)}>
-              <i className='bx bx-cog'></i>
+            <div
+              className="admin-settings-icons"
+              onClick={() => setModalOpenEdit(true)}
+            >
+              <i className="bx bx-cog"></i>
             </div>
-            
           </div>
           <div className="users-list">
             {users.map((user) => (
@@ -267,23 +273,22 @@ export const UserManagement = () => {
             ))}
           </div>
           <div className="pagination">
-
-          {totalPages > 1 && (
-            <ReactPaginate
-              previousLabel={<i className="bx bxs-chevron-left bx-md"></i>}
-              nextLabel={<i className="bx bxs-chevron-right bx-md"></i>}
-              breakLabel={"..."}
-              breakClassName={"break-me"}
-              pageCount={totalPages}
-              marginPagesDisplayed={2}
-              pageRangeDisplayed={5}
-              onPageChange={({ selected }) => handlePageChange(selected + 1)}
-              containerClassName={"pagination-edit-reports"}
-              subContainerClassName={"pagination-edit-reports-sub"}
-              activeClassName={"active"}
-              pageClassName={"page-item"}
-            />
-          )}
+            {totalPages > 1 && (
+              <ReactPaginate
+                previousLabel={<i className="bx bxs-chevron-left bx-md"></i>}
+                nextLabel={<i className="bx bxs-chevron-right bx-md"></i>}
+                breakLabel={"..."}
+                breakClassName={"break-me"}
+                pageCount={totalPages}
+                marginPagesDisplayed={2}
+                pageRangeDisplayed={5}
+                onPageChange={({ selected }) => handlePageChange(selected + 1)}
+                containerClassName={"pagination-edit-reports"}
+                subContainerClassName={"pagination-edit-reports-sub"}
+                activeClassName={"active"}
+                pageClassName={"page-item"}
+              />
+            )}
           </div>
         </div>
       </div>

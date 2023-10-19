@@ -192,7 +192,7 @@ export const ItemFormset = ({ data, userData }) => {
                 <thead>
                   
                 </thead>
-                <tbody>
+                <tbody className="text-semititle">
                   <tr>
                     <td className={`size-table-formset ${type}-background`}>
                       <p>
@@ -212,7 +212,7 @@ export const ItemFormset = ({ data, userData }) => {
                       </div>
                     </td>
                     <td className="semititle-size2">
-                      <p className="text-semititle">
+                      <p>
                         <strong>Дата створення:</strong>{" "}
                         {new Date(created_at).toLocaleDateString()}
                       </p>
@@ -223,7 +223,7 @@ export const ItemFormset = ({ data, userData }) => {
                     >
                       <i
                         className={`bx ${
-                          activeItemId === itemId ? "bx-refresh bx-md" : "bx-chevron-down bx-md"
+                          activeItemId === itemId ? "bx-refresh bx-sm" : "bxs-chevron-down bx-sm"
                         }`}
                       ></i>
                     </td>
@@ -237,7 +237,6 @@ export const ItemFormset = ({ data, userData }) => {
                   <thead>
                     <tr>
                       <th colSpan="6">
-                        {" "}
                         <p>
                           <strong>Звітував:</strong>{" "}
                           <span className="text-size">
@@ -251,14 +250,12 @@ export const ItemFormset = ({ data, userData }) => {
                   <tbody>
                     <tr>
                       <td colSpan="3">
-                        {" "}
                         <p>
                           <strong>Дата народження пацієнта:</strong>{" "}
                           {currentItemDetails.patient.birthday}
                         </p>
                       </td>
                       <td colSpan="3">
-                        {" "}
                         <p>
                           <strong>К-сть днів:</strong>{" "}
                           {currentItemDetails.preoperative_day.title}
@@ -305,7 +302,7 @@ export const ItemFormset = ({ data, userData }) => {
                     </tr>
                     {currentItemDetails.rows.map((row, index) => (
                       <tr key={row.id}>
-                        <td>
+                        <td style={{ textAlign: "center" }}>
                           <span className="text-head-saved-forms">
                             {row.medicament.title}
                           </span>

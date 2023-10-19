@@ -44,7 +44,7 @@ export const Statistics = () => {
           userData={userData}
           activeModal={openModal}
         >
-          Медикаменти
+          Звіт по медикаментам
         </AccessibleButton>
  
         <AccessibleButton

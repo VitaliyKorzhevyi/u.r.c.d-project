@@ -65,14 +65,14 @@ export const ReportsConsultation = () => {
         {
           id: 1,
           number: 1,
-          receipt_number: "",
+          receipt_number: "" || null,
           full_name: "",
           phone: "",
           patient_id: "",
-          is_free: true,
+          is_free: false,
           discount: 0,
           medication_prescribed: false,
-          notation: "",
+          notation: "" || null,
         },
       ];
     }
@@ -86,14 +86,14 @@ export const ReportsConsultation = () => {
     const newRow = {
       id: rows.length + 1,
       number: rows.length + 1,
-      receipt_number: "",
+      receipt_number: "" || null,
       full_name: "",
       phone: "",
       patient_id: "",
-      is_free: true,
+      is_free: false,
       discount: 0,
       medication_prescribed: false,
-      notation: "",
+      notation: "" || null,
     };
 
     setRows([...rows, newRow]);
@@ -161,9 +161,10 @@ export const ReportsConsultation = () => {
     const updatedRows = [...rows];
     updatedRows[id - 1].is_free = !updatedRows[id - 1].is_free;
 
-    // Если is_free устанавливается в true, установите значение discount в 0
     if (updatedRows[id - 1].is_free) {
-      updatedRows[id - 1].discount = 0;
+      updatedRows[id - 1].discount = 100;
+    } else if (updatedRows[id - 1].discount === 100) {
+      updatedRows[id - 1].is_free = true;
     }
 
     setRows(updatedRows);
@@ -180,29 +181,13 @@ export const ReportsConsultation = () => {
   };
 
   const handleSaveButtonClick = () => {
-    // Создайте переменную, чтобы отслеживать наличие пустых полей
     let hasEmptyFields = false;
-
-    // Перебирайте каждый ряд и проверяйте поля
     rows.forEach((row) => {
-      if (!row.receipt_number || !row.patient_id) {
-        // Определите имя поля, которое должно быть заполнено
-        let emptyFieldName = "";
-        if (!row.receipt_number) {
-          emptyFieldName = "Номер талону квитанції";
-        } else if (!row.patient_id) {
-          emptyFieldName = "відвідувач/хворий";
-        }
-
-        // Если есть пустое поле, установите флаг наличия пустых полей в true
+      if (!row.patient_id) {
         hasEmptyFields = true;
-
-        // Выведите сообщение о пустом поле в консоль
-        toast.warn(`Пусте поле '${emptyFieldName}' в рядку ${row.number}`);
+        toast.warn(`Пусте поле "відвідувач/хворий" в рядку ${row.number}`);
       }
     });
-
-    // Если есть пустые поля, не выполняйте отправку на сервер
     if (hasEmptyFields) {
       return;
     }
@@ -215,8 +200,6 @@ export const ReportsConsultation = () => {
       medication_prescribed: row.medication_prescribed,
       notation: row.notation,
     }));
-
-    // Вызовите функцию для отправки данных на сервер
     saveDataToServer(dataToSend);
   };
 
@@ -244,6 +227,20 @@ export const ReportsConsultation = () => {
       .catch((error) => {
         console.error("Произошла ошибка:", error);
       });
+  };
+
+  const handleReceiptNumberChange = (e, id) => {
+    const updatedRows = [...rows];
+    const newValue = e.target.value;
+    updatedRows[id - 1].receipt_number = newValue !== "" ? newValue : null;
+    setRows(updatedRows);
+  };
+
+  const handleNotationChange = (e, id) => {
+    const updatedRows = [...rows];
+    const newValue = e.target.value;
+    updatedRows[id - 1].notation = newValue !== "" ? newValue : null;
+    setRows(updatedRows);
   };
 
   return (
@@ -300,25 +297,22 @@ export const ReportsConsultation = () => {
             {rows.map((row) => {
               const id = row.id;
               return (
-                <tr key={id}>
+                <tr key={id} className="consultation-table-text-info">
                   <td className="consultation-table-text">{row.number}</td>
                   <td>
                     <input
                       className="table-cons-receipt-number"
                       type="text"
-                      value={row.receipt_number}
-                      onChange={(e) => {
-                        const updatedRows = [...rows];
-                        updatedRows[id - 1].receipt_number = e.target.value;
-                        setRows(updatedRows);
-                      }}
+                      value={row.receipt_number || ""}
+                      onChange={(e) => handleReceiptNumberChange(e, id)}
                       disabled={isTableDisabled}
                     />
                   </td>
                   <td>
-                    <p>
-                      {row.full_name} {row.phone}
-                    </p>
+                    <div className="consultation-table-text-group">
+                      <p>{row.full_name}</p>
+                      <p>{row.phone}</p>
+                    </div>
                   </td>
 
                   <td className="consultation-table-size4">
@@ -380,9 +374,9 @@ export const ReportsConsultation = () => {
                         isTableDisabled ? "disabled" : ""
                       }`}
                     >
-                      {row.is_free ? (
+                      {row.is_free ? null : (
                         <i className="bx bx-check bx-md"></i>
-                      ) : null}
+                      )}
                     </div>
                   </td>
                   <td>
@@ -392,7 +386,18 @@ export const ReportsConsultation = () => {
                       value={row.discount}
                       onChange={(e) => {
                         const updatedRows = [...rows];
-                        updatedRows[id - 1].discount = e.target.value;
+                        const newValue = parseInt(e.target.value, 10);
+
+                        if (newValue <= 0) {
+                          updatedRows[id - 1].discount = 0;
+                        } else if (newValue >= 100) {
+                          updatedRows[id - 1].discount = 100;
+                          updatedRows[id - 1].is_free = true;
+                        } else {
+                          updatedRows[id - 1].discount = newValue;
+                          updatedRows[id - 1].is_free = false;
+                        }
+
                         setRows(updatedRows);
                       }}
                       disabled={isTableDisabled}
@@ -414,12 +419,8 @@ export const ReportsConsultation = () => {
                     <input
                       className="table-cons-notation"
                       type="text"
-                      value={row.notation}
-                      onChange={(e) => {
-                        const updatedRows = [...rows];
-                        updatedRows[id - 1].notation = e.target.value;
-                        setRows(updatedRows);
-                      }}
+                      value={row.notation || ""}
+                      onChange={(e) => handleNotationChange(e, id)}
                       disabled={isTableDisabled}
                     />
                   </td>

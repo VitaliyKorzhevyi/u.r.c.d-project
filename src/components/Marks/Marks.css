@@ -2,7 +2,7 @@
   margin: 0 auto;
   max-width: 1700px;
   display: flex;
-  gap: 8px;
+  gap: 4px;
 }
 
 .calendar-marks-forms {
@@ -25,9 +25,9 @@
   max-width: 1200px;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 10px;
 
-  padding: 60px 0 30px;
+  padding: 30px 0 30px;
 
   font-family: "Montserrat", sans-serif;
   font-weight: 500;
@@ -39,7 +39,7 @@
   flex-direction: column;
   padding: 8px;
 
-  border: 3px solid #b1b1b1;
+  border: 2px solid #b1b1b1;
   border-radius: 10px;
 }
 

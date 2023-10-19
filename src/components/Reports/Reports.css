@@ -2,7 +2,7 @@
     position: relative;
     max-width: 1700px;
     margin: 0 auto;
-    padding: 20px 0px 0;
+    padding: 20px 0px;
 }
 
 .reports-buttons {
@@ -11,7 +11,7 @@
     justify-content: center;
     max-width: 1200px;
     margin: 0 auto;
-    gap: 16px;
+    gap: 8px;
     height: 70px;
   
     background-color: #EAEFF6;
@@ -32,7 +32,7 @@
     color: #9096a2;
     font-family: "Montserrat", sans-serif;
     font-weight: 700;
-  
+    font-size: 14px;
     border: 0px;
   }
   

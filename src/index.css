@@ -1,6 +1,6 @@
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -25,7 +25,7 @@ p {
 body {
   overflow-y: scroll;
   overflow-x: hidden; /* hides horizontal scrollbar */
-  margin-right: calc(-1 * (100vw - 100%)); 
+  margin-right: calc(-1 * (100vw - 100%));
 }
 
 /* html {
@@ -62,16 +62,15 @@ ol {
 
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+  -webkit-appearance: none;
+  margin: 0;
 }
-
 
 :root {
   /* color */
   --primary-color: #eeeeee;
   --secondary-color: #000000;
-  
+
   --anest-title-color: #21a766;
   --oper-title-color: #ffbb00;
   --resus-title-color: #4753ff;
@@ -88,10 +87,10 @@ input[type="number"]::-webkit-outer-spin-button {
   --locked-color: #cacace;
   --locked-btn-color: #ff4040;
   --locked-btns-control-color: #b9b9b9;
-  
+
   --required-color: rgb(255, 97, 97);
 
- /* background color */
+  /* background color */
   --primary-bg-color: #eeeeee;
   --secondary-bg-color: #3981f7;
 
@@ -106,11 +105,10 @@ input[type="number"]::-webkit-outer-spin-button {
   --save-btn-hover-bg-color: #6bd1a0;
   --del-btn-hover-bg-color: #ff5e5e;
   --invalid-forms-bg-color: #ffe6e6;
- 
- /* border color */
- --btns-brdr-color: #cacace;
-}
 
+  /* border color */
+  --btns-brdr-color: #cacace;
+}
 
 /** ----- ФОРМИ -----  */
 .form1-icon {
@@ -133,12 +131,12 @@ table {
   width: 100%;
 }
 
-th{
+th {
   border: 1px solid #777777;
   padding: 4px;
 }
 
-td{
+td {
   border: 1px solid #777777;
   padding: 6px;
 }
@@ -241,7 +239,7 @@ th {
   position: relative;
   margin: 0 auto;
   max-width: 1200px;
-  padding: 52px 0 8px 0;
+  padding: 30px 0 8px 0;
   transform: translateY(0);
   opacity: 1;
   transition: transform 500ms ease-out, opacity 500ms ease-out;
@@ -429,7 +427,7 @@ th {
 }
 
 .table1-btn.blue {
-  margin: 0 10px 0 8px;
+  margin: 0 10px 0 10 px;
 }
 
 .btn-patient {
@@ -464,7 +462,7 @@ th {
   background-color: var(--save-btn-hover-bg-color);
   color: var(--white-btns-color);
   border: 2px solid #008545;
-} 
+}
 
 .form2-table.locked .btn-patient {
   background-color: var(--primary-bg-color);
@@ -511,4 +509,10 @@ th {
   color: var(--locked-color);
   border: 2px solid var(--locked-color);
   cursor: default;
+}
+
+.btn-row div {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
 }

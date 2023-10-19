@@ -95,12 +95,12 @@
 
 .my-message .cont-chat-info-sms {
   margin-left: auto;
-  background-color: #5490ffc5;
+  background-color: #5490ffdc;
 }
 
 .other-message .cont-chat-info-sms {
   margin-right: auto;
-  background-color: #ffffffc2;
+  background-color: #ffffffe8;
 }
 
 .message-general-data {
