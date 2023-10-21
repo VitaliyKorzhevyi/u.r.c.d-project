@@ -109,8 +109,8 @@ export const ModalPatientCreate = ({
         last_name,
         middle_name,
         birthday,
-        phone,
-        email,
+        phone: phone || null,
+        email: email || null,
       };
       console.log(data);
       const response = await $api.post("/patients", data);
