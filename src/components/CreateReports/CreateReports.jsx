@@ -1,5 +1,5 @@
 //todo Прописати валідацію для форм, потрбіно що мінімально буі 1 рядок а максимально 100
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useLocation } from "react-router-dom";
 
 import { ReportsAnesthesiology } from "./ReportsAnesthesiology";
@@ -30,7 +30,7 @@ export const CreateReports = ({ userData }) => {
     setActiveForm(currentForm);
   }, [location.search]);
 
-  const FORMS_DATA = [
+  const FORMS_DATA = useMemo(() => [
     {
       id: "anesthesiology",
       label: "Анестезіологія",
@@ -57,19 +57,29 @@ export const CreateReports = ({ userData }) => {
     },
     {
       id: "consultation",
-      label: "Консультація",
+      label: "Звітній документ",
       component: ReportsConsultation,
       permissions: [PERMISSIONS.CREATE_CONSULTATION]
     },
-  ];
+  ], []);
 
-  const userHasAccess = (form) => {
+  const userHasAccess = useCallback((form) => {
     if (!form.permissions) return true;
     return form.permissions.some((permissions) => userData.permissions?.includes(permissions));
-  };
+  }, [userData]);
 
   const userHasAnyAccess = FORMS_DATA.some(userHasAccess);
 
+  useEffect(() => {
+    // Знаходимо перший доступний звіт
+    const firstAvailableForm = FORMS_DATA.find((form) => userHasAccess(form));
+
+    if (firstAvailableForm) {
+      setActiveForm(firstAvailableForm.id);
+      const newUrl = `${window.location.pathname}?form=${firstAvailableForm.id}`;
+      window.history.replaceState(null, "", newUrl);
+    }
+  }, [userData, FORMS_DATA, userHasAccess]);
 
   return userHasAnyAccess ? (
     <div className="container-create-reports">

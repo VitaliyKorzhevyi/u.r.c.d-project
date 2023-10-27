@@ -51,10 +51,11 @@ const UserDetails = ({ user }) => {
             <strong>Вік:</strong> {user.age}
           </td>
           <td>
-            <strong>Birthday:</strong> {user.birthday}
+            <strong>Дата народження:</strong>{" "}
+            {user.birthday.split("-").reverse().join(".")}
           </td>
           <td>
-            <strong>Email:</strong> {user.email}
+            <strong>Пошта:</strong> {user.email}
           </td>
         </tr>
         <tr>
@@ -91,10 +92,13 @@ const User = ({ user, afterCreate }) => {
       className={`user-info-container ${
         isUserBanned ? "checkbox-clicked" : ""
       }`}
-    >
+    > 
       <table>
-        <tbody className="user-info-table">
+        <tbody className="user-info-table"> 
           <tr>
+            {/* <td className="user-info-table-size4">
+              <i className={`bx bxs-circle ${user.is_online ? "online-user" : ""}`}></i>
+            </td> */}
             <td className="user-info-table-size1">
               <p>{user.full_name}</p>
             </td>
@@ -119,7 +123,6 @@ const User = ({ user, afterCreate }) => {
                 className="btn-user-edit"
                 onClick={() => setModalOpenEdit(true)}
               >
-                {" "}
                 Змінити данні
               </button>
             </td>

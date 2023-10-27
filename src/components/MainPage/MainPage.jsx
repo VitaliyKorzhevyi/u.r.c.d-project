@@ -32,6 +32,7 @@ export const MainPage = () => {
     if (ws) {
       ws.onmessage = (event) => {
         const receivedData = JSON.parse(event.data);
+        console.log("event",event);
         if (receivedData.chat === "information") {
           if (receivedData.type === "updated") {
             console.log("оновлення", receivedData.type);
@@ -43,8 +44,6 @@ export const MainPage = () => {
              setMessages(updatedMessages);
            } 
           if (receivedData.type === "new") {
-            console.log("створення", receivedData.type);
-            // Если тип сообщения "new", добавьте его в список сообщений
             setMessages((prevMessages) => [...prevMessages, receivedData]);
           } 
           if (receivedData.type === "deleted") {
@@ -168,6 +167,7 @@ export const MainPage = () => {
 
   return (
     <div className="news-container">
+      
       {myData?.permissions?.includes(
         PERMISSIONS.CREATE_INFORMATION_MESSAGES
       ) && (

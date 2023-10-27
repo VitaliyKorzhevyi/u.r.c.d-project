@@ -1,10 +1,9 @@
 import { useState } from "react";
+import $api from "../../api/api";
+import { toast } from "react-toastify";
 
-export const DataEditingInputs = ({
-  items,
-  selectedItem,
-  onItemSelect,
-}) => {
+
+export const DataEditingInputs = ({ items, selectedItem, onItemSelect, urlSelect, msgSuccess, updateData }) => {
   const [inputValue, setInputValue] = useState(selectedItem || "");
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
   const MIN_INPUT_LENGTH = 1;
@@ -12,6 +11,17 @@ export const DataEditingInputs = ({
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
     setIsDropdownVisible(e.target.value.length >= MIN_INPUT_LENGTH);
+  };
+
+  const onAddNewData = async () => {
+    try {
+      const response = await $api.post(urlSelect, inputValue);
+      toast.success(`${msgSuccess} "${inputValue}" успішно додано`);
+      updateData(response);
+      console.log("Відповідь", response);
+    } catch (error) {
+      toast.error(`Помилка`);
+    }
   };
 
   return (
@@ -27,6 +37,13 @@ export const DataEditingInputs = ({
           value={inputValue}
           onChange={handleInputChange}
         />
+        <button
+          type="button"
+          className="btn-editing-data-item"
+          onClick={onAddNewData}
+        >
+          Додати
+        </button>
       </div>
       {isDropdownVisible && (
         <ul className="autocomplete-dropdown-edit-data">

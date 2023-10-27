@@ -30,7 +30,7 @@ export const DiagnosesInputEditing = ({
         <strong>Діагноз:</strong>
         </label>
         <input
-        className="medicament-input input-size-save-table"
+        className="diagnoses-input input-size-save-table"
           id="diagnosesInput"
           type="text"
           autoComplete="off"

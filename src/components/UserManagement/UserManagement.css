@@ -76,7 +76,7 @@
   max-width: 1700px;
   margin: 0 auto;
   padding: 28px 0px 0;
-  background-color: #f7fafd;
+  background-color: #f7fafda2;
   border-radius: 6px;
 }
 
@@ -99,7 +99,9 @@
   font-size: 16px;
 }
 
-/* background-color: #f7fafd; */
+.online-user {
+  color: #008545;
+}
 
 .title-users {
   margin: 0 auto;

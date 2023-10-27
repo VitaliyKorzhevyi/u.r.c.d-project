@@ -30,7 +30,7 @@ export const OperatingInputEditing = ({
         <strong>Операція:</strong>
         </label>
         <input
-        className="medicament-input input-size-save-table"
+        className="operating-input input-size-save-table"
           id="operatingInput"
           type="text"
           autoComplete="off"

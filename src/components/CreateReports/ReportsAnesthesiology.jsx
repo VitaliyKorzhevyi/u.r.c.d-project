@@ -557,7 +557,9 @@ export const ReportsAnesthesiology = () => {
                     <p className="form2-table-column1-text">Дата народження:</p>
                   </td>
                   <td>
-                    <p className="form2-table-time">{form.birthday}</p>
+                    <p className="form2-table-time">
+                      {form.birthday.split("-").reverse().join(".")}
+                    </p>
                   </td>
                 </tr>
                 <tr>

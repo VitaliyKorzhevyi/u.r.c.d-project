@@ -198,7 +198,7 @@ export const StatisticsMedicaments = () => {
         />
         <div>
           <p>
-            <strong>К-сть. елементів на сторінці</strong>
+            <strong>Елементів на сторінці</strong>
           </p>
 
           <select

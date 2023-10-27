@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import { UserDataContext } from "../../pages/HomePage";
 import $api from "../../api/api";
 import { toast } from "react-toastify";
 
@@ -8,11 +9,9 @@ import { DataEditingInputs } from "./DataEditingInputs";
 
 import "./DataEditing.css";
 
-
-
-
-
 export const DataEditing = () => {
+  const { myData } = useContext(UserDataContext);
+
   //* ВИБІР ПАЦІЄНТА
   const [isModalOpenSearch, setModalOpenSearch] = useState(false);
   const [patientData, setPatientData] = useState({
@@ -32,8 +31,19 @@ export const DataEditing = () => {
     setPatientData((prevData) => ({ ...prevData, [key]: value }));
   };
 
-  //* СПІЛЬНИЙ ЗАПИТ НА РЕДАГУВАННЯ
+  const canAccessMedicaments = myData.permissions.includes(
+    "edit_medicament"
+  );
+  const canAccessDiagnoses = myData.permissions.includes("edit_diagnosis");
+  const canAccessOperations = myData.permissions.includes("edit_operation");
+  const canAccessDays = myData.permissions.includes("edit_preoperative_day");
+  const showEditingContainerItems =
+    canAccessMedicaments ||
+    canAccessDiagnoses ||
+    canAccessOperations ||
+    canAccessDays;
 
+  //* СПІЛЬНИЙ ЗАПИТ НА РЕДАГУВАННЯ
   const onEditItem = (url, updatedItem, successMessage, setStateCallback) => {
     $api
       .put(url, updatedItem)
@@ -79,13 +89,35 @@ export const DataEditing = () => {
     $api.get("/preoperative-days").then((response) => setDays(response.data));
   };
 
-  //* ПОШУК ТА РЕДАГУВННЯ МЕДИКАМЕНТІВ
-  const [medicaments, setMedicaments] = useState([]);
+  useEffect(() => {
+    if (canAccessMedicaments) {
+      $api.get("/medicaments").then((response) => {
+        setMedicaments(response.data);
+        console.log("ПРАЦЮЄ", response.data);
+      });
+    }
+  }, [canAccessMedicaments]);
 
   useEffect(() => {
-    $api.get("/medicaments").then((response) => setMedicaments(response.data));
-  }, []);
+    if (canAccessDiagnoses) {
+      $api.get("/diagnoses").then((response) => setDiagnoses(response.data));
+    }
+  }, [canAccessDiagnoses]);
 
+  useEffect(() => {
+    if (canAccessOperations) {
+      $api.get("/operations").then((response) => setOperations(response.data));
+    }
+  }, [canAccessOperations]);
+
+  useEffect(() => {
+    if (canAccessDays) {
+      $api.get("/preoperative-days").then((response) => setDays(response.data));
+    }
+  }, [canAccessDays]);
+
+  //* ПОШУК ТА РЕДАГУВННЯ МЕДИКАМЕНТІВ
+  const [medicaments, setMedicaments] = useState([]);
   const [medicamentItem, setMedicamentsItem] = useState([]);
   const [medicamentsId, setMedicamentsId] = useState([]);
 
@@ -109,14 +141,8 @@ export const DataEditing = () => {
 
   //* ПОШУК ТА РЕДАГУВАННЯ ДІАГНОЗІВ
   const [diagnoses, setDiagnoses] = useState([]);
-
-  useEffect(() => {
-    $api.get("/diagnoses").then((response) => setDiagnoses(response.data));
-  }, []);
-
   const [diagnosesItem, setDiagnosesItem] = useState([]);
   const [diagnosesId, setDiagnosesId] = useState([]);
-
   const onDiagnosesSelect = (id) => {
     const selectedDiagnoses = diagnoses.find((item) => item.id === id);
     if (selectedDiagnoses) {
@@ -132,11 +158,6 @@ export const DataEditing = () => {
 
   //* ПОШУК ТА РЕДАГУВАННЯ ОПЕРАЦІЙ
   const [operations, setOperations] = useState([]);
-
-  useEffect(() => {
-    $api.get("/operations").then((response) => setOperations(response.data));
-  }, []);
-
   const [operationsItem, setOperationsItem] = useState([]);
   const [operationsId, setOperationsId] = useState([]);
 
@@ -160,11 +181,6 @@ export const DataEditing = () => {
 
   //* ПОШУК ТА РЕДАГУВННЯ ДНІВ
   const [days, setDays] = useState([]);
-
-  useEffect(() => {
-    $api.get("/preoperative-days").then((response) => setDays(response.data));
-  }, []);
-
   const [daysItem, setDaysItem] = useState([]);
   const [daysId, setDaysId] = useState([]);
 
@@ -178,6 +194,26 @@ export const DataEditing = () => {
   const onEditDays = () => {
     const URL = `/preoperative-days/${daysId}`;
     onEditItem(URL, daysItem, "К-сть. днів відредаговано", setDaysItem);
+  };
+
+  //* Додавання нових данних у списки
+
+  const updateData = ({ data, config }) => {
+    if (config.url === "./medicaments") {
+      setMedicaments((pS) => [...pS, data]);
+    }
+
+    if (config.url === "./diagnoses") {
+      setDiagnoses((pS) => [...pS, data]);
+    }
+
+    if (config.url === "./operations") {
+      setOperations((pS) => [...pS, data]);
+    }
+
+    if (config.url === "./preoperative-days") {
+      setDays((pS) => [...pS, data]);
+    }
   };
 
   return (
@@ -201,119 +237,133 @@ export const DataEditing = () => {
           <DataEditingPatient patientData={patientData} />
         </div>
       </div>
-      <div className="editing-container-items">
-        <div className="editing-semi-container">
-          <h2 className="data-editing-title">Медикаменти</h2>
-          <div className="editing-item-inputs">
-            <DataEditingInputs
-              items={medicaments}
-              selectedItem={medicamentItem}
-              onItemSelect={onMedicamentSelect}
-            />
-            <div>
-              <label htmlFor="edit-medicaments">Редагування:&nbsp;</label>
-              <input
-                id="edit-medicaments"
-                type="text"
-                autoComplete="off"
-                value={medicamentItem}
-                onChange={(e) => setMedicamentsItem(e.target.value)}
+      {showEditingContainerItems && (
+        <div className="editing-container-items">
+          <div className="editing-semi-container">
+            <h2 className="data-editing-title">Медикаменти</h2>
+            <div className="editing-item-inputs">
+              <DataEditingInputs
+                items={medicaments}
+                selectedItem={medicamentItem}
+                onItemSelect={onMedicamentSelect}
+                urlSelect="./medicaments"
+                msgSuccess="Медикамент"
+                updateData={updateData}
               />
-              <button
-                type="button"
-                className="btn-editing-data-item"
-                onClick={onEditMedicament}
-              >
-                Редагувати
-              </button>
+              <div>
+                <label htmlFor="edit-medicaments">Редагування:&nbsp;</label>
+                <input
+                  id="edit-medicaments"
+                  type="text"
+                  autoComplete="off"
+                  value={medicamentItem}
+                  onChange={(e) => setMedicamentsItem(e.target.value)}
+                />
+                <button
+                  type="button"
+                  className="btn-editing-data-item"
+                  onClick={onEditMedicament}
+                >
+                  Редагувати
+                </button>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div className="editing-semi-container">
-          <h2 className="data-editing-title">Діагнози</h2>
-          <div className="editing-item-inputs">
-            <DataEditingInputs
-              items={diagnoses}
-              selectedItem={diagnosesItem}
-              onItemSelect={onDiagnosesSelect}
-            />
-            <div>
-              <label htmlFor="edit-diagnoses">Редагування:&nbsp;</label>
-              <input
-                id="edit-diagnoses"
-                type="text"
-                autoComplete="off"
-                value={diagnosesItem}
-                onChange={(e) => setDiagnosesItem(e.target.value)}
+          <div className="editing-semi-container">
+            <h2 className="data-editing-title">Діагнози</h2>
+            <div className="editing-item-inputs">
+              <DataEditingInputs
+                items={diagnoses}
+                selectedItem={diagnosesItem}
+                onItemSelect={onDiagnosesSelect}
+                urlSelect="./diagnoses"
+                msgSuccess="Діагноз"
+                updateData={updateData}
               />
-              <button
-                type="button"
-                className="btn-editing-data-item"
-                onClick={onEditDiagnoses}
-              >
-                Редагувати
-              </button>
+              <div>
+                <label htmlFor="edit-diagnoses">Редагування:&nbsp;</label>
+                <input
+                  id="edit-diagnoses"
+                  type="text"
+                  autoComplete="off"
+                  value={diagnosesItem}
+                  onChange={(e) => setDiagnosesItem(e.target.value)}
+                />
+                <button
+                  type="button"
+                  className="btn-editing-data-item"
+                  onClick={onEditDiagnoses}
+                >
+                  Редагувати
+                </button>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div className="editing-semi-container">
-          <h2 className="data-editing-title">Операції</h2>
-          <div className="editing-item-inputs">
-            <DataEditingInputs
-              items={operations}
-              selectedItem={operationsItem}
-              onItemSelect={onOperationsSelect}
-            />
-            <div>
-              <label htmlFor="edit-operations">Редагування:&nbsp;</label>
-              <input
-                id="edit-operations"
-                type="text"
-                autoComplete="off"
-                value={operationsItem}
-                onChange={(e) => setOperationsItem(e.target.value)}
+          <div className="editing-semi-container">
+            <h2 className="data-editing-title">Операції</h2>
+            <div className="editing-item-inputs">
+              <DataEditingInputs
+                items={operations}
+                selectedItem={operationsItem}
+                onItemSelect={onOperationsSelect}
+                urlSelect="./operations"
+                msgSuccess="Операція"
+                updateData={updateData}
               />
-              <button
-                type="button"
-                className="btn-editing-data-item"
-                onClick={onEditOperations}
-              >
-                Редагувати
-              </button>
+              <div>
+                <label htmlFor="edit-operations">Редагування:&nbsp;</label>
+                <input
+                  id="edit-operations"
+                  type="text"
+                  autoComplete="off"
+                  value={operationsItem}
+                  onChange={(e) => setOperationsItem(e.target.value)}
+                />
+                <button
+                  type="button"
+                  className="btn-editing-data-item"
+                  onClick={onEditOperations}
+                >
+                  Редагувати
+                </button>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div className="editing-semi-container">
-          <h2 className="data-editing-title">Кількість днів</h2>
-          <div className="editing-item-inputs">
-            <DataEditingInputs
-              items={days}
-              selectedItem={daysItem}
-              onItemSelect={onDaysSelect}
-            />
-            <div>
-              <label htmlFor="edit-days">Редагування:&nbsp;</label>
-              <input
-                id="edit-days"
-                type="text"
-                autoComplete="off"
-                value={daysItem}
-                onChange={(e) => setDaysItem(e.target.value)}
+          <div className="editing-semi-container">
+            <h2 className="data-editing-title">Кількість днів</h2>
+            <div className="editing-item-inputs">
+              <DataEditingInputs
+                items={days}
+                selectedItem={daysItem}
+                onItemSelect={onDaysSelect}
+                urlSelect="./preoperative-days"
+                msgSuccess="К-сть. днів"
+                updateData={updateData}
               />
-              <button
-                type="button"
-                className="btn-editing-data-item"
-                onClick={onEditDays}
-              >
-                Редагувати
-              </button>
+              <div>
+                <label htmlFor="edit-days">Редагування:&nbsp;</label>
+                <input
+                  id="edit-days"
+                  type="text"
+                  autoComplete="off"
+                  value={daysItem}
+                  onChange={(e) => setDaysItem(e.target.value)}
+                />
+                <button
+                  type="button"
+                  className="btn-editing-data-item"
+                  onClick={onEditDays}
+                >
+                  Редагувати
+                </button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
 
       <ModalPatientSearch
         isOpen={isModalOpenSearch}

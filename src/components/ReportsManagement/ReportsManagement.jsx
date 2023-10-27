@@ -179,7 +179,7 @@ export const ReportsManagement = ({
       <ul className="list-management-report">
         <li className="item-management-report">
           <p>
-            <strong>К-сть. елементів на сторінці</strong>
+            <strong>Елементів на сторінці</strong>
           </p>
 
           <select

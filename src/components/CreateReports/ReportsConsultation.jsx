@@ -65,14 +65,13 @@ export const ReportsConsultation = () => {
         {
           id: 1,
           number: 1,
-          receipt_number: "" || null,
+          receipt_number: null,
           full_name: "",
           phone: "",
           patient_id: "",
-          is_free: false,
-          discount: 0,
+          payment_amount: 0,
           medication_prescribed: false,
-          notation: "" || null,
+          notation: null,
         },
       ];
     }
@@ -86,14 +85,13 @@ export const ReportsConsultation = () => {
     const newRow = {
       id: rows.length + 1,
       number: rows.length + 1,
-      receipt_number: "" || null,
+      receipt_number: null,
       full_name: "",
       phone: "",
       patient_id: "",
-      is_free: false,
-      discount: 0,
+      payment_amount: 0,
       medication_prescribed: false,
-      notation: "" || null,
+      notation: null,
     };
 
     setRows([...rows, newRow]);
@@ -157,19 +155,6 @@ export const ReportsConsultation = () => {
     setRows(updatedRows);
   };
 
-  const toggleIsFree = (id) => {
-    const updatedRows = [...rows];
-    updatedRows[id - 1].is_free = !updatedRows[id - 1].is_free;
-
-    if (updatedRows[id - 1].is_free) {
-      updatedRows[id - 1].discount = 100;
-    } else if (updatedRows[id - 1].discount === 100) {
-      updatedRows[id - 1].is_free = true;
-    }
-
-    setRows(updatedRows);
-  };
-
   //* ОТПРАВКА НА БЕК
 
   const openConfirmationModal = () => {
@@ -196,7 +181,7 @@ export const ReportsConsultation = () => {
       receipt_number: row.receipt_number,
       patient_id: row.patient_id,
       is_free: row.is_free,
-      discount: row.discount,
+      payment_amount: row.payment_amount,
       medication_prescribed: row.medication_prescribed,
       notation: row.notation,
     }));
@@ -214,13 +199,12 @@ export const ReportsConsultation = () => {
           {
             id: 1,
             number: 1,
-            receipt_number: "",
+            receipt_number: null,
             full_name: "",
             patient_id: "",
-            is_free: false,
-            discount: 0,
+            payment_amount: 0,
             medication_prescribed: false,
-            notation: "",
+            notation: null,
           },
         ]);
       })
@@ -287,9 +271,8 @@ export const ReportsConsultation = () => {
               <td colSpan="2" className="consultation-table-patient-st">
                 відвідувач/хворий
               </td>
-              <td className="consultation-table-size5">Платно</td>
-              <td className="consultation-table-size6">Знижка %</td>
-              <td className="consultation-table-size6">Виписані ліки</td>
+              <td className="consultation-table-size6">Оплата</td>
+              <td className="consultation-table-size5">Виписані ліки</td>
               <td className="consultation-table-size3">Примітки</td>
               <td className="consultation-table-size2">Дії</td>
             </tr>
@@ -319,30 +302,6 @@ export const ReportsConsultation = () => {
                     <div className="btns-patient">
                       <button
                         type="button"
-                        className={`btn-patient green ${
-                          isTableDisabled ? "disabled" : ""
-                        }`}
-                        onClick={() => {
-                          toggleModalCreate();
-                          setSelectedPatientInfo({
-                            fullName: "",
-                            id: id - 1,
-                          });
-                          setSelectedPatientId({
-                            idPatient: "",
-                            id: id - 1,
-                          });
-                          setSelectedPatientPhone({
-                            phone: "",
-                            id: id - 1,
-                          });
-                        }}
-                        disabled={isTableDisabled}
-                      >
-                        <i className="bx bx-user-plus bx-sm"></i>
-                      </button>
-                      <button
-                        type="button"
                         className={`btn-patient blue one ${
                           isTableDisabled ? "disabled" : ""
                         }`}
@@ -365,40 +324,47 @@ export const ReportsConsultation = () => {
                       >
                         <i className="bx bx-search bx-sm"></i>
                       </button>
-                    </div>
-                  </td>
-                  <td>
-                    <div
-                      onClick={() => toggleIsFree(id)}
-                      className={`checkbox-isfree ${
-                        isTableDisabled ? "disabled" : ""
-                      }`}
-                    >
-                      {row.is_free ? null : (
-                        <i className="bx bx-check bx-md"></i>
-                      )}
+                      <button
+                        type="button"
+                        className={`btn-patient green ${
+                          isTableDisabled ? "disabled" : ""
+                        }`}
+                        onClick={() => {
+                          toggleModalCreate();
+                          setSelectedPatientInfo({
+                            fullName: "",
+                            id: id - 1,
+                          });
+                          setSelectedPatientId({
+                            idPatient: "",
+                            id: id - 1,
+                          });
+                          setSelectedPatientPhone({
+                            phone: "",
+                            id: id - 1,
+                          });
+                        }}
+                        disabled={isTableDisabled}
+                      >
+                        <i className="bx bx-user-plus bx-sm"></i>
+                      </button>
                     </div>
                   </td>
                   <td>
                     <input
                       className="table-cons-discount"
                       type="number"
-                      value={row.discount}
+                      value={row.payment_amount === 0 ? '' : row.payment_amount}
                       onChange={(e) => {
                         const updatedRows = [...rows];
                         const newValue = parseInt(e.target.value, 10);
-
-                        if (newValue <= 0) {
-                          updatedRows[id - 1].discount = 0;
-                        } else if (newValue >= 100) {
-                          updatedRows[id - 1].discount = 100;
-                          updatedRows[id - 1].is_free = true;
+                        if (!isNaN(newValue) && newValue >= 0) {
+                          updatedRows[id - 1].payment_amount = newValue;
+                          setRows(updatedRows);
                         } else {
-                          updatedRows[id - 1].discount = newValue;
-                          updatedRows[id - 1].is_free = false;
+                          updatedRows[id - 1].payment_amount = 0;
+                          setRows(updatedRows);
                         }
-
-                        setRows(updatedRows);
                       }}
                       disabled={isTableDisabled}
                     />
@@ -416,12 +382,13 @@ export const ReportsConsultation = () => {
                     </div>
                   </td>
                   <td>
-                    <input
+                    <textarea
                       className="table-cons-notation"
                       type="text"
                       value={row.notation || ""}
                       onChange={(e) => handleNotationChange(e, id)}
                       disabled={isTableDisabled}
+                      maxLength={500}
                     />
                   </td>
                   <td>

@@ -21,7 +21,7 @@ export const MedicamentInputEditing = ({
   return (
     <div className="autocomplete-container">
       <div>
-        <input
+        <textarea
           className="medicament-input input-size-save-table"
           type="text"
           autoComplete="off"

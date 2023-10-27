@@ -58,16 +58,12 @@ export const EditUserModal = ({ isOpen, onClose, afterCreate, userData }) => {
       .then((response) => {
         console.log(response);
         const userId = response.data.id;
-        if (selectedRoles.length > 0) {
-          // Проверка на наличие выбранных ролей
-          changeUserRole(userId);
-        } else {
-          toast.success(`Дані користувача успішно оновлено`, {
-            autoClose: 1500,
-          });
-          onClose();
-          if (afterCreate) afterCreate();
-        }
+        changeUserRole(userId);
+        toast.success(`Дані користувача успішно оновлено`, {
+          autoClose: 1500,
+        });
+        onClose();
+        if (afterCreate) afterCreate();
       })
       .catch((error) => {
         console.log(error);
@@ -75,7 +71,7 @@ export const EditUserModal = ({ isOpen, onClose, afterCreate, userData }) => {
   };
 
   const changeUserRole = (userId) => {
-    const rolesData = { roles: selectedRoles };
+    const rolesData = { roles: selectedRoles.length > 0 ? selectedRoles : [] };
     const URL = `/users/${userId}/change-role`;
     console.log("на бек", rolesData);
     $api
@@ -87,7 +83,9 @@ export const EditUserModal = ({ isOpen, onClose, afterCreate, userData }) => {
         });
         onClose();
         if (afterCreate) afterCreate();
-        window.location.reload()
+        setTimeout(() => {
+          window.location.reload()
+      }, 100);
       })
       .catch((error) => {
         console.log("Error updating roles:", error);

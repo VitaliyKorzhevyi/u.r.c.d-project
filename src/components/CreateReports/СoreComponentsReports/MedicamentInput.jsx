@@ -158,11 +158,11 @@ export const MedicamentInput = ({
 
   return (
     <>
-      <input
+      <textarea
         type="text"
         autoComplete="off"
         name="medicaments"
-        className="form1-table-text-name"
+        className="form1-table-text-name medicaments"
         value={inputValue}
         onChange={onInputChange}
         onBlur={(e) => onMedicamentsInputBlur(e.target.value)}

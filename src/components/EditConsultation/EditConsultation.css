@@ -39,22 +39,50 @@
   flex: 1;
 }
 
-.cons-big-container-data-size1 {
-  width: 10%;
+.cons-big-container-data-size {
+  width: 6px;
 }
 
+.cons-big-container-data-size.yellow {
+  background-color: rgb(255, 248, 152);
+}
+
+.cons-big-container-data-size.green {
+  background-color: rgb(135, 211, 182);
+}
+
+.cons-big-container-data-size1 {
+  width: 10%;
+  text-align: center;
+}
+
+.cons-big-container-data-size1 span {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+}
 
 .cons-big-container-data-size3 {
-  width: 6%;
+  width: 8%;
+  text-align: center;
+}
+.cons-big-container-data-size6 {
+  width: 6.6%;
   text-align: center;
 }
 
 .cons-big-container-data-size4 {
-  width: 28%;
+  width: 30%;
+}
+
+.cons-big-container-data-size4 span{
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  font-size: 14px;
 }
 
 .cons-big-container-data-size5 {
-  width: 8.4%;
+  width: 8.2%;
 }
 
 .btns-maneg-patient-filter {
@@ -70,6 +98,47 @@
 .cons-big-container-data-btns button {
   cursor: pointer;
   height: 36px;
+  border-radius: 4px;
+}
+
+
+.cons-big-container-data-btns button:nth-child(2) {
+  background-color: #c4eee0;
+  border: 2px solid #78d4a9;
+}
+
+.cons-big-container-data-btns button:nth-child(2):hover {
+  color: #fff;
+  background-color: #5ac5a1;
+  border-color: #318860;
+}
+
+.cons-big-container-data-btns button:nth-child(1) {
+  background-color: #cadeff;
+  border: 2px solid #72aefd;
+}
+
+.cons-big-container-data-btns button:nth-child(1):hover {
+  color: #fff;
+  background-color: #72aefd;
+  border-color: #1b7eff;
+}
+
+
+
+
+.cons-big-container-data-btns.disabled button {
+  cursor: default;
+  color: #b9b9b9;
+  background-color: #e7e7e7;
+  border: 2px solid #a7a7a7;
+}
+
+.cons-big-container-data-btns.disabled button:hover {
+  cursor: default;
+  color: #b9b9b9;
+  background-color: #e7e7e7;
+  border: 2px solid #a7a7a7;
 }
 
 .cons-table-edit-rec-n,
@@ -77,6 +146,12 @@
 .cons-table-edit-discount {
   width: 100%;
   height: 36px;
+}
+
+.cons-table-edit-notation {
+  max-width: 346.6px;
+  min-width: 200px;
+  min-height: 30px;
 }
 
 .cons-table-edit-discount {
@@ -101,15 +176,12 @@
 }
 
 .cons-big-container-data-patient div {
-  display: flex;
-  gap: 6px;
-  align-items: baseline;
-  justify-content: center;
+  text-align: center;
 }
 
 .cons-big-container-data-patient div:nth-child(1) {
   padding-bottom: 1px;
-  border-bottom: 1px solid #000
+  border-bottom: 1px solid #000;
 }
 
 .cons-big-container-data-patient div:nth-child(2) {
@@ -120,10 +192,9 @@
   margin-bottom: 30px;
 }
 
-.cons-big-table-title td{
+.cons-big-table-title td {
   padding: 2 6px;
 }
-
 
 .cons-big-container-title-date {
   margin-bottom: 10px;
@@ -150,4 +221,10 @@
 .cons-big-container-data-isfree {
   height: 36px;
   width: 36px;
+}
+
+.cons-table-edit-discount-value {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+  font-size: 16px;
 }

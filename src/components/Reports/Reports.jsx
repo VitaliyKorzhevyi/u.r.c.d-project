@@ -101,7 +101,7 @@ export const Reports = () => {
           userData={myData}
           activeModal={openModal}
         >
-          Редагування даних
+          Керування даними
         </AccessibleButton>
 
         {/* <AccessibleButton

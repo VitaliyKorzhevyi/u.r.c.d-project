@@ -30,7 +30,7 @@ export const UsersSorting = ({ onFormDataChange }) => {
     <ul className="user-sorting-list">
       <li className="user-sorting-item">
         <p>
-          <strong>К-сть. елементів на сторінці</strong>
+          <strong>Елементів на сторінці</strong>
         </p>
 
         <select

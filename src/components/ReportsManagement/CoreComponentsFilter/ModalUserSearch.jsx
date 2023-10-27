@@ -19,7 +19,7 @@ export const ModalUserSearch = ({
   const [birthday, setBirthday] = useState("");
   const [loadingMore, setLoadingMore] = useState(false);
   const [page, setPage] = useState(1);
-  const MIN_LENGTH = 4;
+  const MIN_LENGTH = 2;
 
   const validateParams = useCallback((params) => {
     for (let value of Object.values(params)) {

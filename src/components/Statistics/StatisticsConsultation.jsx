@@ -152,6 +152,11 @@ export const StatisticsConsultation = () => {
     (sum, item) => sum + item.paid_consultations,
     0
   );
+  const totalPaymentConsultations = data.reduce(
+    (sum, item) => sum + item.payments_sum,
+    0
+  );
+
 
   return (
     <div className="st-med-container">
@@ -183,6 +188,7 @@ export const StatisticsConsultation = () => {
               <th className="size-table-st-cons2">К-сть. хворих</th>
               <th className="size-table-st-cons2">Безоплатні</th>
               <th className="size-table-st-cons2">Платні</th>
+              <th className="">Сума</th>
             </tr>
           </thead>
           <tbody>
@@ -193,6 +199,7 @@ export const StatisticsConsultation = () => {
                   free_consultations,
                   total_consultations,
                   paid_consultations,
+                  payments_sum,
                 } = item;
                 return (
                   <tr key={index} className="table-st-cons-data">
@@ -211,6 +218,9 @@ export const StatisticsConsultation = () => {
                     <td>
                       <p>{paid_consultations}</p>
                     </td>
+                    <td>
+                      <p>{payments_sum}</p>
+                    </td>
                   </tr>
                 );
               })
@@ -225,6 +235,7 @@ export const StatisticsConsultation = () => {
               <td>{totalTotalConsultations}</td>
               <td>{totalFreeConsultations}</td>
               <td>{totalPaidConsultations}</td>
+              <td>{totalPaymentConsultations}</td>
             </tr>
           </tbody>
         </table>

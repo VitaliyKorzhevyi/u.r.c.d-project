@@ -5,6 +5,8 @@ import { PERMISSIONS } from "../../constants/permissions";
 
 import "./ItemFormset.css";
 
+import { isThreeDaysOld } from "../EditReports/СoreComponentsReports/dateUtils";
+
 const REPORT_TYPE_NAMES = {
   operating: "Операційна",
   anesthesiology: "Анестезіологія",
@@ -96,25 +98,23 @@ export const ItemFormset = ({ data, userData }) => {
     }
   };
 
-  const sendDataToBackendPharmacy = () => {
-    const firstCheckedRow = Object.values(pharmacyCheck)[0];
-    const reportType = firstCheckedRow?.type;
-    const reportId = firstCheckedRow?.tableId.split("-")[0];
-
+  const sendDataToBackendPharmacy = (type, itemId) => {
+    const reportId = itemId.split("-")[0];
     const rowIds = Object.keys(pharmacyCheck)
-      .filter((key) => pharmacyCheck[key].type === reportType)
+      .filter((key) => pharmacyCheck[key].type === type)
       .map(Number);
 
     const data = {
-      report: reportType,
+      report: type,
       row_ids: rowIds,
     };
-    console.log(data);
-
+    const URL = `/reports/${reportId}/pharmacy-mark`;
+    console.log("data", data);
+    console.log("URL", URL);
     $api
-      .post(`/reports/${reportId}/pharmacy-mark`, data)
+      .post(URL, data)
       .then((response) => {
-        onItemDetailsFetch({ id: reportId, type: reportType });
+        onItemDetailsFetch({ id: reportId, type: type });
         console.log("Data sent successfully:", response.data);
       })
       .catch((error) => {
@@ -137,6 +137,7 @@ export const ItemFormset = ({ data, userData }) => {
         return newState;
       }
     });
+    
     // Если данный чекбокс был отмечен на сервере, удаляем его из backendChecks
     if (backendChecksAccounting[rowId]) {
       setBackendChecksAccounting((prev) => {
@@ -148,25 +149,26 @@ export const ItemFormset = ({ data, userData }) => {
     }
   };
 
-  const sendDataToBackendAccounting = () => {
-    const firstCheckedRow = Object.values(accountingCheck)[0];
-    const reportType = firstCheckedRow?.type;
-    const reportId = firstCheckedRow?.tableId.split("-")[0];
+  const sendDataToBackendAccounting = (type, itemId) => {
+    const reportId = itemId.split("-")[0];
 
     const rowIds = Object.keys(accountingCheck)
-      .filter((key) => accountingCheck[key].type === reportType)
+      .filter((key) => accountingCheck[key].type === type)
       .map(Number);
 
     const data = {
-      report: reportType,
+      report: type,
       row_ids: rowIds,
     };
-    console.log(data);
+    const URL = `/reports/${reportId}/accounting-mark`;
+
+    console.log("data", data);
+    console.log("URL", URL);
 
     $api
-      .post(`/reports/${reportId}/accounting-mark`, data)
+      .post(URL, data)
       .then((response) => {
-        onItemDetailsFetch({ id: reportId, type: reportType });
+        onItemDetailsFetch({ id: reportId, type: type });
         console.log("Data sent successfully:", response.data);
       })
       .catch((error) => {
@@ -174,8 +176,12 @@ export const ItemFormset = ({ data, userData }) => {
       });
   };
 
-  const hasPharmacyPermission = userData.permissions.includes(PERMISSIONS.UPDATING_PHARMACY_MARKS);
-  const hasAccountingPermission = userData.permissions.includes(PERMISSIONS.UPDATING_ACCOUNTING_MARKS);
+  const hasPharmacyPermission = userData.permissions.includes(
+    PERMISSIONS.UPDATING_PHARMACY_MARKS
+  );
+  const hasAccountingPermission = userData.permissions.includes(
+    PERMISSIONS.UPDATING_ACCOUNTING_MARKS
+  );
 
   const currentItemDetails = detailedData[activeItemId];
 
@@ -189,15 +195,17 @@ export const ItemFormset = ({ data, userData }) => {
           <li key={itemId} className="item-formset">
             <div className="mini-form">
               <table>
-                <thead>
-                  
-                </thead>
+                <thead></thead>
                 <tbody className="text-semititle">
                   <tr>
-                    <td className={`size-table-formset ${type}-background`}>
+                    <td
+                      className={`size-table-formset6 ${
+                        isThreeDaysOld(created_at) ? "yellow" : "green"
+                      }`}
+                    ></td>
+                    <td className="size-table-formset">
                       <p>
-                        <strong>Звіт:</strong>{" "}
-                        {REPORT_TYPE_NAMES[type] || type}
+                        <strong>Звіт:</strong> {REPORT_TYPE_NAMES[type] || type}
                       </p>
                     </td>
                     <td>
@@ -223,7 +231,9 @@ export const ItemFormset = ({ data, userData }) => {
                     >
                       <i
                         className={`bx ${
-                          activeItemId === itemId ? "bx-refresh bx-sm" : "bxs-chevron-down bx-sm"
+                          activeItemId === itemId
+                            ? "bx-refresh bx-sm"
+                            : "bxs-chevron-down bx-sm"
                         }`}
                       ></i>
                     </td>
@@ -252,7 +262,10 @@ export const ItemFormset = ({ data, userData }) => {
                       <td colSpan="3">
                         <p>
                           <strong>Дата народження пацієнта:</strong>{" "}
-                          {currentItemDetails.patient.birthday}
+                          {currentItemDetails.patient.birthday
+                            .split("-")
+                            .reverse()
+                            .join(".")}
                         </p>
                       </td>
                       <td colSpan="3">
@@ -266,7 +279,8 @@ export const ItemFormset = ({ data, userData }) => {
                       <td colSpan="6">
                         <p>
                           <strong>Діагноз:</strong>{" "}
-                          {currentItemDetails.diagnosis.title}
+                          {currentItemDetails.diagnosis &&
+                            currentItemDetails.diagnosis.title}
                         </p>
                       </td>
                     </tr>
@@ -302,7 +316,7 @@ export const ItemFormset = ({ data, userData }) => {
                     </tr>
                     {currentItemDetails.rows.map((row, index) => (
                       <tr key={row.id}>
-                        <td style={{ textAlign: "center" }}>
+                        <td>
                           <span className="text-head-saved-forms">
                             {row.medicament.title}
                           </span>
@@ -330,7 +344,8 @@ export const ItemFormset = ({ data, userData }) => {
                         </td>
                         <td>
                           <div>
-                            {hasPharmacyPermission ? (
+                            {hasPharmacyPermission &&
+                            !isThreeDaysOld(currentItemDetails.created_at) ? (
                               <div className="custom-checkbox">
                                 <input
                                   type="checkbox"
@@ -380,7 +395,8 @@ export const ItemFormset = ({ data, userData }) => {
                           </div>
                         </td>
                         <td>
-                          {hasAccountingPermission ? (
+                          {hasAccountingPermission &&
+                          !isThreeDaysOld(currentItemDetails.created_at) ? (
                             <div className="custom-checkbox">
                               <input
                                 type="checkbox"
@@ -432,27 +448,31 @@ export const ItemFormset = ({ data, userData }) => {
                     ))}
                   </tbody>
                 </table>
-                <div className="btns-table-formset">
-                  {hasPharmacyPermission && (
-                    <button
-                      type="button"
-                      className="btn-save-table-formset"
-                      onClick={() => sendDataToBackendPharmacy()}
-                    >
-                      Зберегти
-                    </button>
-                  )}
+                {!isThreeDaysOld(currentItemDetails.created_at) ? (
+                  <div className="btns-table-formset">
+                    {hasPharmacyPermission && (
+                      <button
+                        type="button"
+                        className="btn-save-table-formset"
+                        onClick={() => sendDataToBackendPharmacy(type, itemId)}
+                      >
+                        Зберегти
+                      </button>
+                    )}
 
-                  {hasAccountingPermission && (
-                    <button
-                      type="button"
-                      className="btn-save-table-formset"
-                      onClick={() => sendDataToBackendAccounting()}
-                    >
-                      Зберегти
-                    </button>
-                  )}
-                </div>
+                    {hasAccountingPermission && (
+                      <button
+                        type="button"
+                        className="btn-save-table-formset"
+                        onClick={() =>
+                          sendDataToBackendAccounting(type, itemId)
+                        }
+                      >
+                        Зберегти
+                      </button>
+                    )}
+                  </div>
+                ) : null}
               </div>
             )}
           </li>

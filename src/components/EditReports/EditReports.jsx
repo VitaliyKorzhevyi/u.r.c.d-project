@@ -470,12 +470,11 @@ export const EditReports = ({ userData }) => {
                       <tbody>
                         <tr>
                           <td
-                            className={`semititle-size1 ${
-                              isThreeDaysOld(created_at)
-                                ? "yellow-background"
-                                : "green-background"
+                            className={`table-save-size4 ${
+                              isThreeDaysOld(created_at) ? "yellow" : "green"
                             }`}
-                          >
+                          ></td>
+                          <td className="semititle-size1">
                             <p>
                               <strong>Звіт:</strong>{" "}
                               {REPORT_TYPE_NAMES[type] || type}
@@ -554,23 +553,23 @@ export const EditReports = ({ userData }) => {
                       <>
                         <table border="1" className="table-save">
                           <tbody>
-                          <tr>
+                            <tr>
                               <td colSpan="2">
-                               <strong>Телефон:{" "}</strong> 
+                                <strong>Телефон: </strong>
                                 <span className="text-head-saved-forms">
                                   {selectedItemDetails.patient.phone}
                                 </span>
                               </td>
                               <td colSpan="4">
-                               <strong>Дата народження:{" "}</strong> 
+                                <strong>Дата народження: </strong>
                                 <span className="text-head-saved-forms">
-                                  {selectedItemDetails.patient.birthday}
+                                  {selectedItemDetails.patient.birthday.split("-").reverse().join(".")}
                                 </span>
                               </td>
                             </tr>
                             <tr>
                               <td colSpan="2">
-                                <strong>Вік:{" "}</strong>
+                                <strong>Вік: </strong>
                                 <span className="text-head-saved-forms">
                                   {selectedItemDetails.patient.age}
                                 </span>
@@ -601,7 +600,7 @@ export const EditReports = ({ userData }) => {
                                 >
                                   <span className="text-head-saved-forms">
                                     <strong>Діагноз:</strong>{" "}
-                                    {selectedItemDetails.diagnosis.title}
+                                    {selectedItemDetails.diagnosis && selectedItemDetails.diagnosis.title}
                                   </span>
                                 </td>
                               ) : (
@@ -609,7 +608,7 @@ export const EditReports = ({ userData }) => {
                                   <DiagnosesInputEditing
                                     items={diagnoses}
                                     selectedItem={
-                                      selectedItemDetails.diagnosis.title
+                                      selectedItemDetails.diagnosis && selectedItemDetails.diagnosis.title
                                     }
                                     onItemSelect={onDiagnosesSelect}
                                     createdAt={created_at}
@@ -742,10 +741,10 @@ export const EditReports = ({ userData }) => {
                                       {row.notation}
                                     </p>
                                   ) : (
-                                    <input
+                                    <textarea
                                       type="text"
                                       autoComplete="off"
-                                      className="history-input"
+                                      className="notation-input "
                                       title={row.notation || ""}
                                       value={row.notation || ""}
                                       onChange={(e) =>
@@ -789,30 +788,28 @@ export const EditReports = ({ userData }) => {
                             ))}
                           </tbody>
                         </table>
-                        <div className="btns-save-table-container">
-                          <button
-                            type="button"
-                            className={`btn-save-table ${
-                              !isThreeDaysOld(created_at) ? "blue" : ""
-                            }`}
-                            onClick={() => {
-                              toggleModalSearch();
-                            }}
-                            disabled={isThreeDaysOld(created_at)}
-                          >
-                            Редагувати пацієнта
-                          </button>
-                          <button
-                            type="button"
-                            className={`btn-save-table ${
-                              !isThreeDaysOld(created_at) ? "green" : ""
-                            }`}
-                            onClick={() => onSaveChanges(type)}
-                            disabled={isThreeDaysOld(created_at)}
-                          >
-                            Зберегти зміни
-                          </button>
-                        </div>
+                        {!isThreeDaysOld(created_at) ? (
+                          <div className="btns-save-table-container">
+                            <button
+                              type="button"
+                              className="btn-save-table blue"
+                              onClick={() => {
+                                toggleModalSearch();
+                              }}
+                              disabled={isThreeDaysOld(created_at)}
+                            >
+                              Редагувати пацієнта
+                            </button>
+                            <button
+                              type="button"
+                              className="btn-save-table green"
+                              onClick={() => onSaveChanges(type)}
+                              disabled={isThreeDaysOld(created_at)}
+                            >
+                              Зберегти зміни
+                            </button>
+                          </div>
+                        ) : null}
                       </>
                     )}
                 </li>

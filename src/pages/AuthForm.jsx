@@ -95,18 +95,8 @@ export const Auth = () => {
 
   return (
     <div className="auth-container">
-      <div>
-        <img
-          src="/images/logo-autorization.png"
-          alt="logo"
-          className="logo-autorization"
-        />
-        <h1 className="main-title">єдиний реєстр документів клініки</h1>
-        <p className="main-text">клінiка св.луки</p>
-      </div>
-
+       <h3 className="autorization-text">Вхід у обліковий запис</h3>
       <div className="autorization-container">
-        <h3 className="autorization-text">Вхід у обліковий запис</h3>
         <form onSubmit={onSubmit} className="autorization-form">
           <div className="input-1">
             <label htmlFor="forName"></label>
@@ -117,16 +107,17 @@ export const Auth = () => {
               className="form-input"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
+              autoComplete="username"
             />
           </div>
           <div className="password-input-wrapper">
             <input
-              id="forPassword"
               className="form-input"
               placeholder="Пароль"
               type={showPassword ? "text" : "password"}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              autoComplete="current-password"
             />
             <FontAwesomeIcon
               icon={showPassword ? faEye : faEyeSlash}

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate, Outlet, useLocation } from "react-router-dom";
 
+import { toast } from "react-toastify";
+
 import $api from "../api/api";
 import { SECTION_PERMISSIONS } from "../constants/permissions";
 
@@ -14,7 +16,6 @@ export const UserDataContext = React.createContext({
 export const HomePage = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const [currentTime, setCurrentTime] = useState(new Date());
   const [myData, setMyData] = useState({});
   const [ws, setWs] = useState(null);
 
@@ -42,9 +43,42 @@ export const HomePage = () => {
   }, []);
 
   useEffect(() => {
+    if (ws) {
+      ws.onmessage = (event) => {
+        console.log("event", event);
+        const receivedData = JSON.parse(event.data);
+        if (receivedData.type === "new" && receivedData.chat === "information") {
+          toast.info("Нове повідомлення у новинах");
+        } 
+        if (receivedData.type === "new" && receivedData.chat === "general") {
+          toast.info("Нове повідомлення у чаті");
+        } 
+      };
+    }
+    return () => {
+      if (ws) {
+        ws.onmessage = null;
+      }
+    };
+  }, [ws]);
+
+  const [kyivTime, setKyivTime] = useState(getKyivTime);
+
+  function getKyivTime() {
+    const now = new Date();
+    return now.toLocaleString("en-US", {
+      timeZone: "Europe/Kiev",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    });
+  }
+
+  useEffect(() => {
     const intervalId = setInterval(() => {
-      setCurrentTime(new Date());
-    }, 1000);
+      setKyivTime(getKyivTime());
+    }, 60000); // Обновляем каждую минуту (60 000 миллисекунд)
+
     return () => {
       clearInterval(intervalId);
     };
@@ -53,14 +87,9 @@ export const HomePage = () => {
   useEffect(() => {
     $api.get("/users/me/").then((response) => {
       setMyData(response.data);
-      console.log("про мене",response.data);
+      console.log("про мене", response.data);
     });
   }, []);
-
-  const formattedTime = `${String(currentTime.getHours()).padStart(
-    2,
-    "0"
-  )}:${String(currentTime.getMinutes()).padStart(2, "0")}`;
 
   const onExitHomePage = () => {
     if (ws) {
@@ -102,18 +131,39 @@ export const HomePage = () => {
 
   return (
     <div className="admin-header">
+      <div className="news-container-fixed-image"></div>
       <div className="admin-container-btns">
         <div className="admin-sub-container-btns">
           <img src="/images/logo-use1.png" alt="лого" className="header-logo" />
           <div className="admin-sub-container-nav">
-            {renderNavLink("main-page", "Головна")}
-            {renderNavLink("users", "Керування користувачами")}
+            <Link to="/homepage/main-page" className="admin-btns home-link">
+              <p
+                className={`home-page-header-nav ${
+                  location.pathname === "/homepage/main-page"
+                    ? "admin-btns-active"
+                    : ""
+                }`}
+              >
+                Головна
+              </p>
+            </Link>
+            {renderNavLink("users", "Управління користувачами")}
             {renderNavLink("reports", "Звіти")}
             {renderNavLink("statistics", "Статистика")}
-            {renderNavLink("chat", "Чат")}
+            <Link to="/homepage/chat" className="admin-btns chat-link">
+              <p
+                className={`home-page-header-nav ${
+                  location.pathname === "/homepage/chat"
+                    ? "admin-btns-active"
+                    : ""
+                }`}
+              >
+                Чат
+              </p>
+            </Link>
 
             <div className="admin-container-sub-cont">
-              <div className="admin-container-time">{formattedTime}</div>
+              <div className="admin-container-time">{kyivTime}</div>
               <div className="admin-container-icons">
                 <button type="button" onClick={onExitHomePage}>
                   <i className="bx bx-exit bx-sm"></i>

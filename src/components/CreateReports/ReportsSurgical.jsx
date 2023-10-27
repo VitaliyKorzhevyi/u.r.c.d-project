@@ -128,7 +128,7 @@ export const ReportsSurgical = () => {
           patient_id: "0",
           preoperative_day_id: "0",
           operation_id: "0",
-          diagnosis_id: "0",
+          diagnosis_id: null,
           patientName: "",
           age: "",
           diagnoses: "",
@@ -551,7 +551,9 @@ export const ReportsSurgical = () => {
                     <p className="form2-table-column1-text">Дата народження:</p>
                   </td>
                   <td>
-                    <p className="form2-table-time">{form.birthday}</p>
+                    <p className="form2-table-time">
+                      {form.birthday.split("-").reverse().join(".")}
+                    </p>
                   </td>
                 </tr>
                 <tr>

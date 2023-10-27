@@ -28,7 +28,7 @@ export const ModalPatientSearch = ({
   const [birthday, setBirthday] = useState("");
   const [loadingMore, setLoadingMore] = useState(false);
   const [page, setPage] = useState(1);
-  const MIN_LENGTH = 4;
+  const MIN_LENGTH = 2;
 
   const validateParams = useCallback((params) => {
     for (let value of Object.values(params)) {
@@ -271,7 +271,7 @@ export const ModalPatientSearch = ({
                 </li>
                 <li>
                   <p>
-                    <strong>День народження:</strong> {patient.birthday}
+                    <strong>День народження:</strong> {patient.birthday.split("-").reverse().join(".")}
                   </p>
                   <p>
                     <strong>Вік:</strong> {patient.age}
@@ -279,10 +279,10 @@ export const ModalPatientSearch = ({
                 </li>
                 <li>
                   <p>
-                    <strong>Телефон:</strong> {patient.phone}
+                    <strong>Телефон:</strong> {patient.phone || "немає"}
                   </p>
                   <p>
-                    <strong>Пошта:</strong> {patient.email}
+                    <strong>Пошта:</strong> {patient.email || "немає"}
                   </p>
                 </li>
               </ul>

@@ -15,11 +15,11 @@ export const NotesInput = ({
   };
 
   return (
-    <input
+    <textarea
       type="text"
       autoComplete="off"
       name="notation"
-      className="form1-table-text-name"
+      className="form1-table-text-name notes"
       value={value}
       onChange={(e) =>
         onInputChange(formIndex, rowIndex, "notation", e.target.value)

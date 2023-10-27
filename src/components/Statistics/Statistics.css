@@ -134,7 +134,8 @@
 }
 
 .cons-full-data-size2 {
-  width: 20%;
+  max-width: 293px;
+  word-wrap: break-word;
 }
 
 .cons-full-data-size1 {
@@ -154,4 +155,29 @@
 
 .cons-full-data-size4 {
 text-align: center;
+}
+
+.cons-big-container-data-text1 {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  text-align: right;
+}
+
+.cons-big-container-data-text2 {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  text-align: center;
+}
+
+.cons-big-container-data-text-summ {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  text-align: right;
+}
+
+.cons-big-container-data-total {
+  background-color: #c2c2c2;
 }

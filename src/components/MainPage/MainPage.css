@@ -80,7 +80,7 @@
 
   display: flex;
   flex-direction: column;
-  background-color: #e8eef7a1;
+  background-color: #e8eef756;
 }
 
 .cls-button {
@@ -96,7 +96,6 @@
 
 .btn-form-create-news {
   margin: 0 auto;
-  /* width: 120px; */
   padding: 6px 20px;
   margin-top: 12px;
   background-color: #e0e0e0;
@@ -117,7 +116,6 @@
 }
 
 .name-modal-create-news {
-
   margin: 4px 0 16px;
   text-align: center;
   font-family: "Montserrat", sans-serif;
@@ -156,6 +154,7 @@
   flex-direction: column;
   gap: 28px;
 
+  
   flex-direction: column-reverse;
   overflow-y: auto;
 }
@@ -176,7 +175,6 @@
 }
 
 .message-information-text {
-
   font-family: "Montserrat", sans-serif;
   font-weight: 500;
   font-size: 14px;
@@ -275,9 +273,9 @@
 }
 
 .delete-confirmation-modal button:nth-child(2):hover {
-    background-color: #ffc3c3;
-    border-color: #f73939;
-    color: #f81a1a;
+  background-color: #ffc3c3;
+  border-color: #f73939;
+  color: #f81a1a;
 }
 
 .btn-modal-dlt-news {
@@ -292,7 +290,6 @@
   gap: 8px;
   border-bottom: 1px solid #000b2ea9;
 }
-
 
 .btn-management-news {
   margin: 0 auto;

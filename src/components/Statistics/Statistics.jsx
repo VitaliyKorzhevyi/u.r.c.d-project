@@ -53,7 +53,7 @@ export const Statistics = () => {
           userData={userData}
           activeModal={openModal}
         >
-          Звіт по консультаціям
+          Зведена інформація
         </AccessibleButton>
 
         <AccessibleButton
@@ -62,7 +62,7 @@ export const Statistics = () => {
           userData={userData}
           activeModal={openModal}
         >
-          Пошук по консультаціям
+          Детальний пошук
         </AccessibleButton>
         </div>
       {openModal === "st-medicam" && <StatisticsMedicaments onClose={closeModal} />}
