@@ -42,17 +42,53 @@ export const HomePage = () => {
     };
   }, []);
 
+  //* уведомления
+
+  useEffect(() => {
+    if (location.pathname === "/homepage/main-page") {
+      setNewMessageNews(false);
+      setNumberOfNews(0);
+    }
+  }, [location.pathname]);
+
+  useEffect(() => {
+    if (location.pathname === "/homepage/chat") {
+      setNewMessageGeneralChat(false);
+      setNumberOfGeneralChat(0);
+    }
+  }, [location.pathname]);
+
+  const [numberOfNews, setNumberOfNews] = useState(0);
+  const [newMessageNews, setNewMessageNews] = useState(false);
+  const [numberOfGeneralChat, setNumberOfGeneralChat] = useState(0);
+  const [newMessageGeneralChat, setNewMessageGeneralChat] = useState(false);
+
   useEffect(() => {
     if (ws) {
       ws.onmessage = (event) => {
         console.log("event", event);
         const receivedData = JSON.parse(event.data);
-        if (receivedData.type === "new" && receivedData.chat === "information") {
+        if (
+          receivedData.type === "new" &&
+          receivedData.chat === "information"
+        ) {
           toast.info("Нове повідомлення у новинах");
-        } 
+          setNewMessageNews(true);
+          setNumberOfNews((prevCount) => {
+            const newCount = prevCount + 1;
+            console.log("Количество true:", newCount);
+            return newCount;
+          });
+        }
         if (receivedData.type === "new" && receivedData.chat === "general") {
           toast.info("Нове повідомлення у чаті");
-        } 
+          setNewMessageGeneralChat(true)
+          setNumberOfGeneralChat((prevCount) => {
+            const newCount = prevCount + 1;
+            console.log("Количество true:", newCount);
+            return newCount;
+          });
+        }
       };
     }
     return () => {
@@ -127,8 +163,6 @@ export const HomePage = () => {
     );
   };
 
-  //* WEBSOCETS
-
   return (
     <div className="admin-header">
       <div className="news-container-fixed-image"></div>
@@ -146,6 +180,7 @@ export const HomePage = () => {
               >
                 Головна
               </p>
+              {newMessageNews ? <p>{numberOfNews}</p> : null}
             </Link>
             {renderNavLink("users", "Управління користувачами")}
             {renderNavLink("reports", "Звіти")}
@@ -160,6 +195,7 @@ export const HomePage = () => {
               >
                 Чат
               </p>
+              {newMessageGeneralChat ? <p>{numberOfGeneralChat}</p> : null}
             </Link>
 
             <div className="admin-container-sub-cont">

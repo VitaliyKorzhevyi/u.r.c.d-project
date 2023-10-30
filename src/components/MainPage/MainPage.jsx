@@ -9,8 +9,7 @@ import { ModalEditNews } from "./ModalEditNews";
 import "./MainPage.css";
 
 export const MainPage = () => {
-  const { myData } = useContext(UserDataContext);
-  const { ws } = useContext(UserDataContext);
+  const { myData, ws} = useContext(UserDataContext);
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState("");
   const [inputTitle, setInputTitle] = useState("");
@@ -45,9 +44,10 @@ export const MainPage = () => {
            } 
           if (receivedData.type === "new") {
             setMessages((prevMessages) => [...prevMessages, receivedData]);
+
+            // console.log("прийшло");
           } 
           if (receivedData.type === "deleted") {
-            // Если тип сообщения "delete", удалите сообщение по ID
             setMessages((prevMessages) =>
               prevMessages.filter(
                 (message) => message.message.id !== receivedData.message.id

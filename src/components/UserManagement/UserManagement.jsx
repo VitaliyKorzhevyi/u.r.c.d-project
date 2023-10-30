@@ -96,9 +96,9 @@ const User = ({ user, afterCreate }) => {
       <table>
         <tbody className="user-info-table"> 
           <tr>
-            {/* <td className="user-info-table-size4">
+            <td className="user-info-table-size4">
               <i className={`bx bxs-circle ${user.is_online ? "online-user" : ""}`}></i>
-            </td> */}
+            </td>
             <td className="user-info-table-size1">
               <p>{user.full_name}</p>
             </td>
