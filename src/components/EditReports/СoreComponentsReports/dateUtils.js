@@ -3,5 +3,5 @@ export const isThreeDaysOld = (createdAt) => {
     const currentDate = new Date();
     const timeDifference = currentDate - creationDate;
     const daysDifference = timeDifference / (1000 * 60 * 60 * 24);
-    return daysDifference >= 3;
+    return daysDifference >= 7;
 };

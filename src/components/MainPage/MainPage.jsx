@@ -44,8 +44,6 @@ export const MainPage = () => {
            } 
           if (receivedData.type === "new") {
             setMessages((prevMessages) => [...prevMessages, receivedData]);
-
-            // console.log("прийшло");
           } 
           if (receivedData.type === "deleted") {
             setMessages((prevMessages) =>

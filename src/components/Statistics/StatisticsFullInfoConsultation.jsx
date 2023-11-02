@@ -82,13 +82,13 @@ export const StatisticsFullInfoConsultation = () => {
                     {data[date].length}
                   </td>
                   <td className="cons-big-container-data-text2">
-                    {data[date].reduce((total, consultation) => {
-                      if (consultation.user.id !== data[date][0].user.id) {
-                        return total + 1;
-                      } else {
-                        return total;
-                      }
-                    }, 1)}
+                    {
+                      [
+                        ...new Set(
+                          data[date].map((consultation) => consultation.user.id)
+                        ),
+                      ].length
+                    }
                   </td>
                   <td className="cons-big-container-data-text2">
                     {data[date].reduce(
@@ -98,11 +98,11 @@ export const StatisticsFullInfoConsultation = () => {
                     )}
                   </td>
                   <td className="cons-big-container-data-text2">
-                    {data[date].reduce((total, consultation) => {
-                      return consultation.medication_prescribed
-                        ? total + 1
-                        : total;
-                    }, 0)}
+                    {
+                      data[date].filter(
+                        (consultation) => consultation.medication_prescribed
+                      ).length
+                    }
                   </td>
                   <td></td>
                 </tr>

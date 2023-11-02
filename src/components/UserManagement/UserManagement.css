@@ -7,7 +7,7 @@
 }
 
 .user-info-container td {
-  padding:4px;
+  padding: 4px;
 }
 
 .user-info-table-size2 {
@@ -24,10 +24,9 @@
   cursor: pointer;
 }
 
-.user-info-table-size4 div{
+.user-info-table-size4 div {
   display: flex;
   justify-content: center;
-
 }
 
 .checkbox-ban:hover {
@@ -100,7 +99,20 @@
 }
 
 .online-user {
-  color: #008545;
+  color: #029c52;
+}
+
+.ofline-user {
+  color: #a3a3a3;
+}
+
+.user-info-table-size8 {
+  width: 3%;
+  text-align: center;
+}
+
+.user-info-table-size8 div{
+  min-width: 12px;
 }
 
 .title-users {

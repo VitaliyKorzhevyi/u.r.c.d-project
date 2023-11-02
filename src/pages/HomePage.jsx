@@ -27,7 +27,7 @@ export const HomePage = () => {
     if (token) {
       console.log("Token used for WebSocket:", token);
       ws = new WebSocket(
-        `wss://ip-91-227-40-30-92919.vps.hosted-by-mvps.net/api/ws?token=${token}`
+        `ws://192.168.71.26/api/ws?token=${token}`
       );
       ws.onopen = () => {
         console.log("Connected to the WebSocket");
@@ -76,12 +76,14 @@ export const HomePage = () => {
           setNewMessageNews(true);
           setNumberOfNews((prevCount) => {
             const newCount = prevCount + 1;
+            if (newCount > 5) {
+              setNumberOfNews("5+");
+            }
             console.log("Количество true:", newCount);
             return newCount;
           });
         }
         if (receivedData.type === "new" && receivedData.chat === "general") {
-          toast.info("Нове повідомлення у чаті");
           setNewMessageGeneralChat(true)
           setNumberOfGeneralChat((prevCount) => {
             const newCount = prevCount + 1;
@@ -180,7 +182,7 @@ export const HomePage = () => {
               >
                 Головна
               </p>
-              {newMessageNews ? <p>{numberOfNews}</p> : null}
+              {newMessageNews ? <p className="push-content-news">{numberOfNews}</p> : null}
             </Link>
             {renderNavLink("users", "Управління користувачами")}
             {renderNavLink("reports", "Звіти")}
@@ -195,7 +197,7 @@ export const HomePage = () => {
               >
                 Чат
               </p>
-              {newMessageGeneralChat ? <p>{numberOfGeneralChat}</p> : null}
+              {newMessageGeneralChat ? <p className="push-content-news">{numberOfGeneralChat}</p> : null}
             </Link>
 
             <div className="admin-container-sub-cont">

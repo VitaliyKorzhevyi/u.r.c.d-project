@@ -57,7 +57,7 @@ export const CreateReports = ({ userData }) => {
     },
     {
       id: "consultation",
-      label: "Звітній документ",
+      label: "Звітний документ",
       component: ReportsConsultation,
       permissions: [PERMISSIONS.CREATE_CONSULTATION]
     },

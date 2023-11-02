@@ -92,12 +92,18 @@ const User = ({ user, afterCreate }) => {
       className={`user-info-container ${
         isUserBanned ? "checkbox-clicked" : ""
       }`}
-    > 
+    >
       <table>
-        <tbody className="user-info-table"> 
+        <tbody className="user-info-table">
           <tr>
-            <td className="user-info-table-size4">
-              <i className={`bx bxs-circle ${user.is_online ? "online-user" : ""}`}></i>
+            <td className="user-info-table-size8">
+              <div>
+                <i
+                  className={`bx bxs-circle ${
+                    user.is_online ? "online-user" : "ofline-user"
+                  }`}
+                ></i>
+              </div>
             </td>
             <td className="user-info-table-size1">
               <p>{user.full_name}</p>

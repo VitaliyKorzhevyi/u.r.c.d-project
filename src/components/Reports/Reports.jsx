@@ -83,7 +83,7 @@ export const Reports = () => {
           userData={myData}
           activeModal={openModal}
         >
-          Керування консультаціями
+          Редагування звітних документів
         </AccessibleButton>
         <AccessibleButton
           id="marks"

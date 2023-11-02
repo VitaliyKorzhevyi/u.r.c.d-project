@@ -14,6 +14,10 @@ export const DayInputFilter = ({
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
     setIsDropdownVisible(e.target.value.length >= MIN_INPUT_LENGTH);
+
+    if (e.target.value.length === 0) {
+      onItemSelect(null);
+    }
   };
 
   const filteredItems = items.filter(item => 

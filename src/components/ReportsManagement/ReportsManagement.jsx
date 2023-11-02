@@ -18,17 +18,14 @@ export const ReportsManagement = ({
 }) => {
   const { myData } = useContext(UserDataContext);
   const [formData, setFormData] = useState({
-    preoperative_day_id: "",
-    diagnosis_id: "",
-    operation_id: "",
     patient_id: "",
     report_type: "",
-    limit: "",
     history_number: "",
+    limit: "",
     sort: "",
     user_id: "",
   });
-
+  
   useEffect(() => {
     if (onFormDataChange) {
       onFormDataChange(formData);
@@ -40,16 +37,23 @@ export const ReportsManagement = ({
 
   useEffect(() => {
     $api.get("/preoperative-days").then((response) => {
-      console.log("Доба:", response.data);
       setDays(response.data);
     });
   }, []);
 
   const onDaySelect = (selectedDayId) => {
-    setFormData((prevData) => ({
-      ...prevData,
-      preoperative_day_id: selectedDayId,
-    }));
+    setFormData((prevData) => {
+      const updatedData = { ...prevData };
+
+      if (selectedDayId) {
+        updatedData.preoperative_day_id = selectedDayId;
+      } else {
+        const { preoperative_day_id, ...rest } = updatedData;
+        return rest;
+      }
+
+      return updatedData;
+    });
   };
 
   //* ЗАПИТ ДІАГНОЗІВ
@@ -79,8 +83,6 @@ export const ReportsManagement = ({
       operation_id: selectedOperatingId,
     }));
   };
-
-  //! console.log("ред", userData); допрацювати
 
   //* ВИБІР ПАЦІЄНТА
   const [isModalOpenSearch, setModalOpenSearch] = useState(false);
@@ -166,7 +168,7 @@ export const ReportsManagement = ({
   const onHistoryNumberChange = (e) => {
     setFormData((prevData) => ({
       ...prevData,
-      history_number: e.target.value, // используйте подходящее имя свойства для номера истории
+      history_number: e.target.value,
     }));
   };
 

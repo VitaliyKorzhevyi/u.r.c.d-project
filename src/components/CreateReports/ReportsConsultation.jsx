@@ -245,7 +245,7 @@ export const ReportsConsultation = () => {
           <thead>
             <tr>
               <th colSpan="9" className="consultation-table-title">
-                Консультація
+                Звітний документ
               </th>
             </tr>
           </thead>

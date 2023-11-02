@@ -59,6 +59,7 @@
 }
 
 .admin-btns {
+  position: relative;
   padding: 4px 14px;
   border: none;
   background-color: inherit;
@@ -116,4 +117,20 @@
 
 .admin-container-icons button:hover {
   color: #ffffff;
+}
+
+.push-content-news {
+  position: absolute;
+  top: 0;
+  right: 0;
+  color: #f8f8f8;
+  background-color: #ff3838;
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  border-radius: 20px;
+  padding-top: 3px;
+
+  font-weight: 600;
+  font-size: 12px;
 }

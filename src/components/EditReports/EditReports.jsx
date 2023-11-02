@@ -32,8 +32,6 @@ export const EditReports = ({ userData }) => {
 
   const [totalPages, setTotalPages] = useState(0);
 
-  const [currentFormData, setCurrentFormData] = useState({});
-
   //* ДЛЯ ЗБЕРАГІННЯ ВІДРЕДАГОВАНИХ ЗНАЧЕНЬ
   const [formData, setFormData] = useState({
     id: null,
@@ -232,7 +230,7 @@ export const EditReports = ({ userData }) => {
     setSelectedStartDate(start);
     setSelectedEndDate(end);
   };
-
+  const [currentFormData, setCurrentFormData] = useState({});
   //* ДЛЯ ВІДОБРАЖЕННЯ СПИСКУ ТАБЛИЦІ
   //* по дефолту
 
@@ -290,20 +288,27 @@ export const EditReports = ({ userData }) => {
 
   const onButtonClick = () => {
     if (selectedStartDate && selectedEndDate) {
+      let updatedFormData = { ...currentFormData };
       const initialParams = {
         page: 1,
         from_created_at: selectedStartDate,
         to_created_at: selectedEndDate,
-        ...currentFormData,
+        ...updatedFormData,
       };
-
+      console.log("updatedFormData", updatedFormData);
       const params = Object.keys(initialParams)
-        .filter((key) => initialParams[key]) // Отбираем только те ключи, значения которых заданы
+        .filter((key) => {
+          // Фильтрация пустых значений, исключая 0, чтобы сохранить этот параметр, если это допустимое значение
+          return (
+            initialParams[key] !== undefined &&
+            initialParams[key] !== "" &&
+            initialParams[key] !== null
+          );
+        })
         .reduce((obj, key) => {
-          obj[key] = initialParams[key]; // Создаем новый объект с отобранными ключами
+          obj[key] = initialParams[key];
           return obj;
         }, {});
-
       const queryString = new URLSearchParams(params).toString();
       const url = `/reports?${queryString}`;
       console.log(url);
@@ -563,7 +568,10 @@ export const EditReports = ({ userData }) => {
                               <td colSpan="4">
                                 <strong>Дата народження: </strong>
                                 <span className="text-head-saved-forms">
-                                  {selectedItemDetails.patient.birthday.split("-").reverse().join(".")}
+                                  {selectedItemDetails.patient.birthday
+                                    .split("-")
+                                    .reverse()
+                                    .join(".")}
                                 </span>
                               </td>
                             </tr>
@@ -600,7 +608,8 @@ export const EditReports = ({ userData }) => {
                                 >
                                   <span className="text-head-saved-forms">
                                     <strong>Діагноз:</strong>{" "}
-                                    {selectedItemDetails.diagnosis && selectedItemDetails.diagnosis.title}
+                                    {selectedItemDetails.diagnosis &&
+                                      selectedItemDetails.diagnosis.title}
                                   </span>
                                 </td>
                               ) : (
@@ -608,7 +617,8 @@ export const EditReports = ({ userData }) => {
                                   <DiagnosesInputEditing
                                     items={diagnoses}
                                     selectedItem={
-                                      selectedItemDetails.diagnosis && selectedItemDetails.diagnosis.title
+                                      selectedItemDetails.diagnosis &&
+                                      selectedItemDetails.diagnosis.title
                                     }
                                     onItemSelect={onDiagnosesSelect}
                                     createdAt={created_at}
