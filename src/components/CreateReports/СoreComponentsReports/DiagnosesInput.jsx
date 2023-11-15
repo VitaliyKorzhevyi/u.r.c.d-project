@@ -156,6 +156,7 @@ export const DiagnosesInput = ({
         type="text"
         autoComplete="off"
         name="diagnoses"
+        maxLength={100}
         className="form1-table-text-name"
         value={inputValue}
         onChange={onInputChange}

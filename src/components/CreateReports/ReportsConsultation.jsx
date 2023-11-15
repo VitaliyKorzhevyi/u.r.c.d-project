@@ -55,6 +55,12 @@ export const ReportsConsultation = () => {
     setRows(updatedRows);
   };
 
+  const onFieldChange = (btnActiveCreate, id) => {
+    const updatedRows = [...rows];
+    updatedRows[id].btnActiveCreate = btnActiveCreate;
+    setRows(updatedRows);
+  };
+
   const [rows, setRows] = useState(() => {
     const localStorageData = localStorage.getItem("Concultation");
     if (localStorageData) {
@@ -68,6 +74,7 @@ export const ReportsConsultation = () => {
           receipt_number: null,
           full_name: "",
           phone: "",
+          btnActiveCreate: false,
           patient_id: "",
           payment_amount: 0,
           medication_prescribed: false,
@@ -172,7 +179,26 @@ export const ReportsConsultation = () => {
         hasEmptyFields = true;
         toast.warn(`Пусте поле "відвідувач/хворий" в рядку ${row.number}`);
       }
+      if (row.receipt_number && row.receipt_number.length > 10) {
+        hasEmptyFields = true;
+        toast.warn(
+          `Поле "Номер талону квитанції" в рядку ${row.number} повинно містити не більше 10 символів`
+        );
+      }
+      if (row.notation && row.notation.length > 500) {
+        hasEmptyFields = true;
+        toast.warn(
+          `Поле "Примітки" в рядку ${row.number} повинно містити не більше 500 символів`
+        );
+      }
+      if (row.notation && row.notation.length < 3) {
+        hasEmptyFields = true;
+        toast.warn(
+          `Поле "Примітки" в рядку ${row.number} повинно містити не менше 3 символів`
+        );
+      }
     });
+
     if (hasEmptyFields) {
       return;
     }
@@ -194,7 +220,6 @@ export const ReportsConsultation = () => {
       .post("/consultations", data)
       .then((response) => {
         toast.success("Консультації успішно збережені", response.data);
-        // Очистите таблицу после успешного сохранения
         setRows([
           {
             id: 1,
@@ -287,6 +312,7 @@ export const ReportsConsultation = () => {
                       className="table-cons-receipt-number"
                       type="text"
                       value={row.receipt_number || ""}
+                      maxLength={10}
                       onChange={(e) => handleReceiptNumberChange(e, id)}
                       disabled={isTableDisabled}
                     />
@@ -326,8 +352,10 @@ export const ReportsConsultation = () => {
                       </button>
                       <button
                         type="button"
-                        className={`btn-patient green ${
+                        className={`btn-patient ${
                           isTableDisabled ? "disabled" : ""
+                        } ${
+                          !row.btnActiveCreate ? "inactive" : "green"
                         }`}
                         onClick={() => {
                           toggleModalCreate();
@@ -344,7 +372,7 @@ export const ReportsConsultation = () => {
                             id: id - 1,
                           });
                         }}
-                        disabled={isTableDisabled}
+                        disabled={isTableDisabled || !row.btnActiveCreate}
                       >
                         <i className="bx bx-user-plus bx-sm"></i>
                       </button>
@@ -354,7 +382,7 @@ export const ReportsConsultation = () => {
                     <input
                       className="table-cons-discount"
                       type="number"
-                      value={row.payment_amount === 0 ? '' : row.payment_amount}
+                      value={row.payment_amount === 0 ? "" : row.payment_amount}
                       onChange={(e) => {
                         const updatedRows = [...rows];
                         const newValue = parseInt(e.target.value, 10);
@@ -451,6 +479,9 @@ export const ReportsConsultation = () => {
         onGetPhone={(Phone) => {
           onSetPatientPhone(Phone, selectedPatientPhone.id);
         }}
+        onShowBtnCreate={(btnActiveCreate) =>
+          onFieldChange(btnActiveCreate, selectedPatientPhone.id)
+        }
       />
       <ModalPatientCreate
         onGetFullName={(fullName) => {

@@ -142,6 +142,7 @@ export const DayInput = ({
         type="text"
         autoComplete="off"
         name="day"
+        maxLength={100}
         className="form1-table-text-name"
         value={inputValue}
         onChange={onInputChange}

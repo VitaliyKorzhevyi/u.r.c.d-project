@@ -34,17 +34,17 @@ export const EditReports = ({ userData }) => {
 
   //* ДЛЯ ЗБЕРАГІННЯ ВІДРЕДАГОВАНИХ ЗНАЧЕНЬ
   const [formData, setFormData] = useState({
-    id: null,
-    history_number: null,
-    patient_id: null,
-    diagnosis_id: null,
-    operation_id: null,
-    preoperative_day_id: null,
+    id: 0,
+    history_number: 0,
+    patient_id: 0,
+    diagnosis_id: 0,
+    operation_id: 0,
+    preoperative_day_id: 0,
     rows: [
       {
-        id: null,
-        medicament_id: null,
-        quantity_of_medicament: null,
+        id: 0,
+        medicament_id: 0,
+        quantity_of_medicament: 0,
         unit_of_measurement: "шт",
         notation: "",
       },
@@ -379,7 +379,9 @@ export const EditReports = ({ userData }) => {
           id: response.data.id,
           history_number: response.data.history_number,
           patient_id: response.data.patient.id,
-          diagnosis_id: response.data.diagnosis.id,
+          diagnosis_id: response.data.diagnosis
+            ? response.data.diagnosis.id
+            : null,
           operation_id: response.data.operation.id,
           preoperative_day_id: response.data.preoperative_day.id,
           rows: response.data.rows.map((row) => ({
@@ -416,7 +418,7 @@ export const EditReports = ({ userData }) => {
     }
 
     const url = `/reports/${selectedItem.type}`;
-
+    console.log("formData", formData);
     $api
       .put(url, formData)
       .then((response) => {
@@ -461,6 +463,18 @@ export const EditReports = ({ userData }) => {
         </div>
       </div>
       <div className="container-saved-forms-size">
+      <table className="mini-form-info">
+          <thead>
+            <tr>
+              <th className="semi-mini-title-size"></th>
+              <th className="semi-mini-title-size1">Тип звіту</th>
+              <th>Пацієнт</th>
+              <th className="semi-mini-title-size2">Номер історії</th>
+              <th className="semi-mini-title-size3">Дата створення</th>
+              <th className="semi-mini-title-size4" ></th>
+            </tr>
+          </thead>
+        </table>
         <ul className="list-saved-forms" ref={targetComponentRef}>
           {data.map(
             ({ id, type, patient_full_name, history_number, created_at }) => {
@@ -481,13 +495,12 @@ export const EditReports = ({ userData }) => {
                           ></td>
                           <td className="semititle-size1">
                             <p>
-                              <strong>Звіт:</strong>{" "}
                               {REPORT_TYPE_NAMES[type] || type}
                             </p>
                           </td>
                           <td className="semititle-size5">
                             <p className="semititle-size5">
-                              <strong>Пацієнт:</strong> {patient_full_name}
+                           {patient_full_name}
                             </p>
                           </td>
                           <td className="semititle-size3">
@@ -502,7 +515,7 @@ export const EditReports = ({ userData }) => {
                                 htmlFor="historyInput"
                                 className="number-history-padding"
                               >
-                                <strong>№:</strong>
+                           
                               </label>
                               {isThreeDaysOld(created_at) ? (
                                 <span className="text-head-saved-forms">
@@ -526,7 +539,7 @@ export const EditReports = ({ userData }) => {
 
                           <td className="semititle-size2">
                             <p className="text-semititle">
-                              <strong>Дата створення:</strong>{" "}
+                         
                               {new Date(created_at).toLocaleDateString()}
                             </p>
                           </td>
@@ -662,7 +675,7 @@ export const EditReports = ({ userData }) => {
                               <td className="table-save-size2">
                                 <strong>Тип</strong>
                               </td>
-                              <td>
+                              <td className="table-save-size5">
                                 <strong>Примітки</strong>
                               </td>
                               <td>
@@ -742,6 +755,10 @@ export const EditReports = ({ userData }) => {
                                       <option value="мл.">мл.</option>
                                       <option value="гр.">гр.</option>
                                       <option value="пар">пар</option>
+                                      <option value="пл.">пл.</option>
+                                      <option value="уп.">уп.</option>
+                                      <option value="кап.">кап.</option>
+                                      <option value="таб.">таб.</option>
                                     </select>
                                   )}
                                 </td>

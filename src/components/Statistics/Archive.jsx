@@ -4,11 +4,9 @@ import DatepickerComponent from "../EditReports/Сalendar";
 import ReactPaginate from "react-paginate";
 
 import { ReportsManagement } from "../ReportsManagement/ReportsManagement";
-import { ItemFormset } from "./ItemFormset";
+import { ArchiveItem } from "./ArchiveItem";
 
-import "./Marks.css";
-
-export const Marks = ({ userData }) => {
+export const Archive = ({ userData }) => {
   const [data, setData] = useState([]);
   const [currentFormData, setCurrentFormData] = useState({});
 
@@ -32,7 +30,7 @@ export const Marks = ({ userData }) => {
   const [selectedStartDate, setSelectedStartDate] = useState(
     formattedThirtyDaysAgo
   );
-  
+
   const [selectedEndDate, setSelectedEndDate] = useState(formattedCurrentDate);
 
   const onDateChange = (start, end) => {
@@ -190,7 +188,7 @@ export const Marks = ({ userData }) => {
       <table className="mini-table-marks">
           <thead>
             <tr>
-              <th className="mini-table-marks-size"></th>
+         
               <th className="mini-table-marks-size4">Тип звіту</th>
               <th>Пацієнт</th>
               <th className="mini-table-marks-size3">Номер історії</th>
@@ -199,7 +197,7 @@ export const Marks = ({ userData }) => {
             </tr>
           </thead>
         </table>
-        <ItemFormset data={data} userData={userData} />
+        <ArchiveItem data={data} userData={userData} />
 
         {totalPages > 1 && (
           <ReactPaginate

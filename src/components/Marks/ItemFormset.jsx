@@ -137,7 +137,7 @@ export const ItemFormset = ({ data, userData }) => {
         return newState;
       }
     });
-    
+
     // Если данный чекбокс был отмечен на сервере, удаляем его из backendChecks
     if (backendChecksAccounting[rowId]) {
       setBackendChecksAccounting((prev) => {
@@ -204,38 +204,33 @@ export const ItemFormset = ({ data, userData }) => {
                       }`}
                     ></td>
                     <td className="size-table-formset">
-                      <p>
-                        <strong>Звіт:</strong> {REPORT_TYPE_NAMES[type] || type}
-                      </p>
+                      <p>{REPORT_TYPE_NAMES[type] || type}</p>
                     </td>
-                    <td>
-                      <strong>Пацієнт:</strong> {patient_full_name}
-                    </td>
+                    <td >{patient_full_name}</td>
                     <td className="size-table-formset1">
                       <div style={{ textAlign: "center" }}>
-                        <strong>№:</strong>{" "}
                         <span className="text-head-saved-forms">
                           {history_number}
                         </span>
                       </div>
                     </td>
                     <td className="semititle-size2">
-                      <p>
-                        <strong>Дата створення:</strong>{" "}
-                        {new Date(created_at).toLocaleDateString()}
-                      </p>
+                      <p>{new Date(created_at).toLocaleDateString()}</p>
                     </td>
                     <td
                       className="semititle-size4"
                       onClick={() => onItemDetailsFetch(item)}
                     >
-                      <i
-                        className={`bx ${
-                          activeItemId === itemId
-                            ? "bx-refresh bx-sm"
-                            : "bxs-chevron-down bx-sm"
-                        }`}
-                      ></i>
+                      <div>
+                        {" "}
+                        <i
+                          className={`bx ${
+                            activeItemId === itemId
+                              ? "bx-refresh bx-sm"
+                              : "bxs-chevron-down bx-sm"
+                          }`}
+                        ></i>
+                      </div>
                     </td>
                   </tr>
                 </tbody>

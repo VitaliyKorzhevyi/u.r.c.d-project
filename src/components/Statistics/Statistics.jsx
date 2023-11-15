@@ -4,8 +4,10 @@ import { UserDataContext } from "../../pages/HomePage";
 import { StatisticsMedicaments } from './StatisticsMedicaments'
 import { StatisticsConsultation } from './StatisticsConsultation'
 import { StatisticsFullInfoConsultation } from './StatisticsFullInfoConsultation'
+import { Archive } from "./Archive";
 
 import "./Statistics.css";
+
 
 const AccessibleButton = ({
   id,
@@ -32,6 +34,7 @@ export const Statistics = () => {
   const openMedModal = () => setOpenModal("st-medicam");
   const openConsModal = () => setOpenModal("st-consul");
   const openFullInfoModal = () => setOpenModal("st-fullInfo");
+  const openArchiveModal = () => setOpenModal("archive");
   const closeModal = () => setOpenModal(null);
 
 
@@ -44,7 +47,7 @@ export const Statistics = () => {
           userData={userData}
           activeModal={openModal}
         >
-          Звіт по медикаментам
+          Статистика медикаментів
         </AccessibleButton>
  
         <AccessibleButton
@@ -64,10 +67,19 @@ export const Statistics = () => {
         >
           Детальний пошук
         </AccessibleButton>
+        <AccessibleButton
+          id="archive"
+          onClick={openArchiveModal}
+          userData={userData}
+          activeModal={openModal}
+        >
+          Звіти по медикаментам
+        </AccessibleButton>
         </div>
       {openModal === "st-medicam" && <StatisticsMedicaments onClose={closeModal} />}
       {openModal === "st-consul" && <StatisticsConsultation  onClose={closeModal} />}
       {openModal === "st-fullInfo" && <StatisticsFullInfoConsultation onClose={closeModal} />}
+      {openModal === "archive" && <Archive onClose={closeModal} />}
     </div>
   );
 };

@@ -154,6 +154,7 @@ export const OperationsInput = ({
       <input
         type="text"
         autoComplete="off"
+        maxLength={100}
         name="operations"
         className="form1-table-text-name"
         value={inputValue}

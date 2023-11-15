@@ -1,8 +1,8 @@
 //todo перевірити пошук за номером
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { toast } from "react-toastify";
-import $api from "../../../api/api";
 
+import $api from "../../../api/api";
 import "./ModalPatientSearch.css";
 
 export const ModalPatientSearch = ({
@@ -18,17 +18,68 @@ export const ModalPatientSearch = ({
   onGetMiddleName,
   onGetEmail,
   onGetData,
+  onShowBtnCreate,
 }) => {
   const [patients, setPatients] = useState([]);
-  const [lastName, setLastName] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [middleName, setMiddleName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [birthday, setBirthday] = useState("");
   const [loadingMore, setLoadingMore] = useState(false);
-  const [page, setPage] = useState(1);
+  const [totalPage, setTotalPage] = useState(0);
+  const [currentPage, setCurrentPage] = useState(0);
+
+  const listElemRef = useRef(null);
+
   const MIN_LENGTH = 2;
+  //* Списки ПІБ
+  const [filterFirstName, setFilterFirstName] = useState([]);
+  const [filterLastName, setFilterLastName] = useState([]);
+  const [filterMiddleName, setFilterMiddleName] = useState([]);
+
+  const [inputValueLastName, setInputValueLastName] = useState("");
+  const [inputValueFirstName, setInputValueFirstName] = useState("");
+  const [inputValueMiddleName, setInputValueMiddleName] = useState("");
+
+  const [isDropdownVisibleFirst, setIsDropdownVisibleFirst] = useState(false);
+  const [isDropdownVisibleLast, setIsDropdownVisibleLast] = useState(false);
+  const [isDropdownVisibleMiddle, setIsDropdownVisibleMiddle] = useState(false);
+
+  useEffect(() => {
+    $api
+      .get("/patients/filters/first_name")
+      .then((response) => setFilterFirstName(response.data));
+  }, []);
+
+  useEffect(() => {
+    $api
+      .get("/patients/filters/last_name")
+      .then((response) => setFilterLastName(response.data));
+  }, []);
+
+  useEffect(() => {
+    $api
+      .get("/patients/filters/middle_name")
+      .then((response) => setFilterMiddleName(response.data));
+  }, []);
+
+  const MIN_INPUT_LENGTH = 1;
+
+  const onInputChangeLastName = (e) => {
+    setInputValueLastName(e.target.value);
+    setIsDropdownVisibleLast(e.target.value.length >= MIN_INPUT_LENGTH);
+  };
+
+  const onInputChangeFirstName = (e) => {
+    setInputValueFirstName(e.target.value);
+    setIsDropdownVisibleFirst(e.target.value.length >= MIN_INPUT_LENGTH);
+  };
+
+  const onInputChangeMiddleName = (e) => {
+    setInputValueMiddleName(e.target.value);
+    setIsDropdownVisibleMiddle(e.target.value.length >= MIN_INPUT_LENGTH);
+  };
+
+  //*____________ВАЛІДАЦІЯ
 
   const validateParams = useCallback((params) => {
     for (let value of Object.values(params)) {
@@ -47,87 +98,124 @@ export const ModalPatientSearch = ({
       .join("&");
   }, []);
 
-  const fetchData = useCallback(
-    async (params, nextPage = 1) => {
-      if (!validateParams(params)) return;
-      const queryString = createQueryString(params);
-      console.log("Sending request with params:", queryString);
-      if (!queryString) return;
-      try {
-        const response = await $api.get(
-          `patients?page=${nextPage}&limit=20&${queryString}&sort=-id`
-        );
-        if (!response.data.patients.length) {
-          toast.warn("Пацієнт не знайдений.");
-        } else {
-          setPatients((prevPatients) => {
-            const updatedPatients = [
-              ...prevPatients,
-              ...response.data.patients,
-            ];
-            return updatedPatients.filter(
-              (patient, index, self) =>
-                index === self.findIndex((p) => p.id === patient.id)
-            );
-          });
-          console.log(response.data.patients);
-        }
-        return response;
-      } catch (error) {
-        console.error("Пошук не вдався", error);
-        toast.error("Помилка під час пошуку. Будь ласка, спробуйте пізніше.");
-      }
-    },
-    [validateParams, createQueryString]
-  );
-
-  const handleScroll = useCallback(
-    (e) => {
+  useEffect(() => {
+    const handleScroll = async (e) => {
       const bottom =
-        e.target.scrollHeight - e.target.scrollTop === e.target.clientHeight;
-      if (bottom && !loadingMore) {
+      listElem.scrollHeight - listElem.scrollTop <= 2 * listElem.clientHeight;
+
+      if (bottom && !loadingMore && currentPage < totalPage) {
         setLoadingMore(true);
-        setPage((prev) => prev + 1);
-        fetchData(
-          {
-            last_name: lastName,
-            first_name: firstName,
-            middle_name: middleName,
+      
+        try {
+          const params = {
+            last_name: inputValueLastName,
+            first_name: inputValueFirstName,
+            middle_name: inputValueMiddleName,
             phone: phone,
             email: email,
             birthday: birthday,
-          },
-          page + 1
-        ).finally(() => setLoadingMore(false));
-      }
-    },
-    [
-      loadingMore,
-      lastName,
-      firstName,
-      middleName,
-      phone,
-      email,
-      birthday,
-      page,
-      fetchData,
-    ]
-  );
+          };
 
-  useEffect(() => {
-    const listElem = document.querySelector(".patients-list");
+          if (!validateParams(params)) return;
+          const queryString = createQueryString(params);
+
+          if (!queryString) return;
+
+          try {
+            const response = await $api.get(
+              `patients?page=${currentPage+1}&limit=20&${queryString}&sort=-id`
+            );
+
+            if (!response.data.patients.length) {
+              toast.warn("Пацієнт не знайдений.");
+            } else {
+              setPatients((prevPatients) => {
+                const newPatients = response.data.patients.filter(
+                  (newPatient) =>
+                    !prevPatients.some(
+                      (prevPatient) => prevPatient.id === newPatient.id
+                    )
+                );
+                return [...prevPatients, ...newPatients];
+              });
+              setCurrentPage(response.data.current_page)
+              
+            }
+
+            console.log("Нові пацієнти", response.data);
+
+            return response;
+          } catch (error) {
+            console.error("Пошук не вдався", error);
+            toast.error(
+              "Помилка під час пошуку. Будь ласка, спробуйте пізніше."
+            );
+          }
+        } catch (error) {
+          // Handle any errors thrown by fetchData
+          console.error("Fetch data error", error);
+        } finally {
+          setLoadingMore(false);
+        }
+      }
+    };
+
+    const listElem = listElemRef.current;
     if (listElem) {
       listElem.addEventListener("scroll", handleScroll);
       return () => listElem.removeEventListener("scroll", handleScroll);
     }
-  }, [handleScroll]);
+  }, [
+    currentPage,
+    totalPage,
+    validateParams,
+    createQueryString,
+    inputValueLastName,
+    inputValueFirstName,
+    inputValueMiddleName,
+    phone,
+    email,
+    birthday,
+    loadingMore,
+    setPatients,
+  ]);
+
+  const fetchData = async (params) => {
+    if (!validateParams(params)) return;
+    const queryString = createQueryString(params);
+    if (!queryString) {
+      setPatients([]);
+      return;
+    }
+    try {
+      const response = await $api.get(
+        `patients?page=1&limit=20&${queryString}&sort=-id`
+      );
+
+      if (!response.data.patients.length) {
+        toast.warn("Пациент не найден.");
+        setPatients([]);
+        onShowBtnCreate?.(true);
+      } else {
+        setPatients(response.data.patients);
+        setTotalPage(response.data.total_pages);
+        setCurrentPage(response.data.current_page)
+        console.log(response.data.total_pages);
+      }
+
+      return response;
+    } catch (error) {
+      console.error("Поиск не удался", error);
+      toast.error("Ошибка во время поиска. Пожалуйста, попробуйте позже.");
+    }
+  };
 
   if (!isOpen) return null;
 
   const resetFields = () => {
-    setFirstName("");
-    setLastName("");
-    setMiddleName("");
+    setInputValueFirstName("");
+    setInputValueLastName("");
+    setInputValueMiddleName("");
     setBirthday("");
     setPhone("");
     setEmail("");
@@ -135,10 +223,6 @@ export const ModalPatientSearch = ({
   };
 
   if (!isOpen) return null;
-
-  const capitalize = (string) => {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-  };
 
   const onPhoneChange = (e) => {
     let phoneNumber = e.target.value.replace(/\+/g, "");
@@ -152,9 +236,9 @@ export const ModalPatientSearch = ({
   const onSearchPatient = (e) => {
     e.preventDefault();
     fetchData({
-      last_name: lastName,
-      first_name: firstName,
-      middle_name: middleName,
+      last_name: inputValueLastName,
+      first_name: inputValueFirstName,
+      middle_name: inputValueMiddleName,
       phone: phone,
       email: email,
       birthday: birthday,
@@ -195,33 +279,110 @@ export const ModalPatientSearch = ({
 
         <form onSubmit={onSearchPatient} className="modal-container">
           <div className="input-container">
-            <label>
-              <input
-                autoComplete="off"
-                value={lastName}
-                placeholder="Прізвище"
-                onChange={(e) => setLastName(capitalize(e.target.value))}
-              />
-            </label>
-            <label>
-              <input
-                autoComplete="off"
-                value={firstName}
-                placeholder="Ім'я"
-                onChange={(e) => setFirstName(capitalize(e.target.value))}
-              />
-            </label>
+            <div className="container-full-name">
+              <div>
+                <input
+                  id="medicament-edit"
+                  type="text"
+                  placeholder="Прізвище"
+                  autoComplete="off"
+                  title={inputValueLastName}
+                  value={inputValueLastName}
+                  onChange={onInputChangeLastName}
+                />
+              </div>
+              {isDropdownVisibleLast && (
+                <ul className="dropdown-full-name">
+                  {filterLastName
+                    .filter((item) =>
+                      item
+                        .toLowerCase()
+                        .includes(inputValueLastName.toLowerCase())
+                    )
+                    .map((item, index) => (
+                      <li
+                        key={index}
+                        onClick={() => {
+                          setInputValueLastName(item);
+                          setIsDropdownVisibleLast(false);
+                        }}
+                      >
+                        {item}
+                      </li>
+                    ))}
+                </ul>
+              )}
+            </div>
+            <div className="container-full-name">
+              <div>
+                <input
+                  id="medicament-edit"
+                  type="text"
+                  placeholder="Ім'я"
+                  autoComplete="off"
+                  title={inputValueFirstName}
+                  value={inputValueFirstName}
+                  onChange={onInputChangeFirstName}
+                />
+              </div>
+              {isDropdownVisibleFirst && (
+                <ul className="dropdown-full-name">
+                  {filterFirstName
+                    .filter((item) =>
+                      item
+                        .toLowerCase()
+                        .includes(inputValueFirstName.toLowerCase())
+                    )
+                    .map((item, index) => (
+                      <li
+                        key={index}
+                        onClick={() => {
+                          setInputValueFirstName(item);
+                          setIsDropdownVisibleFirst(false);
+                        }}
+                      >
+                        {item}
+                      </li>
+                    ))}
+                </ul>
+              )}
+            </div>
           </div>
           <div className="input-container">
-            <label>
-              <input
-                autoComplete="off"
-                value={middleName}
-                placeholder="По батькові"
-                onChange={(e) => setMiddleName(capitalize(e.target.value))}
-              />
-            </label>
-
+            <div className="container-full-name">
+              <div>
+                <input
+                  id="medicament-edit"
+                  type="text"
+                  placeholder="По-батькові"
+                  autoComplete="off"
+                  title={inputValueMiddleName}
+                  value={inputValueMiddleName}
+                  onChange={onInputChangeMiddleName}
+                />
+              </div>
+              {isDropdownVisibleMiddle && (
+                <ul className="dropdown-full-name">
+                  {filterMiddleName
+                    .filter((item) =>
+                      item
+                        .toLowerCase()
+                        .includes(inputValueMiddleName.toLowerCase())
+                    )
+                    .map((item, index) => (
+                      <li
+                        key={index}
+                        onClick={() => {
+                          setInputValueMiddleName(item);
+                          setIsDropdownVisibleMiddle(false);
+                        }}
+                      >
+                        {item}
+                      </li>
+                    ))}
+                </ul>
+              )}
+            </div>
             <label>
               <input
                 autoComplete="off"
@@ -256,7 +417,7 @@ export const ModalPatientSearch = ({
             </button>
           </div>
         </form>
-        <div className="patients-list">
+        <div className="patients-list" ref={listElemRef}>
           {patients.map((patient) => (
             <div
               key={patient.id}
@@ -271,7 +432,8 @@ export const ModalPatientSearch = ({
                 </li>
                 <li>
                   <p>
-                    <strong>День народження:</strong> {patient.birthday.split("-").reverse().join(".")}
+                    <strong>День народження:</strong>{" "}
+                    {patient.birthday.split("-").reverse().join(".")}
                   </p>
                   <p>
                     <strong>Вік:</strong> {patient.age}

@@ -107,7 +107,7 @@ export const Chat = () => {
     }
   }, [fetching, currentPage, messages, initialLoad]);
 
-  // currentPage, messages під питанням
+
   useEffect(() => {
     const messageListElement = messageListRef.current;
     if (messageListElement) {
@@ -276,6 +276,7 @@ export const Chat = () => {
           )}
           <input
             className="input-message"
+            maxLength={4000}
             value={inputMessage}
             onChange={(e) => setInputMessage(e.target.value)}
             onKeyDown={(e) => {

@@ -123,11 +123,11 @@ export const ModalPatientCreate = ({
 
       console.log(response.data);
 
-      resetFields();
+      // resetFields();
 
-      setTimeout(() => {
-        onClose();
-      }, 600);
+      // setTimeout(() => {
+      //   onClose();
+      // }, 600);
     } catch (error) {
       if (error.response && error.response.status === 409) {
         toast.info("Пацієнт із таким номером телефону вже існує!", {

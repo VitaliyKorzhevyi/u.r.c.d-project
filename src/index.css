@@ -466,6 +466,15 @@ th {
   border: 2px solid var(--save-btns-color);
 }
 
+.btn-patient.inactive {
+  display: flex;
+  padding: 4px 6px;
+  background-color: var(--primary-bg-color);
+  color: var(--locked-color);
+  border: 2px solid var(--locked-color);
+  cursor: default;
+}
+
 .btn-patient.blue:hover,
 .btn-patient.blue:focus {
   color: #fff;

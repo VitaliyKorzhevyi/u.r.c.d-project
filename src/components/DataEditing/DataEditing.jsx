@@ -93,7 +93,7 @@ export const DataEditing = () => {
     if (canAccessMedicaments) {
       $api.get("/medicaments").then((response) => {
         setMedicaments(response.data);
-        console.log("ПРАЦЮЄ", response.data);
+  
       });
     }
   }, [canAccessMedicaments]);

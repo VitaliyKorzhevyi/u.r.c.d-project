@@ -24,8 +24,19 @@
 }
 
 .size-table-formset {
-  width: 17.2%;
-  text-align: center;
+  width: 12%;
+}
+
+.semititle-size2 {
+  width: 12%;
+}
+
+.text-semititle3 {
+  width: 30%;
+}
+
+.size-table-formset p {
+  padding-left: 2px;
 }
 
 .size-table-formset6.yellow {
@@ -37,7 +48,7 @@
 }
 
 .size-table-formset1 {
-  width: 15.2%;
+  width: 10%;
 }
 
 .size-table-formset2 {

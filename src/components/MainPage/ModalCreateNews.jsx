@@ -47,10 +47,11 @@ export const ModalCreateNews = ({
             />
           </div>
           <p className="name-modal-create-news">Створити новину</p>
-          <input
+          <textarea
             className="form-create-news-title"
             type="text"
-            placeholder="Заголовок"
+            placeholder="Тема"
+            maxLength={500}
             value={inputTitle}
             onChange={(e) => setInputTitle(e.target.value)}
           />
@@ -60,6 +61,7 @@ export const ModalCreateNews = ({
             onChange={(e) => setInputMessage(e.target.value)}
             placeholder="Текст новини..."
             autoComplete="off"
+            maxLength={4000}
             rows="5"
             cols="50"
           />

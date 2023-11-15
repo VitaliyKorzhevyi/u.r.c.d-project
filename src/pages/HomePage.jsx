@@ -27,7 +27,7 @@ export const HomePage = () => {
     if (token) {
       console.log("Token used for WebSocket:", token);
       ws = new WebSocket(
-        `ws://192.168.71.26/api/ws?token=${token}`
+        `wss://ip-91-227-40-30-92919.vps.hosted-by-mvps.net/api/ws?token=${token}`
       );
       ws.onopen = () => {
         console.log("Connected to the WebSocket");

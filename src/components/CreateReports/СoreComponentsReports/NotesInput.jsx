@@ -18,6 +18,7 @@ export const NotesInput = ({
     <textarea
       type="text"
       autoComplete="off"
+      maxLength={500}
       name="notation"
       className="form1-table-text-name notes"
       value={value}

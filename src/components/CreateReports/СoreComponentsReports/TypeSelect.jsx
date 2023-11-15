@@ -35,6 +35,10 @@ export const TypeSelect = ({
       <option value="мл.">мл.</option>
       <option value="гр.">гр.</option>
       <option value="пар">пар</option>
+      <option value="пл.">пл.</option>
+      <option value="уп.">уп.</option>
+      <option value="кап.">кап.</option>
+      <option value="таб.">таб.</option>
     </select>
   );
 };

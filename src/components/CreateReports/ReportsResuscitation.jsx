@@ -125,6 +125,7 @@ export const ReportsResuscitation = () => {
           ],
           doctorName: myData.full_name || "",
           date: "",
+          btnActiveCreate: false,
           birthday: "",
           history_number: "",
           patient_id: "0",
@@ -476,6 +477,7 @@ export const ReportsResuscitation = () => {
                     <input
                       type="text"
                       name="history_number"
+                      maxLength={10}
                       className="form1-table-number"
                       value={form.history_number}
                       autoComplete="off"
@@ -514,12 +516,14 @@ export const ReportsResuscitation = () => {
                       </button>
                       <button
                         type="button"
-                        className="btn-patient green"
+                        className={`btn-patient ${
+                          !form.btnActiveCreate ? "inactive" : "green"
+                        }`}
                         onClick={() => {
                           setActiveFormIndex(formIndex);
                           onModalCreate();
                         }}
-                        disabled={form.locked}
+                        disabled={form.locked || !form.btnActiveCreate}
                       >
                         <i className="bx bx-user-plus bx-sm"></i>
                       </button>
@@ -766,6 +770,9 @@ export const ReportsResuscitation = () => {
           onFieldChange(activeFormIndex, "birthday", birthday)
         }
         onGetId={(id) => onFieldChange(activeFormIndex, "patient_id", id)}
+        onShowBtnCreate={(btnActiveCreate) =>
+          onFieldChange(activeFormIndex, "btnActiveCreate", btnActiveCreate)
+        }
       />
       <ModalPatientCreate
         isOpen={isModalOpenCreate}

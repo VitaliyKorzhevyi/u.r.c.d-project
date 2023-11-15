@@ -8,12 +8,10 @@ export const ModalEditNews = ({
   inputTitle,
   setInputTitle,
   editingMessage,
-
 }) => {
-
   useEffect(() => {
     if (editingMessage) {
-      setInputMessage(editingMessage.text); 
+      setInputMessage(editingMessage.text);
     }
   }, [editingMessage, setInputMessage]);
 
@@ -21,7 +19,7 @@ export const ModalEditNews = ({
     <div className="modal-create-news">
       <div className="create-news-content">
         <div className="form-create-news-content">
-        <div className="btn-close-modal-create-news" onClick={onClose}>
+          <div className="btn-close-modal-create-news" onClick={onClose}>
             <img
               src="/images/cross.svg"
               alt="Х"
@@ -29,15 +27,17 @@ export const ModalEditNews = ({
             />
           </div>
           <p className="name-modal-create-news">Редагувати новину</p>
-          <input
-          className="form-create-news-title"
+          <textarea
+            className="form-create-news-title"
             type="text"
+            maxLength={500}
             value={inputTitle}
             onChange={(e) => setInputTitle(e.target.value)}
           />
           <textarea
             className="form-create-news-message"
             value={inputMessage}
+            maxLength={4000}
             onChange={(e) => setInputMessage(e.target.value)}
             placeholder="Type a message..."
             autoComplete="off"

@@ -161,6 +161,7 @@ export const MedicamentInput = ({
       <textarea
         type="text"
         autoComplete="off"
+        maxLength={100}
         name="medicaments"
         className="form1-table-text-name medicaments"
         value={inputValue}

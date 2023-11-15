@@ -122,11 +122,11 @@ export const EditConsultation = () => {
 
   const saveEditedData = () => {
     const data = {
-      receipt_number: editConsultation.receipt_number,
+      receipt_number: editConsultation.receipt_number || null,
       patient_id: editConsultation.patient.id,
       payment_amount: parseFloat(editConsultation.payment_amount || 0),
       medication_prescribed: editConsultation.medication_prescribed,
-      notation: editConsultation.notation,
+      notation: editConsultation.notation || null,
     };
 
     const url = `/consultations/${editConsultation.id}`;
@@ -203,13 +203,14 @@ export const EditConsultation = () => {
                       <td className="cons-big-container-data-size1">
                         {is_edit ? (
                           <input
+                          maxLength={10}
                             className="cons-table-edit-rec-n"
                             type="text"
-                            value={receipt_number || ""}
+                            value={receipt_number || null}
                             onChange={(e) => onInputReceiptNumber(e, id, date)}
                           />
                         ) : (
-                          <span>{receipt_number}</span>
+                          <span>{receipt_number || null}</span>
                         )}
                       </td>
                       <td className="cons-big-container-data-size2">
@@ -259,12 +260,12 @@ export const EditConsultation = () => {
                           <textarea
                             className="cons-table-edit-notation"
                             type="text"
-                            value={notation || ""}
+                            value={notation || null}
                             onChange={(e) => onInputNotation(e, id, date)}
                             maxLength={500}
                           />
                         ) : (
-                          <span>{notation || ""}</span>
+                          <span>{notation || null}</span>
                         )}
                       </td>
                       <td className="cons-big-container-data-size5">
