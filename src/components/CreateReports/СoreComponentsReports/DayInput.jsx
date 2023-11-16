@@ -164,7 +164,7 @@ export const DayInput = ({
         <div className="confirm-modal">
           <p>Додати "{inputValue}"?</p>
           <div className="confirm-modal-btn-save">
-          <button
+            <button
               onClick={() => {
                 setShowModal(false);
                 setInputValue("");

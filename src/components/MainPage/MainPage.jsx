@@ -16,13 +16,13 @@ export const MainPage = () => {
   const messagesEndRef = useRef(null);
   const [showModalCreate, setShowModalCreate] = useState(false);
   const [showModalEdit, setShowModalEdit] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [totalPage, setTotalPage] = useState(1);
   const [fetching, setFetching] = useState(true);
   const [editingMessage, setEditingMessage] = useState(null);
 
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [messageToDelete, setMessageToDelete] = useState(null);
-
   const formatText = (text) => {
     return text.replace(/\*(.*?)\*/g, "<strong>$1</strong>");
   };
@@ -65,10 +65,12 @@ export const MainPage = () => {
   }, [ws, messages]);
 
   useEffect(() => {
-    if (fetching) {
+    // console.log("currentPage", currentPage);
+    // console.log("totalPage", totalPage);
+    if (fetching && currentPage < totalPage) {
       console.log("fetching");
       $api
-        .get(`/messages/information?page=${currentPage}&limit=20&sort=-id`)
+        .get(`/messages/information?page=${currentPage+1}&limit=20&sort=-id`)
         .then((response) => {
           const newMessages = response.data.messages
             .reverse()
@@ -79,12 +81,15 @@ export const MainPage = () => {
                     existingMessage.message.id === newMessage.message.id
                 )
             );
+            console.log("response.data Новини", response.data);
+
           setMessages((prevMessages) => [...newMessages, ...prevMessages]);
-          setCurrentPage((prevState) => prevState + 1);
+          setCurrentPage(response.data.current_page);
+          setTotalPage(response.data.total_pages);
         })
         .finally(() => setFetching(false));
     }
-  }, [fetching, currentPage, messages]);
+  }, [fetching, currentPage, messages, totalPage]);
 
   // currentPage, messages під питанням
   useEffect(() => {
@@ -95,11 +100,15 @@ export const MainPage = () => {
   }, []);
 
   const scrollHandler = (e) => {
-    if (
-      e.target.documentElement.scrollHeight -
-        (e.target.documentElement.scrollTop + window.innerHeight) <
-      100
-    ) {
+    const { scrollHeight, clientHeight, scrollTop } = e.target.documentElement;
+    const scrollBottom = scrollHeight - (scrollTop + clientHeight);
+    const scrollThreshold = 0.2; // Процент отступа снизу для срабатывания
+    console.log("scrollHeight", scrollHeight);
+    console.log("clientHeight", clientHeight);
+    console.log("scrollTop", scrollTop);
+    console.log("scrollBottom", scrollThreshold);
+  
+    if (scrollBottom < scrollThreshold * scrollHeight) {
       setFetching(true);
     }
   };

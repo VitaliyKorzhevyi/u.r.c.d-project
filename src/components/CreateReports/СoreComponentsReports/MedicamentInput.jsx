@@ -171,7 +171,7 @@ export const MedicamentInput = ({
         disabled={locked}
       />
       <ul
-        className="days-dropdown"
+        className="medicaments-dropdown"
         style={{ display: filteredMedicaments.length === 0 ? "none" : "block" }}
       >
         {filteredMedicaments.map((med) => (

@@ -100,8 +100,9 @@ export const ModalPatientSearch = ({
 
   useEffect(() => {
     const handleScroll = async (e) => {
+     const t = e.target;
       const bottom =
-      listElem.scrollHeight - listElem.scrollTop <= 2 * listElem.clientHeight;
+      t.scrollHeight - t.scrollTop - t.clientHeight <= 1;
 
       if (bottom && !loadingMore && currentPage < totalPage) {
         setLoadingMore(true);

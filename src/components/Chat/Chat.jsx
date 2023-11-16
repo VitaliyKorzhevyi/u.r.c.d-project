@@ -13,7 +13,8 @@ export const Chat = () => {
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState("");
   const messagesEndRef = useRef(null);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [totalPage, setTotalPage] = useState(1);
   const [fetching, setFetching] = useState(true);
   const messageListRef = useRef(null);
   const [shouldScrollToBottom, setShouldScrollToBottom] = useState(true);
@@ -79,9 +80,9 @@ export const Chat = () => {
   }, [messages, shouldScrollToBottom]);
 
   useEffect(() => {
-    if (fetching) {
+    if (fetching && currentPage < totalPage) {
       $api
-        .get(`/messages/general?page=${currentPage}&limit=20&sort=-id`)
+        .get(`/messages/general?page=${currentPage + 1}&limit=100&sort=-id`)
         .then((response) => {
           const newMessages = response.data.messages
             .reverse()
@@ -93,7 +94,8 @@ export const Chat = () => {
                 )
             );
           setMessages((prevMessages) => [...newMessages, ...prevMessages]);
-          setCurrentPage((prevState) => prevState + 1);
+          setCurrentPage(response.data.current_page);
+          setTotalPage(response.data.total_pages);
 
           // Если это первая загрузка, установите shouldScrollToBottom в true
           if (initialLoad) {
@@ -105,8 +107,7 @@ export const Chat = () => {
           setFetching(false);
         });
     }
-  }, [fetching, currentPage, messages, initialLoad]);
-
+  }, [fetching, currentPage, messages, initialLoad, totalPage]);
 
   useEffect(() => {
     const messageListElement = messageListRef.current;
