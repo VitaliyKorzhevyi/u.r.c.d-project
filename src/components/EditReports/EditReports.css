@@ -126,7 +126,7 @@
 }
 
 .table-save-size4.green {
-  background-color: rgb(135, 211, 182);
+  background-color: #87d3b6;
 }
 
 .semi-mini-title-size {
@@ -144,7 +144,7 @@
 }
 
 .semi-mini-title-size4 {
-  width: 3.2%;
+  width: 9.1%;
 }
 
 .table-save-size {
@@ -192,18 +192,32 @@ padding-left: 2px;
   cursor: pointer;
 }
 
+.semititle-size6 {
+  text-align: center;
+  width: 6%;
+  cursor: pointer;
+  background-color: #87d3b675;
+}
+
 .semititle-size4 div {
   display: flex;
   justify-content: center;
 }
 
 .semititle-size5 {
-  padding-left: 4px;
+  text-align: center;
+  padding-left: 8px;
+  font-weight: 600;
+}
+
+.semititle-size6:hover {
+  background-color: #87d3b6;
 }
 
 .semititle-size4:hover {
   background-color: #ccc;
 }
+
 
 .text-head-saved-forms {
   font-family: "Montserrat", sans-serif;

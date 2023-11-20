@@ -195,7 +195,7 @@ export const Marks = ({ userData }) => {
               <th>Пацієнт</th>
               <th className="mini-table-marks-size3">Номер історії</th>
               <th className="mini-table-marks-size2">Дата створення</th>
-              <th className="mini-table-marks-size1"></th>
+              <th className="mini-table-marks-size1">Дії</th>
             </tr>
           </thead>
         </table>

@@ -65,18 +65,21 @@ export const ModalPatientSearch = ({
   const MIN_INPUT_LENGTH = 1;
 
   const onInputChangeLastName = (e) => {
-    setInputValueLastName(e.target.value);
-    setIsDropdownVisibleLast(e.target.value.length >= MIN_INPUT_LENGTH);
+    const i = e.target.value;
+    setInputValueLastName(i);
+    setIsDropdownVisibleLast(i.length >= MIN_INPUT_LENGTH);
   };
 
   const onInputChangeFirstName = (e) => {
-    setInputValueFirstName(e.target.value);
-    setIsDropdownVisibleFirst(e.target.value.length >= MIN_INPUT_LENGTH);
+    const i = e.target.value;
+    setInputValueFirstName(i);
+    setIsDropdownVisibleFirst(i.length >= MIN_INPUT_LENGTH);
   };
 
   const onInputChangeMiddleName = (e) => {
-    setInputValueMiddleName(e.target.value);
-    setIsDropdownVisibleMiddle(e.target.value.length >= MIN_INPUT_LENGTH);
+    const i = e.target.value;
+    setInputValueMiddleName(i);
+    setIsDropdownVisibleMiddle(i.length >= MIN_INPUT_LENGTH);
   };
 
   //*____________ВАЛІДАЦІЯ
@@ -100,13 +103,12 @@ export const ModalPatientSearch = ({
 
   useEffect(() => {
     const handleScroll = async (e) => {
-     const t = e.target;
-      const bottom =
-      t.scrollHeight - t.scrollTop - t.clientHeight <= 1;
+      const t = e.target;
+      const bottom = t.scrollHeight - t.scrollTop - t.clientHeight <= 1;
 
       if (bottom && !loadingMore && currentPage < totalPage) {
         setLoadingMore(true);
-      
+
         try {
           const params = {
             last_name: inputValueLastName,
@@ -124,7 +126,9 @@ export const ModalPatientSearch = ({
 
           try {
             const response = await $api.get(
-              `patients?page=${currentPage+1}&limit=20&${queryString}&sort=-id`
+              `patients?page=${
+                currentPage + 1
+              }&limit=20&${queryString}&sort=-id`
             );
 
             if (!response.data.patients.length) {
@@ -139,8 +143,7 @@ export const ModalPatientSearch = ({
                 );
                 return [...prevPatients, ...newPatients];
               });
-              setCurrentPage(response.data.current_page)
-              
+              setCurrentPage(response.data.current_page);
             }
 
             console.log("Нові пацієнти", response.data);
@@ -200,7 +203,7 @@ export const ModalPatientSearch = ({
       } else {
         setPatients(response.data.patients);
         setTotalPage(response.data.total_pages);
-        setCurrentPage(response.data.current_page)
+        setCurrentPage(response.data.current_page);
         console.log(response.data.total_pages);
       }
 
@@ -298,7 +301,7 @@ export const ModalPatientSearch = ({
                     .filter((item) =>
                       item
                         .toLowerCase()
-                        .includes(inputValueLastName.toLowerCase())
+                        .startsWith(inputValueLastName.trim().toLowerCase())
                     )
                     .map((item, index) => (
                       <li
@@ -330,10 +333,10 @@ export const ModalPatientSearch = ({
                 <ul className="dropdown-full-name">
                   {filterFirstName
                     .filter((item) =>
-                      item
-                        .toLowerCase()
-                        .includes(inputValueFirstName.toLowerCase())
-                    )
+                    item
+                      .toLowerCase()
+                      .startsWith(inputValueFirstName.trim().toLowerCase())
+                  )
                     .map((item, index) => (
                       <li
                         key={index}
@@ -368,7 +371,7 @@ export const ModalPatientSearch = ({
                     .filter((item) =>
                       item
                         .toLowerCase()
-                        .includes(inputValueMiddleName.toLowerCase())
+                        .startsWith(inputValueMiddleName.trim().toLowerCase())
                     )
                     .map((item, index) => (
                       <li

@@ -122,6 +122,36 @@ export const ItemFormset = ({ data, userData }) => {
       });
   };
 
+  const onFormDownloadExcel = ({ id, type }) => {
+    console.log("дані для Excel", id, type);
+
+    const url = `/reports/${type}/${id}/xlsx`;
+
+    $api({
+      url: url,
+      method: "GET",
+      responseType: "blob",
+    })
+      .then((response) => {
+        const contentDisposition = response.headers["content-disposition"];
+        const encodedFilename = contentDisposition.split("utf-8''")[1];
+        const decodedFilename = decodeURI(encodedFilename);
+        console.log(decodedFilename);
+
+        console.log("c-d", contentDisposition);
+        const blob = new Blob([response.data], {
+          type: response.headers["content-type"],
+        });
+        const downloadLink = document.createElement("a");
+        downloadLink.href = window.URL.createObjectURL(blob);
+        downloadLink.download = decodedFilename || "downloadedFile.xlsx";
+        downloadLink.click();
+      })
+      .catch((error) => {
+        console.error("Ошибка при скачивании файла", error);
+      });
+  };
+
   //* ВІДПРАВКА ЗНАЧЕНЬ БУХГАЛТЕРІЇ НА БЕК
   const onCheckboxChangeAccounting = (e, rowId, reportId, reportType) => {
     const isChecked = e.target.checked;
@@ -206,7 +236,7 @@ export const ItemFormset = ({ data, userData }) => {
                     <td className="size-table-formset">
                       <p>{REPORT_TYPE_NAMES[type] || type}</p>
                     </td>
-                    <td >{patient_full_name}</td>
+                    <td className="size-table-formset7">{patient_full_name}</td>
                     <td className="size-table-formset1">
                       <div style={{ textAlign: "center" }}>
                         <span className="text-head-saved-forms">
@@ -216,6 +246,12 @@ export const ItemFormset = ({ data, userData }) => {
                     </td>
                     <td className="semititle-size2">
                       <p>{new Date(created_at).toLocaleDateString()}</p>
+                    </td>
+                    <td
+                      className="semititle-size6"
+                      onClick={() => onFormDownloadExcel({ id, type })}
+                    >
+                      <i className="bx bx-download bx-sm"></i>
                     </td>
                     <td
                       className="semititle-size4"

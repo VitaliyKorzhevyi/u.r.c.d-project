@@ -364,11 +364,41 @@ export const EditReports = ({ userData }) => {
 
   const targetComponentRef = useRef(null);
 
+  const onFormDownloadExcel = ({ id, type }) => {
+    console.log("дані для Excel", id, type);
+
+    const url = `/reports/${type}/${id}/xlsx`;
+
+    $api({
+      url: url,
+      method: "GET",
+      responseType: "blob",
+    })
+      .then((response) => {
+        const contentDisposition = response.headers["content-disposition"];
+        const encodedFilename = contentDisposition.split("utf-8''")[1];
+        const decodedFilename = decodeURI(encodedFilename);
+        console.log(decodedFilename);
+
+        console.log("c-d", contentDisposition);
+        const blob = new Blob([response.data], {
+          type: response.headers["content-type"],
+        });
+        const downloadLink = document.createElement("a");
+        downloadLink.href = window.URL.createObjectURL(blob);
+        downloadLink.download = decodedFilename || "downloadedFile.xlsx";
+        downloadLink.click();
+      })
+      .catch((error) => {
+        console.error("Ошибка при скачивании файла", error);
+      });
+  };
+
   //* ДЛЯ ВІДОБРАЖЕННЯ ВСІЄЇ ТАБЛИЦІ
-  const onFormDataById = (item) => {
+  const onFormDataById = ({ id, type }) => {
     setLoading(true);
-    setSelectedItem({ id: item.id, type: item.type });
-    const url = `reports/${item.type}/${item.id}`;
+    setSelectedItem({ id: id, type: type });
+    const url = `reports/${type}/${id}`;
     $api
       .get(url)
       .then((response) => {
@@ -463,7 +493,7 @@ export const EditReports = ({ userData }) => {
         </div>
       </div>
       <div className="container-saved-forms-size">
-      <table className="mini-form-info">
+        <table className="mini-form-info">
           <thead>
             <tr>
               <th className="semi-mini-title-size"></th>
@@ -471,7 +501,7 @@ export const EditReports = ({ userData }) => {
               <th>Пацієнт</th>
               <th className="semi-mini-title-size2">Номер історії</th>
               <th className="semi-mini-title-size3">Дата створення</th>
-              <th className="semi-mini-title-size4" ></th>
+              <th className="semi-mini-title-size4">Дії</th>
             </tr>
           </thead>
         </table>
@@ -494,14 +524,10 @@ export const EditReports = ({ userData }) => {
                             }`}
                           ></td>
                           <td className="semititle-size1">
-                            <p>
-                              {REPORT_TYPE_NAMES[type] || type}
-                            </p>
+                            <p>{REPORT_TYPE_NAMES[type] || type}</p>
                           </td>
                           <td className="semititle-size5">
-                            <p className="semititle-size5">
-                           {patient_full_name}
-                            </p>
+                            <p>{patient_full_name}</p>
                           </td>
                           <td className="semititle-size3">
                             <div
@@ -514,9 +540,7 @@ export const EditReports = ({ userData }) => {
                               <label
                                 htmlFor="historyInput"
                                 className="number-history-padding"
-                              >
-                           
-                              </label>
+                              ></label>
                               {isThreeDaysOld(created_at) ? (
                                 <span className="text-head-saved-forms">
                                   {history_number}
@@ -539,9 +563,14 @@ export const EditReports = ({ userData }) => {
 
                           <td className="semititle-size2">
                             <p className="text-semititle">
-                         
                               {new Date(created_at).toLocaleDateString()}
                             </p>
+                          </td>
+                          <td
+                            className="semititle-size6"
+                            onClick={() => onFormDownloadExcel({ id, type })}
+                          >
+                            <i className="bx bx-download bx-sm"></i>
                           </td>
                           <td
                             className="semititle-size4"
