@@ -76,16 +76,12 @@ export const Auth = () => {
       const { access_token, refresh_token } = response.data;
       localStorage.setItem("access_token", access_token);
       localStorage.setItem("refresh_token", refresh_token);
-      // setUsername('');
-      // setPassword('');
-      console.log(access_token);
-      console.log(refresh_token);
+      setUsername('');
+      setPassword('');
       setIsAuthenticated(true);
-  
     } catch (err) {
       const errorMessage = handleAuthErrors(err);
       setError(errorMessage);
-      console.log(err);
     }
   };
 

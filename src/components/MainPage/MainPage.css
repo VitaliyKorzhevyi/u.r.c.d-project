@@ -25,6 +25,13 @@
   background-color: #f5f5f5;
 }
 
+@media (max-width: 1199.98px) {
+  .create-news-content {
+    padding: 20px 10px 24px;
+    margin: 0 4px;
+  }
+}
+
 .bold-font-message {
   border: 1px solid #ccc;
   margin-top: 10px;
@@ -66,11 +73,28 @@
   border: 1px solid #949494;
 }
 
+@media (max-width: 1199.98px) {
+  .form-create-news-message {
+    min-width: 100%;
+    max-width: 100%;
+    max-height: 400px;
+  }
+}
+
 .form-create-news-title {
   padding: 6px;
   border-radius: 6px;
   border: 1px solid #949494;
   margin-bottom: 8px;
+}
+
+@media (max-width: 1199.98px) {
+  .form-create-news-title {
+    min-width: 100%;
+    max-width: 100%;
+    min-height: 34px;
+    max-height: 100px;
+  }
 }
 
 .news-container {
@@ -83,15 +107,31 @@
   background-color: #e8eef756;
 }
 
+@media (max-width: 1199.98px) {
+  .news-container {
+    padding: 20px 10px 80px;
+  }
+}
+
 .cls-button {
   background-color: transparent;
   cursor: pointer;
 }
 
-.container-btn-create-news {
-  padding: 0 0 12px 0;
-  margin-left: auto;
-  border-bottom: 2px solid #597193;
+@media (min-width: 1200px) {
+  .container-btn-create-news {
+    padding: 0 0 12px 0;
+    margin-left: auto;
+    border-bottom: 2px solid #597193;
+  }
+}
+
+@media (max-width: 1199.98px) {
+  .container-btn-create-news {
+    position: fixed;
+    top: 80vh;
+    right: 10px;
+  }
 }
 
 .btn-form-create-news {
@@ -146,17 +186,58 @@
   color: #fdfdfd;
 }
 
+@media (max-width: 1199.98px) {
+  .btn-create-news {
+    display: none;
+  }
+}
+
+.btn-create-news-mob {
+  height: 60px;
+  width: 60px;
+  border-radius: 50%;
+  border: 2px solid #607692;
+  background-color: #f8f8f89f;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 400;
+  font-size: 40px;
+  cursor: pointer;
+  box-shadow: 0 0 6px 1px rgb(133, 133, 133);
+}
+
+.btn-create-news-mob:hover,
+.btn-create-news-mob:focus {
+  color: #fff;
+  background-color: #87d3b675;
+}
+
+@media (min-width: 1200px) {
+  .btn-create-news-mob {
+    display: none;
+  }
+}
+
 .message-list-information {
-  width: 780px;
-  padding: 20px;
-  margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 28px;
 
-  
   flex-direction: column-reverse;
   overflow-y: auto;
+}
+
+@media (min-width: 1200px) {
+  .message-list-information {
+    width: 780px;
+    padding: 20px;
+    gap: 28px;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 1199.98px) {
+  .message-list-information {
+    gap: 12px;
+  }
 }
 
 .item-message-information {
@@ -166,6 +247,13 @@
   background-color: #3e7bcf21;
   padding: 20px 20px 30px;
   border-radius: 6px;
+}
+
+@media (max-width: 1199.98px) {
+  .item-message-information {
+    padding: 10px 10px 15px;
+    flex: 1;
+  }
 }
 
 .item-message-information h2 {
@@ -185,7 +273,7 @@
 .message-information-text-up {
   padding: 12px 0 0 0;
   display: flex;
-  width: 100%;
+  min-width: 100%;
 }
 
 .message-information-data {
@@ -202,6 +290,18 @@
   font-family: "Open Sans", sans-serif;
   font-weight: 600;
   font-size: 16px;
+}
+
+@media (max-width: 1199.98px) {
+  .message-information-user {
+    font-weight: 700;
+    font-size: 12px;
+  }
+
+  .message-information-data {
+    font-weight: 600;
+    font-size: 12px;
+  }
 }
 
 /* Rubik Montserrat Comfortaa Open Sans  Raleway Ubuntu Roboto Mono */
@@ -309,6 +409,12 @@
   font-size: 12px;
 }
 
+@media (max-width: 1199.98px) {
+  .btn-management-news {
+    display: none;
+  }
+}
+
 .btns-management-news-cont button:nth-child(1):hover {
   background-color: #599393b9;
   color: #fdfdfd;
@@ -317,4 +423,32 @@
 .btns-management-news-cont button:nth-child(2):hover {
   background-color: #935959b9;
   color: #fdfdfd;
+}
+
+.btn-management-news-mob {
+  height: 40px;
+  width: 60px;
+  color: #fdfdfd;
+  background-color: #59719386;
+  border: none;
+  box-shadow: 2px 2px 4px #d4d4d4ad;
+
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+.btns-management-news-cont button:nth-child(3):hover {
+  background-color: #599393b9;
+  color: #fdfdfd;
+}
+
+.btns-management-news-cont button:nth-child(4):hover {
+  background-color: #935959b9;
+  color: #fdfdfd;
+}
+
+@media (min-width: 1200px) {
+  .btn-management-news-mob {
+    display: none;
+  }
 }

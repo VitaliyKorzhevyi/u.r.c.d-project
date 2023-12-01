@@ -297,23 +297,13 @@ export const EditConsultation = () => {
                 })}
                 <tr className="cons-big-container-data-total">
                   <td></td>
-                  <td className="cons-big-container-data-text1">Всього:</td>
+                  <td className="cons-big-container-data-text1">Всіх:</td>
                   <td className="cons-big-container-data-text2">
                     {data[date].length}
                   </td>
                   <td className="cons-big-container-data-text2">
-                    {data[date].reduce(
-                      (total, consultation) =>
-                        total + parseFloat(consultation.payment_amount),
-                      0
-                    )}
                   </td>
                   <td className="cons-big-container-data-text2">
-                    {data[date].reduce((total, consultation) => {
-                      return consultation.medication_prescribed
-                        ? total + 1
-                        : total;
-                    }, 0)}
                   </td>
                   <td></td>
                   <td></td>

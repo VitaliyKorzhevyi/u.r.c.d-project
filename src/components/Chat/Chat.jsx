@@ -202,6 +202,11 @@ export const Chat = () => {
     return userColors[index];
   }
 
+  // const autoExpand = (element) => {
+  //   element.style.height = 'auto';
+  //   element.style.height = Math.min(element.scrollHeight, 78) + 'px';
+  // };
+
   return (
     <div className="chat-container">
       <div className="select-bg-chat">
@@ -242,7 +247,7 @@ export const Chat = () => {
                       className="cont-chat-info-name"
                       style={{ color: getUserColor(message.user.id) }} // Устанавливаем цвет имени
                     >
-                      {message.user.full_name}
+                      {message.user.full_name.split(' ').slice(0, 2).join(' ')}
                     </p>
                     <p className="cont-chat-info-text">
                       {message.message.text}
@@ -275,7 +280,7 @@ export const Chat = () => {
               />
             </div>
           )}
-          <input
+          <textarea
             className="input-message"
             maxLength={4000}
             value={inputMessage}
@@ -289,11 +294,11 @@ export const Chat = () => {
             autoComplete="off"
           />
           <i
-            className="bx bx-happy bx-sm icons-emoji"
+            className="bx bx-happy bx-md icons-emoji"
             onClick={() => setPickerVisible(!isPickerVisible)}
           ></i>
           <i
-            className={`bx bxs-capsule bx-sm bx-fade-up-hover icons-send ${
+            className={`bx bxs-capsule bx-md bx-fade-up-hover icons-send ${
               inputMessage.trim() === "" ? "gray-icon" : ""
             }`}
             onClick={sendMessage}

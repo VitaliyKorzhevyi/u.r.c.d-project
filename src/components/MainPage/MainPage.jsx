@@ -185,7 +185,15 @@ export const MainPage = () => {
           >
             Створити новину
           </button>
+          <button
+            className="btn-create-news-mob"
+            onClick={() => setShowModalCreate(true)}
+          >
+            +
+          </button>
         </div>
+        
+        
       )}
       <ul className="message-list-information">
         {messages
@@ -253,6 +261,26 @@ export const MainPage = () => {
                     onClick={() => showDeleteModal(message.message.id)}
                   >
                     Видалити
+                  </button>
+                  <button
+                    className="btn-management-news-mob"
+                    onClick={() => {
+                      setShowModalEdit(true);
+                      setEditingMessage({
+                        id: message.message.id,
+                        text: message.message.text,
+                        title: message.message.title, // Добавьте title в editingMessage
+                      });
+                      setInputTitle(message.message.title); // Установите inputTitle
+                    }}
+                  >
+                    <i className='bx bx-edit-alt bx-sm'></i>
+                  </button>
+                  <button
+                    className="btn-management-news-mob"
+                    onClick={() => showDeleteModal(message.message.id)}
+                  >
+                    <i className='bx bx-trash bx-sm'></i>
                   </button>
                 </div>
               )}

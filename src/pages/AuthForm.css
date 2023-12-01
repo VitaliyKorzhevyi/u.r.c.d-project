@@ -36,12 +36,23 @@
   flex-direction: column;
   align-items: center;
   margin: 40px auto 0;
-  padding: 32px 0 40px;
-  min-width: 500px;
-
   background-color: #fff;
-  border: 3px solid #cacace;
-  border-radius: 12px;
+  border: 2px solid #cacace;
+  border-radius: 6px;
+}
+
+@media (min-width: 1200px) {
+  .autorization-container {
+    min-width: 500px;
+    padding: 32px 0 40px;
+  }
+}
+
+@media (max-width: 1199.98px) {
+  .autorization-container {
+    min-width: 290px;
+    padding: 32px 12px 40px;
+  }
 }
 
 .autorization-form {
@@ -50,7 +61,7 @@
 }
 
 .input-1 {
-  margin: 12px 0;
+  margin: 12px auto;
 }
 
 .form-input {
@@ -58,7 +69,19 @@
   padding: 0 16px;
   border: 1px solid #cacace;
   border-radius: 12px;
-  min-width: 260px;
+  box-shadow: 0 1px 4px rgba(0,0,0,.15);
+}
+
+@media (min-width: 1200px) {
+  .form-input {
+    min-width: 260px;
+  }
+}
+
+@media (max-width: 1199.98px) {
+  .form-input {
+    min-width: 250px;
+  }
 }
 
 .form-input::placeholder {
@@ -70,8 +93,6 @@
 
 .autorization-btn {
   margin: 24px auto 36px;
-  height: 48px;
-  min-width: 260px;
   background-color: #f1f1f1;
   border: 2px solid #cacace;
   border-radius: 12px;
@@ -79,7 +100,23 @@
 
   font-family: "Montserrat", sans-serif;
   font-weight: 500;
-  font-size: 16px;
+}
+
+
+@media (min-width: 1200px) {
+  .autorization-btn {
+    min-width: 260px;
+    height: 48px;
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 1199.98px) {
+  .autorization-btn {
+    min-width: 40%;
+    height: 50px;
+    font-size: 14px;
+  }
 }
 
 .autorization-btn:hover,
@@ -90,23 +127,25 @@
 }
 
 .password-input-wrapper {
-    position: relative;
-    width: 100%;
+  display: flex;
+  justify-content: center;
+  position: relative;
+  width: 100%;
 }
 
 .password-toggle-icon {
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    cursor: pointer;
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
 }
 
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
-    -webkit-box-shadow: 0 0 0 30px white inset !important;
+  -webkit-box-shadow: 0 0 0 30px white inset !important;
 }
 
 .err-auth {

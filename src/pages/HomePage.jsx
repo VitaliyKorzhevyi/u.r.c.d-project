@@ -18,7 +18,6 @@ export const HomePage = () => {
   const navigate = useNavigate();
   const [myData, setMyData] = useState({});
   const [ws, setWs] = useState(null);
-
   //* WEBSOCKET
   useEffect(() => {
     let ws = null;
@@ -27,7 +26,7 @@ export const HomePage = () => {
     if (token) {
       console.log("Token used for WebSocket:", token);
       ws = new WebSocket(
-        `ws://192.168.71.26/api/ws?token=${token}`
+        `wss://ip-91-227-40-30-92919.vps.hosted-by-mvps.net/api/ws?token=${token}`
       );
       ws.onopen = () => {
         console.log("Connected to the WebSocket");
@@ -84,7 +83,7 @@ export const HomePage = () => {
           });
         }
         if (receivedData.type === "new" && receivedData.chat === "general") {
-          setNewMessageGeneralChat(true)
+          setNewMessageGeneralChat(true);
           setNumberOfGeneralChat((prevCount) => {
             const newCount = prevCount + 1;
             console.log("Количество true:", newCount);
@@ -140,7 +139,7 @@ export const HomePage = () => {
     navigate("/", { replace: true });
   };
 
-  const renderNavLink = (path, label) => {
+  const renderNavLink = (path, label, icon) => {
     const requiredPermissions = SECTION_PERMISSIONS[path.replace("/", "")];
     const userHasPermission =
       myData && myData.permissions && requiredPermissions
@@ -160,7 +159,10 @@ export const HomePage = () => {
           location.pathname === fullPath ? "admin-btns-active" : ""
         }`}
       >
-        <p className="home-page-header-nav">{label}</p>
+        <p className="home-page-header-nav">
+          <i className={`bx ${icon} bx-sm`}></i>
+          {label}
+        </p>
       </Link>
     );
   };
@@ -172,40 +174,48 @@ export const HomePage = () => {
         <div className="admin-sub-container-btns">
           <img src="/images/logo-use1.png" alt="лого" className="header-logo" />
           <div className="admin-sub-container-nav">
-            <Link to="/homepage/main-page" className="admin-btns home-link">
-              <p
-                className={`home-page-header-nav ${
-                  location.pathname === "/homepage/main-page"
-                    ? "admin-btns-active"
-                    : ""
-                }`}
-              >
-                Головна
+            <Link
+              to="/homepage/main-page"
+              className={`admin-btns ${
+                location.pathname === "/homepage/main-page"
+                  ? "admin-btns-active"
+                  : ""
+              }`}
+            >
+              <p className="home-page-header-nav">
+                {" "}
+                <i className="bx bx-news bx-sm"></i>
+                Новини
               </p>
-              {newMessageNews ? <p className="push-content-news">{numberOfNews}</p> : null}
+              {newMessageNews ? (
+                <p className="push-content-news">{numberOfNews}</p>
+              ) : null}
             </Link>
-            {renderNavLink("users", "Управління користувачами")}
-            {renderNavLink("reports", "Звіти")}
-            {renderNavLink("statistics", "Статистика")}
-            <Link to="/homepage/chat" className="admin-btns chat-link">
-              <p
-                className={`home-page-header-nav ${
-                  location.pathname === "/homepage/chat"
-                    ? "admin-btns-active"
-                    : ""
-                }`}
-              >
+            {renderNavLink("users", "Адмін", "bx-cool")}
+            {renderNavLink("reports", "Звіти", "bx-notepad")}
+            {renderNavLink("statistics", "Інфо", "bx-line-chart")}
+            <Link
+              to="/homepage/chat"
+              className={`admin-btns ${
+                location.pathname === "/homepage/chat"
+                  ? "admin-btns-active"
+                  : ""
+              }`}
+            >
+              <p className="home-page-header-nav">
+                <i className="bx bx-chat bx-sm"></i>
                 Чат
               </p>
-              {newMessageGeneralChat ? <p className="push-content-news">{numberOfGeneralChat}</p> : null}
+              {newMessageGeneralChat ? (
+                <p className="push-content-news">{numberOfGeneralChat}</p>
+              ) : null}
             </Link>
 
             <div className="admin-container-sub-cont">
               <div className="admin-container-time">{kyivTime}</div>
               <div className="admin-container-icons">
-                <button type="button" onClick={onExitHomePage}>
-                  <i className="bx bx-exit bx-sm"></i>
-                </button>
+                <i className="bx bx-exit bx-sm" onClick={onExitHomePage}></i>
+                <p>Вихід</p>
               </div>
             </div>
           </div>
